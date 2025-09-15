@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>EditorPage</class>
+ <widget class="QWidget" name="EditorPage">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Editor</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="leftMargin">
+    <number>32</number>
+   </property>
+   <property name="topMargin">
+    <number>32</number>
+   </property>
+   <property name="rightMargin">
+    <number>32</number>
+   </property>
+   <property name="bottomMargin">
+    <number>32</number>
+   </property>
+   <item>
+    <widget class="QLabel" name="pageTitle">
+     <property name="font">
+      <font>
+       <pointsize>24</pointsize>
+       <weight>300</weight>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel {
+    color: #343a40;
+    font-weight: 300;
+    letter-spacing: 1px;
+}</string>
+     </property>
+     <property name="text">
+      <string>Editor</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <widget class="QWidget" name="editorCanvas" native="true">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>300</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QWidget#editorCanvas {
+    background-color: #f8f9fa;
+    border: 2px dashed #dee2e6;
+    border-radius: 8px;
+}</string>
+     </property>
+     <layout class="QVBoxLayout" name="canvasLayout">
+      <item>
+       <widget class="QLabel" name="canvasLabel">
+        <property name="font">
+         <font>
+          <pointsize>16</pointsize>
+          <weight>300</weight>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QLabel {
+    color: #6c757d;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+}</string>
+        </property>
+        <property name="text">
+         <string>Editor Canvas Area
+(Drag &amp; Drop will be implemented here)</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QLabel" name="editorContent">
+     <property name="font">
+      <font>
+       <pointsize>14</pointsize>
+       <weight>300</weight>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QLabel {
+    color: #6c757d;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+}</string>
+     </property>
+     <property name="text">
+      <string>This is the visual editor workspace. You can design and edit your projects here with drag and drop functionality.</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignTop</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

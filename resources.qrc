@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/fonts/Poppins-Light.ttf</file>
+        <file>resources/icons/dashboard.svg</file>
+        <file>resources/icons/projects.svg</file>
+        <file>resources/icons/editor.svg</file>
+        <file>resources/icons/library.svg</file>
+        <file>resources/icons/settings.svg</file>
+        <file>style.qss</file>
+    </qresource>
+</RCC>

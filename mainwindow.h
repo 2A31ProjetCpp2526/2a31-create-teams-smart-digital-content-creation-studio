@@ -1,4 +1,4 @@
-#ifndef MAINWINDOW_H
+﻿#ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
 #include <QMainWindow>
@@ -10,13 +10,16 @@
 #include <QParallelAnimationGroup>
 
 QT_BEGIN_NAMESPACE
+class QLineEdit;
+class QCheckBox;
+class QLabel;
+class QString;
+
 namespace Ui {
 class MainWindow;
-class ProjectsPage;
-class EditorPage;
-class LibraryPage;
-class SettingsPage;
 class LoginPage;
+class Profile;
+class SignUpPage;
 }
 QT_END_NAMESPACE
 
@@ -30,33 +33,97 @@ public:
 
 private slots:
     void onDashboardClicked();
+    void onProfileClicked();
     void onProjectsClicked();
-    void onEditorClicked();
-    void onLibraryClicked();
-    void onSettingsClicked();
+    void onClientsClicked();
+    void onResourcesClicked();
+    void onSponsorsClicked();
+    void onTemplatesClicked();
+    void onShopClicked();
     void onLoginClicked();
+    
+    
+    void onSaveEmployee();
+    void onCancelAddEmployee();
+    void onEmployeeTableSelectionChanged();
+    void onModifyEmployeeClicked();
+    void onDeleteEmployeeClicked();
+    
+    
+    void onSaveModify();
+    void onCancelModify();
+    
+    
+    void showSignUpForm();
+    void showLoginForm();
+    void showForgotPasswordForm();
+    void openSignUpWindow();
+    
+    
+    void onSaveProfileClicked();
+    void onResetProfileClicked();
+    
+    
+    void validateAndLogin();
+    void validateAndSignUp();
+    void validateAndSendResetLink();
+
+protected:
+    bool eventFilter(QObject *obj, QEvent *event) override;
 
 private:
     void setupPages();
+    void setupLoginForms();
     void setupAnimations();
+    void setupSidebarIcons();
+    void setupCircularAvatar(QLabel* avatarLabel, const QString& initials);
+    void setupProfileWidget();
+    void setupEmployeeTable();
     void switchToPage(int pageIndex);
     void addButtonHoverEffect(QPushButton* button);
+    void setupLoginFormConnections();
+    void switchLoginFormWithAnimation(int formIndex);
+    void showMainContent();
+    void showLoginOverlay();
+    
+    
+    bool isValidEmail(const QString& email);
+    bool isValidPassword(const QString& password);
+    void showValidationError(const QString& message);
+    void setFieldError(QLineEdit* field, bool hasError);
+    void addInputFieldEnhancements(QLineEdit* field);
     
     Ui::MainWindow *ui;
     
-    // Page widgets
-    QWidget *projectsPage;
-    QWidget *editorPage;
-    QWidget *libraryPage;
-    QWidget *settingsPage;
-    QWidget *loginPage;
     
-    // Animation objects
+    QWidget *projectsPage;
+    QWidget *clientsPage;
+    QWidget *resourcesPage;
+    QWidget *sponsorsPage;
+    QWidget *templatesPage;
+    QWidget *shopPage;
+    
+    
+    QWidget *profileWidget;
+    Ui::Profile *profileUI;
+    
+    
+    QMainWindow *loginPageWidget;
+    QStackedWidget *authStackedWidget;
+    Ui::LoginPage *loginUI;
+    
+    
+    QMainWindow *signUpPageWidget;
+    Ui::SignUpPage *signUpUI;
+    
+    
     QPropertyAnimation *pageTransitionAnimation;
     QParallelAnimationGroup *animationGroup;
+    QPropertyAnimation *loginFormTransitionAnimation;
     
-    // Current page tracking
+    
     int currentPageIndex;
 };
 
-#endif // MAINWINDOW_H
+#endif 
+

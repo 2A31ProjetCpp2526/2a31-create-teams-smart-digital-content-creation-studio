@@ -31,14 +31,18 @@
      <property name="font">
       <font>
        <pointsize>24</pointsize>
-       <weight>300</weight>
+       <weight>500</weight>
       </font>
      </property>
      <property name="styleSheet">
       <string notr="true">QLabel {
-    color: #343a40;
-    font-weight: 300;
-    letter-spacing: 1px;
+    color: #14171a;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    background: transparent;
+    border-bottom: 1px solid #e1e8ed;
+    padding: 12px 20px;
+    margin: 8px 0px;
 }</string>
      </property>
      <property name="text">
@@ -72,18 +76,23 @@
      </property>
      <property name="styleSheet">
       <string notr="true">QGroupBox {
-    color: #495057;
-    font-weight: 300;
-    letter-spacing: 0.5px;
-    border: 1px solid #dee2e6;
+    color: #14171a;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    border: 1px solid #e1e8ed;
     border-radius: 8px;
-    margin-top: 8px;
-    padding-top: 16px;
+    margin-top: 12px;
+    padding-top: 20px;
+    background: #fafbfc;
 }
 QGroupBox::title {
     subcontrol-origin: margin;
-    left: 16px;
-    padding: 0 8px 0 8px;
+    left: 20px;
+    padding: 4px 12px;
+    color: #1da1f2;
+    font-weight: 500;
+    background: transparent;
+    border-radius: 4px;
 }</string>
      </property>
      <property name="title">
@@ -112,9 +121,9 @@ QGroupBox::title {
         </property>
         <property name="styleSheet">
          <string notr="true">QLabel {
-    color: #6c757d;
-    font-weight: 300;
-    letter-spacing: 0.5px;
+    color: #5f6368;
+    font-weight: 400;
+    letter-spacing: 0.3px;
 }</string>
         </property>
         <property name="text">
@@ -132,12 +141,16 @@ QGroupBox::title {
         </property>
         <property name="styleSheet">
          <string notr="true">QComboBox {
-    padding: 8px 12px;
-    border: 1px solid #dee2e6;
-    border-radius: 4px;
-    background-color: white;
-    color: #495057;
-    font-weight: 300;
+    padding: 10px 16px;
+    border: 1px solid #e1e8ed;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #14171a;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+}
+QComboBox:hover {
+    border: 1px solid #1da1f2;
 }</string>
         </property>
         <item>
@@ -167,9 +180,9 @@ QGroupBox::title {
         </property>
         <property name="styleSheet">
          <string notr="true">QLabel {
-    color: #6c757d;
-    font-weight: 300;
-    letter-spacing: 0.5px;
+    color: #5f6368;
+    font-weight: 400;
+    letter-spacing: 0.3px;
 }</string>
         </property>
         <property name="text">
@@ -187,12 +200,16 @@ QGroupBox::title {
         </property>
         <property name="styleSheet">
          <string notr="true">QSpinBox {
-    padding: 8px 12px;
-    border: 1px solid #dee2e6;
-    border-radius: 4px;
-    background-color: white;
-    color: #495057;
-    font-weight: 300;
+    padding: 10px 16px;
+    border: 1px solid #e1e8ed;
+    border-radius: 6px;
+    background: #ffffff;
+    color: #14171a;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+}
+QSpinBox:hover {
+    border: 1px solid #1da1f2;
 }</string>
         </property>
         <property name="minimum">

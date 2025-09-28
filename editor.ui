@@ -31,14 +31,18 @@
      <property name="font">
       <font>
        <pointsize>24</pointsize>
-       <weight>300</weight>
+       <weight>500</weight>
       </font>
      </property>
      <property name="styleSheet">
       <string notr="true">QLabel {
-    color: #343a40;
-    font-weight: 300;
-    letter-spacing: 1px;
+    color: #14171a;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    background: transparent;
+    border-bottom: 1px solid #e1e8ed;
+    padding: 12px 20px;
+    margin: 8px 0px;
 }</string>
      </property>
      <property name="text">
@@ -72,9 +76,9 @@
      </property>
      <property name="styleSheet">
       <string notr="true">QWidget#editorCanvas {
-    background-color: #f8f9fa;
-    border: 2px dashed #dee2e6;
-    border-radius: 8px;
+    background: #fafbfc;
+    border: 2px dashed #aab8c2;
+    border-radius: 12px;
 }</string>
      </property>
      <layout class="QVBoxLayout" name="canvasLayout">
@@ -88,9 +92,12 @@
         </property>
         <property name="styleSheet">
          <string notr="true">QLabel {
-    color: #6c757d;
-    font-weight: 300;
-    letter-spacing: 0.5px;
+    color: #5f6368;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    background: transparent;
+    border-radius: 8px;
+    padding: 16px;
 }</string>
         </property>
         <property name="text">
@@ -115,9 +122,15 @@
      </property>
      <property name="styleSheet">
       <string notr="true">QLabel {
-    color: #6c757d;
-    font-weight: 300;
-    letter-spacing: 0.5px;
+    color: #5f6368;
+    font-weight: 400;
+    letter-spacing: 0.3px;
+    line-height: 1.6;
+    background: #fafbfc;
+    border: 1px solid #e1e8ed;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 12px 0px;
 }</string>
      </property>
      <property name="text">

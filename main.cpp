@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+﻿#include "mainwindow.h"
 
 #include <QApplication>
 #include <QFontDatabase>
@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
     
-    // Load Poppins font
+    
     int fontId = QFontDatabase::addApplicationFont(":/resources/fonts/Poppins-Light.ttf");
     if (fontId != -1) {
         QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
@@ -29,7 +29,7 @@ int main(int argc, char *argv[])
         a.setFont(fallbackFont);
     }
     
-    // Load and apply global stylesheet
+    
     QFile styleFile(":/style.qss");
     if (styleFile.open(QFile::ReadOnly)) {
         QString styleSheet = QString::fromLatin1(styleFile.readAll());
@@ -46,3 +46,4 @@ int main(int argc, char *argv[])
     
     return a.exec();
 }
+

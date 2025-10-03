@@ -1,0 +1,27 @@
+# ninja log v6
+838	2571	7808458885025096	CMakeFiles/untitled2.dir/main.cpp.obj	db8448c0ea3205fd
+46	174	7810610676085163	C:/Users/Windows/Documents/untitled2/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/untitled2_autogen/mocs_compilation.cpp	c8d49717e29c28ae
+46	174	7810610676085163	untitled2_autogen/timestamp	c8d49717e29c28ae
+46	174	7810610676085163	untitled2_autogen/mocs_compilation.cpp	c8d49717e29c28ae
+1590	1712	7810610691505717	untitled2.exe	7583d7fb0ba706d
+175	1589	7810610677368537	CMakeFiles/untitled2.dir/mainwindow.cpp.obj	45219f1aef4aab6d
+46	174	7810610676085163	C:/Users/Windows/Documents/untitled2/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/untitled2_autogen/timestamp	c8d49717e29c28ae
+834	2544	7808458884992336	CMakeFiles/untitled2.dir/untitled2_autogen/mocs_compilation.cpp.obj	adad233933e12eb5
+56	289	7810620144111866	untitled2_autogen/timestamp	c8d49717e29c28ae
+56	289	7810620144111866	untitled2_autogen/mocs_compilation.cpp	c8d49717e29c28ae
+56	289	7810620144111866	C:/Users/Windows/Documents/untitled2/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/untitled2_autogen/timestamp	c8d49717e29c28ae
+56	289	7810620144111866	C:/Users/Windows/Documents/untitled2/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/untitled2_autogen/mocs_compilation.cpp	c8d49717e29c28ae
+291	3348	7810620146467626	CMakeFiles/untitled2.dir/mainwindow.cpp.obj	45219f1aef4aab6d
+3348	3793	7810620177044365	untitled2.exe	7583d7fb0ba706d
+57	256	7810621610709329	untitled2_autogen/timestamp	c8d49717e29c28ae
+57	256	7810621610709329	untitled2_autogen/mocs_compilation.cpp	c8d49717e29c28ae
+57	256	7810621610709329	C:/Users/Windows/Documents/untitled2/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/untitled2_autogen/timestamp	c8d49717e29c28ae
+57	256	7810621610709329	C:/Users/Windows/Documents/untitled2/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/untitled2_autogen/mocs_compilation.cpp	c8d49717e29c28ae
+257	2700	7810621612714664	CMakeFiles/untitled2.dir/mainwindow.cpp.obj	45219f1aef4aab6d
+2700	2960	7810621637128723	untitled2.exe	7583d7fb0ba706d
+57	250	7810628724560839	untitled2_autogen/timestamp	c8d49717e29c28ae
+57	250	7810628724560839	untitled2_autogen/mocs_compilation.cpp	c8d49717e29c28ae
+57	250	7810628724560839	C:/Users/Windows/Documents/untitled2/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/untitled2_autogen/timestamp	c8d49717e29c28ae
+57	250	7810628724560839	C:/Users/Windows/Documents/untitled2/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/untitled2_autogen/mocs_compilation.cpp	c8d49717e29c28ae
+251	2643	7810628726513410	CMakeFiles/untitled2.dir/mainwindow.cpp.obj	45219f1aef4aab6d
+2643	2944	7810628750436652	untitled2.exe	7583d7fb0ba706d

@@ -1,0 +1,9 @@
+C:/Users/lenovo/Documents/Molka_Proj_Val/build/Desktop_Qt_6_7_3_MinGW_64_bite-Debug/CMakeFiles/Molka_Proj_Val.dir
+C:/Users/lenovo/Documents/Molka_Proj_Val/build/Desktop_Qt_6_7_3_MinGW_64_bite-Debug/CMakeFiles/edit_cache.dir
+C:/Users/lenovo/Documents/Molka_Proj_Val/build/Desktop_Qt_6_7_3_MinGW_64_bite-Debug/CMakeFiles/rebuild_cache.dir
+C:/Users/lenovo/Documents/Molka_Proj_Val/build/Desktop_Qt_6_7_3_MinGW_64_bite-Debug/CMakeFiles/list_install_components.dir
+C:/Users/lenovo/Documents/Molka_Proj_Val/build/Desktop_Qt_6_7_3_MinGW_64_bite-Debug/CMakeFiles/install.dir
+C:/Users/lenovo/Documents/Molka_Proj_Val/build/Desktop_Qt_6_7_3_MinGW_64_bite-Debug/CMakeFiles/install/local.dir
+C:/Users/lenovo/Documents/Molka_Proj_Val/build/Desktop_Qt_6_7_3_MinGW_64_bite-Debug/CMakeFiles/install/strip.dir
+C:/Users/lenovo/Documents/Molka_Proj_Val/build/Desktop_Qt_6_7_3_MinGW_64_bite-Debug/CMakeFiles/Molka_Proj_Val_autogen_timestamp_deps.dir
+C:/Users/lenovo/Documents/Molka_Proj_Val/build/Desktop_Qt_6_7_3_MinGW_64_bite-Debug/CMakeFiles/Molka_Proj_Val_autogen.dir

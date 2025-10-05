@@ -323,6 +323,7 @@
 #define WIN32 1
 #define __nocona 1
 #define __code_model_medium__ 1
+#define QT_DISABLE_DEPRECATED_BEFORE 0x060000
 #define __INT64_TYPE__ long long int
 #define __FLT_MAX_EXP__ 128
 #define WIN64 1

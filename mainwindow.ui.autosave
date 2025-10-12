@@ -20,8 +20,8 @@
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>30</y>
+      <x>20</x>
+      <y>80</y>
       <width>1441</width>
       <height>671</height>
      </rect>
@@ -223,8 +223,8 @@ QPushButton:pressed {
      <widget class="QPushButton" name="pushButton_3">
       <property name="geometry">
        <rect>
-        <x>700</x>
-        <y>60</y>
+        <x>1190</x>
+        <y>50</y>
         <width>211</width>
         <height>41</height>
        </rect>
@@ -254,8 +254,8 @@ QPushButton:pressed {
      <widget class="QPushButton" name="pushButton_2">
       <property name="geometry">
        <rect>
-        <x>1220</x>
-        <y>450</y>
+        <x>1080</x>
+        <y>550</y>
         <width>151</width>
         <height>41</height>
        </rect>
@@ -285,8 +285,8 @@ QPushButton:pressed {
      <widget class="QPushButton" name="pushButton">
       <property name="geometry">
        <rect>
-        <x>1220</x>
-        <y>500</y>
+        <x>1270</x>
+        <y>550</y>
         <width>151</width>
         <height>41</height>
        </rect>
@@ -333,8 +333,8 @@ color: #000000</string>
      <widget class="QPushButton" name="pushButton_6">
       <property name="geometry">
        <rect>
-        <x>530</x>
-        <y>60</y>
+        <x>1020</x>
+        <y>50</y>
         <width>161</width>
         <height>41</height>
        </rect>

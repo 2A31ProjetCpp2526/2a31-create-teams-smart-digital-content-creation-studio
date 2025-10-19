@@ -1,76 +1,114 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.22)
 
-project(AmineTemplar VERSION 0.1 LANGUAGES CXX)
+project(AmineTemplar LANGUAGES CXX)
 
-set(CMAKE_AUTOUIC ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTORCC ON)
-
+# Set C++ standard (Qt6 requires C++17 minimum)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
+# Enable threading support explicitly
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
 
-set(PROJECT_SOURCES
-        main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        mainwindow.ui
-        projects.ui
-        editor.ui
-        library.ui
-        settings.ui
-        login.ui
-        resources.qrc
+# Set Qt6 path hint (helps CMake find Qt6 more reliably)
+if(WIN32)
+    set(CMAKE_PREFIX_PATH "C:/Qt/6.7.3/mingw_64" ${CMAKE_PREFIX_PATH})
+endif()
+
+# Find Qt6 components with better error handling
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
+
+# Verify Qt6 was found correctly
+if(NOT Qt6_FOUND)
+    message(FATAL_ERROR "Qt6 was not found. Please install Qt6 or set CMAKE_PREFIX_PATH correctly.")
+endif()
+
+# Automatically handle Qt's MOC, UIC, and RCC
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTORCC ON)
+
+# Set build output directories
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
+
+# Source files
+set(SOURCES
+    main.cpp
+    mainwindow.cpp
+    templatewidget.cpp
+    clientwidget.cpp
+    sponsorwidget.cpp
+    ressourcewidget.cpp
+    projectwidget.cpp
 )
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(AmineTemplar
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
+# Header files
+set(HEADERS
+    mainwindow.h
+    templatewidget.h
+    clientwidget.h
+    sponsorwidget.h
+    ressourcewidget.h
+    projectwidget.h
+)
+
+# UI form files
+set(UI_FILES
+    mainwindow.ui
+    Profile.ui
+    login.ui
+    template.ui
+    client.ui
+    sponsor.ui
+    ressource.ui
+    project.ui
+)
+
+# Resource files
+set(RESOURCES
+    resources.qrc
+)
+
+# Create the executable
+add_executable(AmineTemplar
+    ${SOURCES}
+    ${HEADERS}
+    ${UI_FILES}
+    ${RESOURCES}
+    style.qss
+)
+
+# Link Qt6 libraries and threading support
+target_link_libraries(AmineTemplar
+    Qt6::Core
+    Qt6::Widgets
+    Threads::Threads
+)
+
+# Compiler-specific options
+if(WIN32 AND CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+    target_compile_options(AmineTemplar PRIVATE
+        -fno-keep-inline-dllexport
+        $<$<CONFIG:Debug>:-g>
+        $<$<CONFIG:Release>:-O2>
     )
-# Define target properties for Android with Qt 6 as:
-#    set_property(TARGET AmineTemplar APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
-else()
-    if(ANDROID)
-        add_library(AmineTemplar SHARED
-            ${PROJECT_SOURCES}
-        )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-    else()
-        add_executable(AmineTemplar
-            ${PROJECT_SOURCES}
-        )
-    endif()
 endif()
 
-target_link_libraries(AmineTemplar PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
-
-# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
-# If you are developing for iOS or macOS you should consider setting an
-# explicit, fixed bundle identifier manually though.
-if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.AmineTemplar)
-endif()
-set_target_properties(AmineTemplar PROPERTIES
-    ${BUNDLE_ID_OPTION}
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-    MACOSX_BUNDLE TRUE
-    WIN32_EXECUTABLE TRUE
+# Disable deprecated warnings for Qt6
+target_compile_definitions(AmineTemplar PRIVATE
+    QT_DISABLE_DEPRECATED_BEFORE=0x060000
 )
 
-include(GNUInstallDirs)
+# Windows-specific settings
+if(WIN32)
+    set_target_properties(AmineTemplar PROPERTIES
+        WIN32_EXECUTABLE TRUE
+    )
+endif()
+
+# Install target
 install(TARGETS AmineTemplar
-    BUNDLE DESTINATION .
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    DESTINATION bin
 )
-
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(AmineTemplar)
-endif()

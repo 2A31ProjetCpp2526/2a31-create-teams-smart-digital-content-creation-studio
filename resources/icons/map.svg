@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
+     viewBox="0 0 24 24" fill="none" stroke="black" 
+     stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Left fold -->
+  <path d="M9 3L3 6v15l6-3 6 3 6-3 0-15-6 3z"/>
+  <!-- Middle fold -->
+  <line x1="9" y1="3" x2="9" y2="18"/>
+  <!-- Right fold -->
+  <line x1="15" y1="6" x2="15" y2="21"/>
+</svg>

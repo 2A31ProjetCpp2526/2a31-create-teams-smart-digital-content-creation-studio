@@ -8,15 +8,26 @@
 #include <QPropertyAnimation>
 #include <QGraphicsDropShadowEffect>
 #include <QParallelAnimationGroup>
+#include <QDialog>
+#include <QFormLayout>
+#include <QComboBox>
+#include <QPixmap>
 
 QT_BEGIN_NAMESPACE
+class QLineEdit;
+class QCheckBox;
+class QLabel;
+class QString;
+class TemplateWidget;
+class ClientWidget;
+class SponsorWidget;
+class RessourceWidget;
+class ProjectWidget;
+
 namespace Ui {
 class MainWindow;
-class ProjectsPage;
-class EditorPage;
-class LibraryPage;
-class SettingsPage;
 class LoginPage;
+class Profile;
 }
 QT_END_NAMESPACE
 
@@ -30,33 +41,110 @@ public:
 
 private slots:
     void onDashboardClicked();
+    void onProfileClicked();
     void onProjectsClicked();
-    void onEditorClicked();
-    void onLibraryClicked();
-    void onSettingsClicked();
+    void onClientsClicked();
+    void onResourcesClicked();
+    void onSponsorsClicked();
+    void onTemplatesClicked();
+    void onAboutClicked();
     void onLoginClicked();
+    
+    // Employee management slots
+    void onSaveEmployee();
+    void onCancelAddEmployee();
+    void onEmployeeTableSelectionChanged();
+    void onModifyEmployeeClicked();
+    void onDeleteEmployeeClicked();
+    
+    // Show modify employee dialog
+    void showModifyEmployeeDialog();
+    
+    // Dashboard animations
+    void setupDashboardAnimations();
+    
+    // Login form navigation slots
+    void showSignUpForm();
+    void showLoginForm();
+    void showForgotPasswordForm();
+    
+    // Profile management slots
+    void onSaveProfileClicked();
+    void onResetProfileClicked();
+    
+    // Form validation slots
+    void validateAndLogin();
+    void validateAndSignUp();
+    void validateAndSendResetLink();
 
 private:
     void setupPages();
+    void setupLoginForms();
+    void setupProfileWidget();
+    void setupTemplateWidget();
+    void setupClientWidget();
+    void setupSponsorWidget();
+    void setupRessourceWidget();
+    void setupProjectWidget();
     void setupAnimations();
+    void setupSidebarIcons();
+    void setupCircularAvatar(QLabel* avatarLabel, const QString& initials);
+    void setupEmployeeTable();
     void switchToPage(int pageIndex);
     void addButtonHoverEffect(QPushButton* button);
+    void setupLoginFormConnections();
+    void switchLoginFormWithAnimation(int formIndex);
+    void showMainContent();
+    void showLoginOverlay();
+    void setActiveSidebarButton(QPushButton* activeButton);
+    
+    // Validation helper methods
+    bool isValidEmail(const QString& email);
+    bool isValidPassword(const QString& password);
+    void showValidationError(const QString& message);
+    void setFieldError(QLineEdit* field, bool hasError);
+    void addInputFieldEnhancements(QLineEdit* field);
     
     Ui::MainWindow *ui;
+    QPixmap legionPixmap;
+
+    // Helper to scale legion pixmap proportionally into the label
+    void updateLegionLogoScaled();
     
-    // Page widgets
-    QWidget *projectsPage;
-    QWidget *editorPage;
-    QWidget *libraryPage;
-    QWidget *settingsPage;
-    QWidget *loginPage;
+    // Page widgets (projectsPage removed to avoid conflicts with generated UI)
+    // QWidget *projectsPage;  // Commented out - using mainwindow.ui pages instead
+    QWidget *clientsPage;
+    QWidget *resourcesPage;
+    QWidget *sponsorsPage;
+    QWidget *templatesPage;
+    QWidget *shopPage;
+    
+    // Profile widget and UI
+    QWidget *profileWidget;
+    Ui::Profile *profileUI;
+    
+    // Template widget (TemplateWidget handles its own UI)
+    TemplateWidget *templateWidget;
+    
+    // Client, Sponsor, Ressource, Project widgets
+    ClientWidget *clientWidget;
+    SponsorWidget *sponsorWidget;
+    RessourceWidget *ressourceWidget;
+    ProjectWidget *projectWidget;
+    
+    // Login page widget and auth stacked widget reference
+    QWidget *loginPageWidget;
+    QStackedWidget *authStackedWidget;
+    Ui::LoginPage *loginUI;
     
     // Animation objects
     QPropertyAnimation *pageTransitionAnimation;
     QParallelAnimationGroup *animationGroup;
+    QPropertyAnimation *loginFormTransitionAnimation;
     
     // Current page tracking
     int currentPageIndex;
+    void resizeEvent(QResizeEvent* event) override;
 };
 
 #endif // MAINWINDOW_H

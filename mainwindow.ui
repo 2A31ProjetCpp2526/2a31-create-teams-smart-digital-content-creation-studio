@@ -14,14 +14,14 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: #ffffff;</string>
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>30</y>
+      <x>20</x>
+      <y>80</y>
       <width>1441</width>
       <height>671</height>
      </rect>
@@ -62,13 +62,13 @@ QTabWidget::pane {
      <attribute name="title">
       <string>🌐Display</string>
      </attribute>
-     <widget class="QTableWidget" name="tableWidget">
+     <widget class="QTableWidget" name="affiche">
       <property name="geometry">
        <rect>
         <x>0</x>
         <y>130</y>
-        <width>1141</width>
-        <height>411</height>
+        <width>1211</width>
+        <height>391</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -120,17 +120,7 @@ QHeaderView::section {
       </column>
       <column>
        <property name="text">
-        <string/>
-       </property>
-      </column>
-      <column>
-       <property name="text">
         <string>Nom </string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string/>
        </property>
       </column>
       <column>
@@ -140,22 +130,17 @@ QHeaderView::section {
       </column>
       <column>
        <property name="text">
-        <string/>
-       </property>
-      </column>
-      <column>
-       <property name="text">
         <string>Date-F</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string/>
+        <string>E-Mail</string>
        </property>
       </column>
       <column>
        <property name="text">
-        <string>E-Mail</string>
+        <string>Status</string>
        </property>
       </column>
      </widget>
@@ -184,8 +169,11 @@ QLineEdit:focus {
 }
 </string>
       </property>
+      <property name="inputMask">
+       <string notr="true"/>
+      </property>
       <property name="text">
-       <string>Search Sponsor</string>
+       <string/>
       </property>
      </widget>
      <widget class="QPushButton" name="pushButton_4">
@@ -223,8 +211,8 @@ QPushButton:pressed {
      <widget class="QPushButton" name="pushButton_3">
       <property name="geometry">
        <rect>
-        <x>700</x>
-        <y>60</y>
+        <x>1190</x>
+        <y>50</y>
         <width>211</width>
         <height>41</height>
        </rect>
@@ -251,11 +239,11 @@ QPushButton:pressed {
        <string>📥Exporter PDF</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="updateButton">
       <property name="geometry">
        <rect>
-        <x>1220</x>
-        <y>450</y>
+        <x>1100</x>
+        <y>550</y>
         <width>151</width>
         <height>41</height>
        </rect>
@@ -282,11 +270,11 @@ QPushButton:pressed {
        <string>✨Modify </string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="deleteButton">
       <property name="geometry">
        <rect>
-        <x>1220</x>
-        <y>500</y>
+        <x>1270</x>
+        <y>550</y>
         <width>151</width>
         <height>41</height>
        </rect>
@@ -333,8 +321,8 @@ color: #000000</string>
      <widget class="QPushButton" name="pushButton_6">
       <property name="geometry">
        <rect>
-        <x>530</x>
-        <y>60</y>
+        <x>1020</x>
+        <y>50</y>
         <width>161</width>
         <height>41</height>
        </rect>
@@ -360,6 +348,37 @@ QPushButton:pressed {
       </property>
       <property name="text">
        <string>🔄Sort by Name</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="afficherButton">
+      <property name="geometry">
+       <rect>
+        <x>910</x>
+        <y>550</y>
+        <width>151</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #e67e22; /* orange normal */
+    color: white;
+    border-radius: 10px;
+    padding: 8px 20px;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background-color: #d35400; /* orange foncé quand souris dessus */
+}
+
+QPushButton:pressed {
+    background-color: #ff0000; /* rouge pur quand on clique */
+}
+</string>
+      </property>
+      <property name="text">
+       <string>Afficher</string>
       </property>
      </widget>
     </widget>
@@ -439,7 +458,7 @@ font: 350 12pt &quot;Nirmala Text&quot;;
        <string>ID-SPONSOR</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit">
+     <widget class="QLineEdit" name="ID">
       <property name="geometry">
        <rect>
         <x>200</x>
@@ -465,7 +484,7 @@ QLineEdit:focus {
 </string>
       </property>
       <property name="text">
-       <string>ID_Spons</string>
+       <string/>
       </property>
      </widget>
      <widget class="QLabel" name="label_5">
@@ -486,44 +505,6 @@ font: 350 12pt &quot;Nirmala Text&quot;;
        <string> Status :</string>
       </property>
      </widget>
-     <widget class="QCheckBox" name="checkBox">
-      <property name="geometry">
-       <rect>
-        <x>660</x>
-        <y>350</y>
-        <width>141</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: #000000  /* texte noir */;
-selection-background-color: rgb(0, 0, 0);
-selection-color: rgb(0, 0, 0);
-font: 350 12pt &quot;Nirmala Text&quot;;
-</string>
-      </property>
-      <property name="text">
-       <string>active </string>
-      </property>
-     </widget>
-     <widget class="QCheckBox" name="checkBox_2">
-      <property name="geometry">
-       <rect>
-        <x>820</x>
-        <y>350</y>
-        <width>171</width>
-        <height>25</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: #000000  /* texte noir */;
-font: 350 12pt &quot;Nirmala Text&quot;;
-</string>
-      </property>
-      <property name="text">
-       <string>non active </string>
-      </property>
-     </widget>
      <widget class="QLabel" name="label_9">
       <property name="geometry">
        <rect>
@@ -542,7 +523,7 @@ font: 350 12pt &quot;Nirmala Text&quot;;
        <string>Date-Fin</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_7">
+     <widget class="QPushButton" name="addButton">
       <property name="geometry">
        <rect>
         <x>1030</x>
@@ -573,7 +554,7 @@ QPushButton:pressed {
        <string>➕ Add</string>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_2">
+     <widget class="QLineEdit" name="Nom">
       <property name="geometry">
        <rect>
         <x>660</x>
@@ -599,10 +580,10 @@ QLineEdit:focus {
 </string>
       </property>
       <property name="text">
-       <string>Nom_Spons</string>
+       <string/>
       </property>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_4">
+     <widget class="QLineEdit" name="EM">
       <property name="geometry">
        <rect>
         <x>660</x>
@@ -628,10 +609,10 @@ QLineEdit:focus {
 </string>
       </property>
       <property name="text">
-       <string>Email</string>
+       <string/>
       </property>
      </widget>
-     <widget class="QDateEdit" name="dateEdit">
+     <widget class="QDateEdit" name="dd">
       <property name="geometry">
        <rect>
         <x>200</x>
@@ -644,7 +625,7 @@ QLineEdit:focus {
        <string notr="true">color: #000000;  /* texte noir */</string>
       </property>
      </widget>
-     <widget class="QDateEdit" name="dateEdit_2">
+     <widget class="QDateEdit" name="df">
       <property name="geometry">
        <rect>
         <x>200</x>
@@ -687,6 +668,34 @@ QPushButton:pressed {
       <property name="text">
        <string>Cancel</string>
       </property>
+     </widget>
+     <widget class="QComboBox" name="STS">
+      <property name="geometry">
+       <rect>
+        <x>660</x>
+        <y>350</y>
+        <width>171</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color:rgb(0, 0, 0)</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>Selectionner...</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Active</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Non Active</string>
+       </property>
+      </item>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_3">

@@ -2,20 +2,24 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
+#include <QMessageBox>
 QT_BEGIN_NAMESPACE
-namespace Ui {
-class MainWindow;
-}
+namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+    explicit MainWindow(QWidget *parent = nullptr);
+    ~MainWindow() override = default; // Explicit default destructor
+
+private slots:
+    // Slot for adding a new appointment
+    void addAppointment();
+    void loadSponsoring();
+    void deleteSelectedSponsor();
+    void updateSponsor();
 
 private:
     Ui::MainWindow *ui;

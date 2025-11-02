@@ -1,9 +1,0 @@
-# ninja log v6
-13	627	7796729846322038	AmineTemplar_autogen/timestamp	fb6ba49bcbb58102
-13	627	7796729846322038	AmineTemplar_autogen/mocs_compilation.cpp	fb6ba49bcbb58102
-13	627	7796729846322038	C:/Users/user/Documents/QT - Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/timestamp	fb6ba49bcbb58102
-13	627	7796729846322038	C:/Users/user/Documents/QT - Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/mocs_compilation.cpp	fb6ba49bcbb58102
-633	2556	7796729847261988	CMakeFiles/AmineTemplar.dir/AmineTemplar_autogen/mocs_compilation.cpp.obj	714fe3f54201deae
-637	2580	7796729847301091	CMakeFiles/AmineTemplar.dir/main.cpp.obj	5548caa3bc6f7685
-641	2730	7796729847337570	CMakeFiles/AmineTemplar.dir/mainwindow.cpp.obj	c5279a87b6ce7768
-2730	2974	7796729868241558	AmineTemplar.exe	503a350a79f7e779

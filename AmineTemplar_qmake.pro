@@ -7,22 +7,21 @@ CONFIG += c++17
 # Source files
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    templatewidget.cpp
 
 # Header files
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    templatewidget.h
 
-# UI form files
+# UI form files (removed conflicting UI files: projects.ui, editor.ui, library.ui, settings.ui)
 FORMS += \
     mainwindow.ui \
     Profile.ui \
     Shop.ui \
-    projects.ui \
-    editor.ui \
-    library.ui \
-    settings.ui \
-    login.ui
+    login.ui \
+    template.ui
 
 # Resource files
 RESOURCES += \

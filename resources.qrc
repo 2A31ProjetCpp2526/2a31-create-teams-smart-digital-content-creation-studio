@@ -30,9 +30,18 @@
         <file>resources/icons/upgrade.svg</file>
         <file>resources/icons/login.svg</file>
         <file>resources/icons/logout.svg</file>
+        <file>resources/icons/map.svg</file>
+        <file>resources/icons/undo.svg</file>
+        <file>resources/icons/camera.svg</file>
+        <file>resources/icons/calendar.svg</file>
+        <file>resources/icons/qrcode.svg</file>
+        <file>resources/icons/bell.svg</file>
+        <file>resources/icons/mail.svg</file>
         <file>images/background.jpg</file>
-        <file>images/amine.jpg</file>
         <file>images/exemple.jpg</file>
+    <file>images/legion.png</file>
+    <file>images/inspira.png</file>
+    <file>ui/template.ui</file>
         <file>style.qss</file>
     </qresource>
     <!-- Alias resources so UI files referencing :/icons/... work without changing .ui -->
@@ -65,7 +74,14 @@
         <file alias="transactions.svg">resources/icons/transactions.svg</file>
         <file alias="upgrade.svg">resources/icons/upgrade.svg</file>
         <file alias="login.svg">resources/icons/login.svg</file>
+        <file alias="map.svg">resources/icons/map.svg</file>
         <file alias="logout.svg">resources/icons/logout.svg</file>
+        <file alias="undo.svg">resources/icons/undo.svg</file>
+        <file alias="camera.svg">resources/icons/camera.svg</file>
+        <file alias="calendar.svg">resources/icons/calendar.svg</file>
+        <file alias="qrcode.svg">resources/icons/qrcode.svg</file>
+        <file alias="bell.svg">resources/icons/bell.svg</file>
+        <file alias="mail.svg">resources/icons/mail.svg</file>
         <!-- Provide a PNG alias expected by some styleSheets by mapping it to an existing svg -->
         <file alias="check-white.png">resources/icons/info.svg</file>
     </qresource>

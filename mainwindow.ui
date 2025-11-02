@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1608</width>
-    <height>855</height>
+    <width>1672</width>
+    <height>907</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -132,7 +132,7 @@ QLabel[objectName*=&quot;Title&quot;]:hover, QLabel[objectName*=&quot;title&quot
 }</string>
          </property>
          <property name="text">
-          <string>Amine HELALI</string>
+          <string>InspiraStudio</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -167,7 +167,7 @@ QLabel[objectName*=&quot;Title&quot;]:hover, QLabel[objectName*=&quot;title&quot
           <font>
            <family>Poppins</family>
            <pointsize>11</pointsize>
-           <fontweight>Medium</fontweight>
+           <bold>false</bold>
           </font>
          </property>
          <property name="styleSheet">
@@ -209,9 +209,6 @@ QPushButton[checked=&quot;true&quot;] {
            <normaloff>:/resources/icons/employer.svg</normaloff>:/resources/icons/employer.svg</iconset>
          </property>
          <property name="checkable">
-          <bool>true</bool>
-         </property>
-         <property name="checked">
           <bool>true</bool>
          </property>
          <property name="autoExclusive">
@@ -571,7 +568,7 @@ QPushButton[checked=&quot;true&quot;] {
 }</string>
          </property>
          <property name="text">
-          <string>Templates</string>
+          <string>Services</string>
          </property>
          <property name="icon">
           <iconset resource="resources.qrc">
@@ -632,7 +629,7 @@ QPushButton[checked=&quot;true&quot;] {
 }</string>
          </property>
          <property name="text">
-          <string>Shop</string>
+          <string>About</string>
          </property>
          <property name="icon">
           <iconset resource="resources.qrc">
@@ -643,6 +640,55 @@ QPushButton[checked=&quot;true&quot;] {
          </property>
          <property name="autoExclusive">
           <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Policy::Fixed</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="sidebarInspiraLogo">
+         <property name="minimumSize">
+          <size>
+           <width>260</width>
+           <height>260</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>260</width>
+           <height>260</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QLabel {
+    background-color: transparent;
+    border: none;
+    padding: 8px;
+    margin: 0px 10px;
+}</string>
+         </property>
+         <property name="pixmap">
+          <pixmap resource="resources.qrc">:/images/inspira.png</pixmap>
+         </property>
+         <property name="scaledContents">
+          <bool>true</bool>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
          </property>
         </widget>
        </item>
@@ -747,26 +793,95 @@ QPushButton[checked=&quot;true&quot;] {
              </property>
              <property name="font">
               <font>
-               <pointsize>11</pointsize>
-               <fontweight>Light</fontweight>
+               <family>Poppins</family>
+               <pointsize>-1</pointsize>
+               <bold>true</bold>
               </font>
              </property>
              <property name="styleSheet">
               <string notr="true">QPushButton {
-    background-color: #007bff;
+    background: qlineargradient(
+        x1:0, y1:0, x2:1, y2:1,
+        stop:0 #007bff, stop:1 #33ccff
+    ); /* Dégradé bleu néon */
     color: white;
     border: none;
-    border-radius: 19px;
-    padding: 8px 24px;
-    font-weight: 300;
-    letter-spacing: 0.5px;
+    border-radius: 17px;
+    padding: 6px 20px;       /* un peu plus petit */
+    font-family: 'Poppins', sans-serif; /* Poppins */
+    font-weight: 700;         /* gras */
+    font-size: 15px;
+    letter-spacing: 0.5px;    /* espacement comme fourni */
+    text-transform: none;     /* Login normal, pas uppercase */
+    outline: none;
+    position: relative;
+
+    /* Ombre néon + profondeur 3D */
+    box-shadow:
+        0 0 8px rgba(0, 123, 255, 0.6),
+        0 4px 12px rgba(0, 0, 0, 0.25);
+
+    /* Transition fluide */
+    transition: all 0.3s ease;
 }
+
+/* Hover – glow + légère expansion */
 QPushButton:hover {
-    background-color: #0056b3;
+    background: qlineargradient(
+        x1:0, y1:0, x2:1, y2:1,
+        stop:0 #3399ff, stop:1 #66ccff
+    );
+    box-shadow:
+        0 0 18px rgba(51, 153, 255, 0.8),
+        0 6px 16px rgba(0, 0, 0, 0.3);
+    transform: scale(1.08);
 }
+
+/* Pressed – effet enfoncé 3D */
 QPushButton:pressed {
-    background-color: #004085;
-}</string>
+    background: qlineargradient(
+        x1:0, y1:0, x2:1, y2:1,
+        stop:0 #0056b3, stop:1 #0099ff
+    );
+    box-shadow:
+        0 0 6px rgba(0, 102, 255, 0.5),
+        inset 0 2px 6px rgba(0, 0, 0, 0.3);
+    transform: scale(0.96) translateY(2px);
+}
+
+/* Reflet animé subtil */
+QPushButton::after {
+    content: &quot;&quot;;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 17px;
+    background: qlineargradient(
+        x1:0, y1:0, x2:1, y2:1,
+        stop:0 rgba(255,255,255,0.2),
+        stop:1 rgba(255,255,255,0)
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+QPushButton:hover::after {
+    opacity: 1;
+}
+
+/* Animation “neon pulse” */
+@keyframes neonPulse {
+    0% { box-shadow: 0 0 8px rgba(0, 123, 255, 0.5), 0 4px 12px rgba(0,0,0,0.25);}
+    50% { box-shadow: 0 0 20px rgba(0, 153, 255, 0.9), 0 6px 16px rgba(0,0,0,0.3);}
+    100% { box-shadow: 0 0 8px rgba(0, 123, 255, 0.5), 0 4px 12px rgba(0,0,0,0.25);}
+}
+
+QPushButton {
+    animation: neonPulse 2.5s infinite ease-in-out;
+}
+</string>
              </property>
              <property name="text">
               <string>Login</string>
@@ -779,7 +894,7 @@ QPushButton:pressed {
         <item>
          <widget class="QStackedWidget" name="stackedWidget">
           <property name="currentIndex">
-           <number>3</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="employerPage">
            <layout class="QVBoxLayout" name="employerLayout">
@@ -787,16 +902,16 @@ QPushButton:pressed {
              <number>0</number>
             </property>
             <property name="leftMargin">
-             <number>0</number>
+             <number>32</number>
             </property>
             <property name="topMargin">
-             <number>0</number>
+             <number>32</number>
             </property>
             <property name="rightMargin">
-             <number>0</number>
+             <number>32</number>
             </property>
             <property name="bottomMargin">
-             <number>0</number>
+             <number>32</number>
             </property>
             <item>
              <widget class="QTabWidget" name="employerTabWidget">
@@ -820,15 +935,13 @@ QTabBar::tab {
     border: 1px solid #dee2e6;
     border-bottom: none;
     border-radius: 6px 6px 0 0;
-    padding: 12px 24px;
+    padding: 12px 20px;
     margin-right: 2px;
     font-weight: 700;
-    color: #657786;
+    color: #495057;
     font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
     font-size: 14px;
-    min-width: 80px;
-    min-height: 32px;
-    max-height: 32px;
+    min-width: 100px;
     letter-spacing: 0.3px;
     transition: all 0.3s ease-in-out;
 }
@@ -906,7 +1019,7 @@ QLabel:hover {
 }</string>
                   </property>
                   <property name="text">
-                   <string>Employee Management</string>
+                   <string>                                                                            Employee Management</string>
                   </property>
                  </widget>
                 </item>
@@ -1475,7 +1588,7 @@ QTableWidget::item:focus {
                    <number>1</number>
                   </property>
                   <property name="columnCount">
-                   <number>7</number>
+                   <number>8</number>
                   </property>
                   <attribute name="horizontalHeaderVisible">
                    <bool>true</bool>
@@ -1529,6 +1642,11 @@ QTableWidget::item:focus {
                   <column>
                    <property name="text">
                     <string>Phone</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>Start Date</string>
                    </property>
                   </column>
                   <item row="0" column="0">
@@ -1862,646 +1980,6 @@ QWidget#addEmployeeContainer:hover {
                     </widget>
                    </item>
                    <item>
-                    <widget class="QWidget" name="formWidget" native="true">
-                     <layout class="QGridLayout" name="employeeFormLayout">
-                      <property name="horizontalSpacing">
-                       <number>24</number>
-                      </property>
-                      <property name="verticalSpacing">
-                       <number>20</number>
-                      </property>
-                      <item row="0" column="0">
-                       <widget class="QLabel" name="firstNameLabel">
-                        <property name="minimumSize">
-                         <size>
-                          <width>100</width>
-                          <height>20</height>
-                         </size>
-                        </property>
-                        <property name="font">
-                         <font>
-                          <family>Poppins</family>
-                          <pointsize>12</pointsize>
-                          <fontweight>Light</fontweight>
-                         </font>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">QLabel {
-    color: #495057;
-    font-weight: 300;
-    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
-    letter-spacing: 0.4px;
-    padding: 4px 0px;
-    margin-right: 8px;
-}</string>
-                        </property>
-                        <property name="text">
-                         <string>First Name:</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="0" column="1">
-                       <widget class="QLineEdit" name="firstNameEdit">
-                        <property name="minimumSize">
-                         <size>
-                          <width>200</width>
-                          <height>42</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>16777215</width>
-                          <height>42</height>
-                         </size>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">QLineEdit {
-    padding: 12px 16px;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    background-color: #ffffff;
-    color: #495057;
-    font-weight: 300;
-    letter-spacing: 0.5px;
-}
-
-QLineEdit:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
-
-QLineEdit:hover {
-    border-color: #adb5bd;
-}</string>
-                        </property>
-                        <property name="placeholderText">
-                         <string>Enter first name</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="0" column="2">
-                       <widget class="QLabel" name="lastNameLabel">
-                        <property name="minimumSize">
-                         <size>
-                          <width>100</width>
-                          <height>20</height>
-                         </size>
-                        </property>
-                        <property name="font">
-                         <font>
-                          <family>Poppins</family>
-                          <pointsize>12</pointsize>
-                          <fontweight>Light</fontweight>
-                         </font>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">QLabel {
-    color: #495057;
-    font-weight: 300;
-    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
-    letter-spacing: 0.4px;
-    padding: 4px 0px;
-    margin-right: 8px;
-}</string>
-                        </property>
-                        <property name="text">
-                         <string>Last Name:</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="0" column="3">
-                       <widget class="QLineEdit" name="lastNameEdit">
-                        <property name="minimumSize">
-                         <size>
-                          <width>200</width>
-                          <height>42</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>16777215</width>
-                          <height>42</height>
-                         </size>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">QLineEdit {
-    padding: 12px 16px;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    background-color: #ffffff;
-    color: #495057;
-    font-weight: 300;
-    letter-spacing: 0.5px;
-}
-
-QLineEdit:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
-
-QLineEdit:hover {
-    border-color: #adb5bd;
-}</string>
-                        </property>
-                        <property name="placeholderText">
-                         <string>Enter last name</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="0">
-                       <widget class="QLabel" name="emailLabel">
-                        <property name="minimumSize">
-                         <size>
-                          <width>100</width>
-                          <height>20</height>
-                         </size>
-                        </property>
-                        <property name="font">
-                         <font>
-                          <family>Poppins</family>
-                          <pointsize>12</pointsize>
-                          <bold>false</bold>
-                         </font>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">QLabel {
-    color: #495057;
-    font-weight: 400;
-    letter-spacing: 0.5px;
-}</string>
-                        </property>
-                        <property name="text">
-                         <string>Email:</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="1">
-                       <widget class="QLineEdit" name="emailEdit">
-                        <property name="minimumSize">
-                         <size>
-                          <width>200</width>
-                          <height>42</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>16777215</width>
-                          <height>42</height>
-                         </size>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">QLineEdit {
-    padding: 12px 16px;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    background-color: #ffffff;
-    color: #495057;
-    font-weight: 300;
-    letter-spacing: 0.5px;
-}
-
-QLineEdit:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
-
-QLineEdit:hover {
-    border-color: #adb5bd;
-}</string>
-                        </property>
-                        <property name="placeholderText">
-                         <string>Enter email address</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="2">
-                       <widget class="QLabel" name="phoneLabel">
-                        <property name="minimumSize">
-                         <size>
-                          <width>100</width>
-                          <height>20</height>
-                         </size>
-                        </property>
-                        <property name="font">
-                         <font>
-                          <family>Poppins</family>
-                          <pointsize>12</pointsize>
-                          <bold>false</bold>
-                         </font>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">QLabel {
-    color: #495057;
-    font-weight: 400;
-    letter-spacing: 0.5px;
-}</string>
-                        </property>
-                        <property name="text">
-                         <string>Phone:</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="1" column="3">
-                       <widget class="QLineEdit" name="phoneEdit">
-                        <property name="minimumSize">
-                         <size>
-                          <width>200</width>
-                          <height>42</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>16777215</width>
-                          <height>42</height>
-                         </size>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">QLineEdit {
-    padding: 12px 16px;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    background-color: #ffffff;
-    color: #495057;
-    font-weight: 300;
-    letter-spacing: 0.5px;
-}
-
-QLineEdit:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
-
-QLineEdit:hover {
-    border-color: #adb5bd;
-}</string>
-                        </property>
-                        <property name="placeholderText">
-                         <string>Enter phone number</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="2" column="0">
-                       <widget class="QLabel" name="roleLabel">
-                        <property name="minimumSize">
-                         <size>
-                          <width>100</width>
-                          <height>20</height>
-                         </size>
-                        </property>
-                        <property name="font">
-                         <font>
-                          <family>Poppins</family>
-                          <pointsize>12</pointsize>
-                          <bold>false</bold>
-                         </font>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">QLabel {
-    color: #495057;
-    font-weight: 400;
-    letter-spacing: 0.5px;
-}</string>
-                        </property>
-                        <property name="text">
-                         <string>Role:</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="2" column="1">
-                       <widget class="QComboBox" name="roleComboBox">
-                        <property name="minimumSize">
-                         <size>
-                          <width>200</width>
-                          <height>38</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>16777215</width>
-                          <height>42</height>
-                         </size>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">QComboBox {
-    padding: 8px 12px;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    background-color: white;
-    color: #495057;
-    font-weight: 300;
-    min-height: 20px;
-}
-
-QComboBox:hover {
-    border-color: #adb5bd;
-}
-
-QComboBox:focus {
-    border-color: #007bff;
-}
-
-QComboBox::drop-down {
-    border: none;
-    width: 20px;
-}
-
-QComboBox::down-arrow {
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 5px solid #6c757d;
-    margin-right: 5px;
-}</string>
-                        </property>
-                        <item>
-                         <property name="text">
-                          <string>Select Role</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>Developer</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>Designer</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>Manager</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>Animator</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>Artist</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>Intern</string>
-                         </property>
-                        </item>
-                       </widget>
-                      </item>
-                      <item row="2" column="2">
-                       <widget class="QLabel" name="departmentLabel">
-                        <property name="minimumSize">
-                         <size>
-                          <width>100</width>
-                          <height>20</height>
-                         </size>
-                        </property>
-                        <property name="font">
-                         <font>
-                          <family>Poppins</family>
-                          <pointsize>12</pointsize>
-                          <bold>false</bold>
-                         </font>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">QLabel {
-    color: #495057;
-    font-weight: 400;
-    letter-spacing: 0.5px;
-}</string>
-                        </property>
-                        <property name="text">
-                         <string>Department:</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="2" column="3">
-                       <widget class="QComboBox" name="departmentComboBox">
-                        <property name="minimumSize">
-                         <size>
-                          <width>200</width>
-                          <height>38</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>16777215</width>
-                          <height>42</height>
-                         </size>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">QComboBox {
-    padding: 8px 12px;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    background-color: white;
-    color: #495057;
-    font-weight: 300;
-    min-height: 20px;
-}
-
-QComboBox:hover {
-    border-color: #adb5bd;
-}
-
-QComboBox:focus {
-    border-color: #007bff;
-}
-
-QComboBox::drop-down {
-    border: none;
-    width: 20px;
-}
-
-QComboBox::down-arrow {
-    width: 0;
-    height: 0;
-    border-left: 5px solid transparent;
-    border-right: 5px solid transparent;
-    border-top: 5px solid #6c757d;
-    margin-right: 5px;
-}</string>
-                        </property>
-                        <item>
-                         <property name="text">
-                          <string>Select Department</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>Development</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>Design</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>Animation</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>Management</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>Quality Assurance</string>
-                         </property>
-                        </item>
-                        <item>
-                         <property name="text">
-                          <string>Human Resources</string>
-                         </property>
-                        </item>
-                       </widget>
-                      </item>
-                      <item row="3" column="0">
-                       <widget class="QLabel" name="salaryLabel">
-                        <property name="minimumSize">
-                         <size>
-                          <width>100</width>
-                          <height>20</height>
-                         </size>
-                        </property>
-                        <property name="font">
-                         <font>
-                          <family>Poppins</family>
-                          <pointsize>12</pointsize>
-                          <bold>false</bold>
-                         </font>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">QLabel {
-    color: #495057;
-    font-weight: 400;
-    letter-spacing: 0.5px;
-}</string>
-                        </property>
-                        <property name="text">
-                         <string>Salary:</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="3" column="1">
-                       <widget class="QLineEdit" name="salaryEdit">
-                        <property name="minimumSize">
-                         <size>
-                          <width>200</width>
-                          <height>42</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>16777215</width>
-                          <height>42</height>
-                         </size>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">QLineEdit {
-    padding: 12px 16px;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    background-color: #ffffff;
-    color: #495057;
-    font-weight: 300;
-    letter-spacing: 0.5px;
-}
-
-QLineEdit:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
-
-QLineEdit:hover {
-    border-color: #adb5bd;
-}</string>
-                        </property>
-                        <property name="placeholderText">
-                         <string>Enter salary amount</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="3" column="2">
-                       <widget class="QLabel" name="startDateLabel">
-                        <property name="minimumSize">
-                         <size>
-                          <width>100</width>
-                          <height>20</height>
-                         </size>
-                        </property>
-                        <property name="font">
-                         <font>
-                          <family>Poppins</family>
-                          <pointsize>12</pointsize>
-                          <bold>false</bold>
-                         </font>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">QLabel {
-    color: #495057;
-    font-weight: 400;
-    letter-spacing: 0.5px;
-}</string>
-                        </property>
-                        <property name="text">
-                         <string>Start Date:</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item row="3" column="3">
-                       <widget class="QDateEdit" name="startDateEdit">
-                        <property name="minimumSize">
-                         <size>
-                          <width>200</width>
-                          <height>38</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>16777215</width>
-                          <height>42</height>
-                         </size>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">QDateEdit {
-    padding: 8px 12px;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    background-color: white;
-    color: #495057;
-    font-weight: 300;
-    min-height: 20px;
-}
-
-QDateEdit:hover {
-    border-color: #adb5bd;
-}
-
-QDateEdit:focus {
-    border-color: #007bff;
-}</string>
-                        </property>
-                        <property name="calendarPopup">
-                         <bool>true</bool>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
-                   </item>
-                   <item>
                     <widget class="QWidget" name="buttonContainer" native="true">
                      <layout class="QHBoxLayout" name="buttonLayout">
                       <property name="spacing">
@@ -2641,476 +2119,13 @@ QPushButton:pressed {
                 </item>
                </layout>
               </widget>
-              <widget class="QWidget" name="modifyTab">
-               <attribute name="icon">
-                <iconset resource="resources.qrc">
-                 <normaloff>:/resources/icons/modify.svg</normaloff>:/resources/icons/modify.svg</iconset>
-               </attribute>
-               <attribute name="title">
-                <string>Modify</string>
-               </attribute>
-               <layout class="QVBoxLayout" name="modifyLayout">
-                <property name="spacing">
-                 <number>20</number>
-                </property>
-                <property name="leftMargin">
-                 <number>32</number>
-                </property>
-                <property name="topMargin">
-                 <number>32</number>
-                </property>
-                <property name="rightMargin">
-                 <number>32</number>
-                </property>
-                <property name="bottomMargin">
-                 <number>32</number>
-                </property>
-                <item>
-                 <widget class="QLabel" name="modifyTitle">
-                  <property name="font">
-                   <font>
-                    <family>Poppins</family>
-                    <pointsize>-1</pointsize>
-                    <fontweight>Light</fontweight>
-                   </font>
-                  </property>
-                  <property name="styleSheet">
-                   <string notr="true">QLabel {
-    color: #14171a;
-    font-weight: 300;
-    letter-spacing: 0.8px;
-    margin-bottom: 20px;
-    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-    border-bottom: 1px solid #e1e8ed;
-    padding: 16px 0px 20px 0px;
-}</string>
-                  </property>
-                  <property name="text">
-                   <string>Modify Employee</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QWidget" name="modifyFormWidget" native="true">
-                  <layout class="QGridLayout" name="modifyFormLayout">
-                   <property name="horizontalSpacing">
-                    <number>24</number>
-                   </property>
-                   <property name="verticalSpacing">
-                    <number>20</number>
-                   </property>
-                   <item row="0" column="0">
-                    <widget class="QLabel" name="modifyFirstNameLabel">
-                     <property name="minimumSize">
-                      <size>
-                       <width>100</width>
-                       <height>20</height>
-                      </size>
-                     </property>
-                     <property name="font">
-                      <font>
-                       <family>Poppins</family>
-                       <pointsize>12</pointsize>
-                       <fontweight>Light</fontweight>
-                      </font>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">QLabel {
-    color: #495057;
-    font-weight: 300;
-    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
-    letter-spacing: 0.4px;
-    padding: 4px 0px;
-    margin-right: 8px;
-}</string>
-                     </property>
-                     <property name="text">
-                      <string>First Name:</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="1">
-                    <widget class="QLineEdit" name="modifyFirstNameEdit">
-                     <property name="minimumSize">
-                      <size>
-                       <width>200</width>
-                       <height>42</height>
-                      </size>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>16777215</width>
-                       <height>42</height>
-                      </size>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">QLineEdit {
-    padding: 12px 16px;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    background-color: #ffffff;
-    color: #495057;
-    font-weight: 300;
-    letter-spacing: 0.5px;
-}
-
-QLineEdit:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
-
-QLineEdit:hover {
-    border-color: #adb5bd;
-}</string>
-                     </property>
-                     <property name="placeholderText">
-                      <string>Enter first name</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="2">
-                    <widget class="QLabel" name="modifyLastNameLabel">
-                     <property name="minimumSize">
-                      <size>
-                       <width>100</width>
-                       <height>20</height>
-                      </size>
-                     </property>
-                     <property name="font">
-                      <font>
-                       <family>Poppins</family>
-                       <pointsize>12</pointsize>
-                       <fontweight>Light</fontweight>
-                      </font>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">QLabel {
-    color: #495057;
-    font-weight: 300;
-    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
-    letter-spacing: 0.4px;
-    padding: 4px 0px;
-    margin-right: 8px;
-}</string>
-                     </property>
-                     <property name="text">
-                      <string>Last Name:</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="3">
-                    <widget class="QLineEdit" name="modifyLastNameEdit">
-                     <property name="minimumSize">
-                      <size>
-                       <width>200</width>
-                       <height>42</height>
-                      </size>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>16777215</width>
-                       <height>42</height>
-                      </size>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">QLineEdit {
-    padding: 12px 16px;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    background-color: #ffffff;
-    color: #495057;
-    font-weight: 300;
-    letter-spacing: 0.5px;
-}
-
-QLineEdit:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
-
-QLineEdit:hover {
-    border-color: #adb5bd;
-}</string>
-                     </property>
-                     <property name="placeholderText">
-                      <string>Enter last name</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="0">
-                    <widget class="QLabel" name="modifyEmailLabel">
-                     <property name="minimumSize">
-                      <size>
-                       <width>100</width>
-                       <height>20</height>
-                      </size>
-                     </property>
-                     <property name="font">
-                      <font>
-                       <family>Poppins</family>
-                       <pointsize>12</pointsize>
-                       <fontweight>Light</fontweight>
-                      </font>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">QLabel {
-    color: #495057;
-    font-weight: 300;
-    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
-    letter-spacing: 0.4px;
-    padding: 4px 0px;
-    margin-right: 8px;
-}</string>
-                     </property>
-                     <property name="text">
-                      <string>Email:</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="1">
-                    <widget class="QLineEdit" name="modifyEmailEdit">
-                     <property name="minimumSize">
-                      <size>
-                       <width>200</width>
-                       <height>42</height>
-                      </size>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>16777215</width>
-                       <height>42</height>
-                      </size>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">QLineEdit {
-    padding: 12px 16px;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    background-color: #ffffff;
-    color: #495057;
-    font-weight: 300;
-    letter-spacing: 0.5px;
-}
-
-QLineEdit:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
-
-QLineEdit:hover {
-    border-color: #adb5bd;
-}</string>
-                     </property>
-                     <property name="placeholderText">
-                      <string>Enter email address</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="2">
-                    <widget class="QLabel" name="modifyPhoneLabel">
-                     <property name="minimumSize">
-                      <size>
-                       <width>100</width>
-                       <height>20</height>
-                      </size>
-                     </property>
-                     <property name="font">
-                      <font>
-                       <family>Poppins</family>
-                       <pointsize>12</pointsize>
-                       <fontweight>Light</fontweight>
-                      </font>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">QLabel {
-    color: #495057;
-    font-weight: 300;
-    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
-    letter-spacing: 0.4px;
-    padding: 4px 0px;
-    margin-right: 8px;
-}</string>
-                     </property>
-                     <property name="text">
-                      <string>Phone:</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="3">
-                    <widget class="QLineEdit" name="modifyPhoneEdit">
-                     <property name="minimumSize">
-                      <size>
-                       <width>200</width>
-                       <height>42</height>
-                      </size>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>16777215</width>
-                       <height>42</height>
-                      </size>
-                     </property>
-                     <property name="styleSheet">
-                      <string notr="true">QLineEdit {
-    padding: 12px 16px;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    background-color: #ffffff;
-    color: #495057;
-    font-weight: 300;
-    letter-spacing: 0.5px;
-}
-
-QLineEdit:focus {
-    border-color: #007bff;
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
-}
-
-QLineEdit:hover {
-    border-color: #adb5bd;
-}</string>
-                     </property>
-                     <property name="placeholderText">
-                      <string>Enter phone number</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="1" colspan="2">
-                    <widget class="QWidget" name="modifyButtonContainer" native="true">
-                     <layout class="QHBoxLayout" name="modifyButtonLayout">
-                      <property name="spacing">
-                       <number>16</number>
-                      </property>
-                      <property name="leftMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>20</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="bottomMargin">
-                       <number>0</number>
-                      </property>
-                      <item>
-                       <spacer name="modifyButtonSpacer">
-                        <property name="orientation">
-                         <enum>Qt::Orientation::Horizontal</enum>
-                        </property>
-                        <property name="sizeHint" stdset="0">
-                         <size>
-                          <width>40</width>
-                          <height>20</height>
-                         </size>
-                        </property>
-                       </spacer>
-                      </item>
-                      <item>
-                       <widget class="QPushButton" name="saveModifyBtn">
-                        <property name="minimumSize">
-                         <size>
-                          <width>120</width>
-                          <height>44</height>
-                         </size>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">QPushButton {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 24px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
-}
-
-QPushButton:hover {
-    background-color: #0056b3;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
-}
-
-QPushButton:pressed {
-    background-color: #004085;
-    transform: translateY(0);
-}</string>
-                        </property>
-                        <property name="text">
-                         <string>Save Changes</string>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QPushButton" name="cancelModifyBtn">
-                        <property name="minimumSize">
-                         <size>
-                          <width>120</width>
-                          <height>44</height>
-                         </size>
-                        </property>
-                        <property name="styleSheet">
-                         <string notr="true">QPushButton {
-    background-color: #6c757d;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    padding: 12px 24px;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
-}
-
-QPushButton:hover {
-    background-color: #545b62;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 4px rgba(108, 117, 125, 0.3);
-}
-
-QPushButton:pressed {
-    background-color: #3d4142;
-    transform: translateY(0);
-}</string>
-                        </property>
-                        <property name="text">
-                         <string>Cancel</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="modifySpacer">
-                  <property name="orientation">
-                   <enum>Qt::Orientation::Vertical</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>20</width>
-                    <height>40</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-               </layout>
-              </widget>
               <widget class="QWidget" name="dashboardTab">
                <attribute name="icon">
                 <iconset resource="resources.qrc">
                  <normaloff>:/resources/icons/dashboard.svg</normaloff>:/resources/icons/dashboard.svg</iconset>
                </attribute>
                <attribute name="title">
-                <string>Dashboard</string>
+                <string>Statistics</string>
                </attribute>
                <layout class="QVBoxLayout" name="dashboardTabLayout">
                 <property name="leftMargin">
@@ -3139,6 +2154,8 @@ QPushButton:pressed {
     color: #343a40;
     font-weight: 500;
     letter-spacing: 0.5px;
+    font-size: 24px;
+    margin-bottom: 20px;
 }</string>
                   </property>
                   <property name="text">
@@ -3147,31 +2164,939 @@ QPushButton:pressed {
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLabel" name="dashboardTabContent">
-                  <property name="font">
-                   <font>
-                    <family>Poppins</family>
-                    <pointsize>14</pointsize>
-                    <fontweight>Light</fontweight>
-                   </font>
-                  </property>
+                 <widget class="QWidget" name="statisticsCardsContainer" native="true">
                   <property name="styleSheet">
-                   <string notr="true">QLabel {
+                   <string notr="true">QWidget#statisticsCardsContainer {
+    background: transparent;
+}</string>
+                  </property>
+                  <layout class="QHBoxLayout" name="statisticsCardsLayout">
+                   <property name="spacing">
+                    <number>20</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QWidget" name="totalEmployeesCard" native="true">
+                     <property name="minimumSize">
+                      <size>
+                       <width>250</width>
+                       <height>120</height>
+                      </size>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">QWidget#totalEmployeesCard {
+    background-color: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+QWidget#totalEmployeesCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}</string>
+                     </property>
+                     <layout class="QVBoxLayout" name="totalEmployeesCardLayout">
+                      <property name="spacing">
+                       <number>8</number>
+                      </property>
+                      <property name="leftMargin">
+                       <number>20</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>20</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>20</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>20</number>
+                      </property>
+                      <item>
+                       <widget class="QLabel" name="totalEmployeesTitle">
+                        <property name="font">
+                         <font>
+                          <family>Poppins</family>
+                          <pointsize>-1</pointsize>
+                          <fontweight>Light</fontweight>
+                         </font>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">QLabel {
     color: #6c757d;
     font-weight: 300;
     letter-spacing: 0.5px;
-    padding: 16px 0;
+}</string>
+                        </property>
+                        <property name="text">
+                         <string>Total Employees</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="totalEmployeesNumber">
+                        <property name="font">
+                         <font>
+                          <family>Poppins</family>
+                          <pointsize>28</pointsize>
+                          <fontweight>DemiBold</fontweight>
+                         </font>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">QLabel {
+    color: #007bff;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+}</string>
+                        </property>
+                        <property name="text">
+                         <string>142</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="totalEmployeesGrowth">
+                        <property name="font">
+                         <font>
+                          <family>Poppins</family>
+                          <pointsize>10</pointsize>
+                          <fontweight>Light</fontweight>
+                         </font>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">QLabel {
+    color: #28a745;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+}</string>
+                        </property>
+                        <property name="text">
+                         <string>+12% from last month</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QWidget" name="activeProjectsCard" native="true">
+                     <property name="minimumSize">
+                      <size>
+                       <width>250</width>
+                       <height>120</height>
+                      </size>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">QWidget#activeProjectsCard {
+    background-color: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+QWidget#activeProjectsCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}</string>
+                     </property>
+                     <layout class="QVBoxLayout" name="activeProjectsCardLayout">
+                      <property name="spacing">
+                       <number>8</number>
+                      </property>
+                      <property name="leftMargin">
+                       <number>20</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>20</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>20</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>20</number>
+                      </property>
+                      <item>
+                       <widget class="QLabel" name="activeProjectsTitle">
+                        <property name="font">
+                         <font>
+                          <family>Poppins</family>
+                          <pointsize>-1</pointsize>
+                          <fontweight>Light</fontweight>
+                         </font>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">QLabel {
+    color: #6c757d;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+}</string>
+                        </property>
+                        <property name="text">
+                         <string>Active Projects</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="activeProjectsNumber">
+                        <property name="font">
+                         <font>
+                          <family>Poppins</family>
+                          <pointsize>28</pointsize>
+                          <fontweight>DemiBold</fontweight>
+                         </font>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">QLabel {
+    color: #17a2b8;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+}</string>
+                        </property>
+                        <property name="text">
+                         <string>23</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="activeProjectsStatus">
+                        <property name="font">
+                         <font>
+                          <family>Poppins</family>
+                          <pointsize>10</pointsize>
+                          <fontweight>Light</fontweight>
+                         </font>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">QLabel {
+    color: #ffc107;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+}</string>
+                        </property>
+                        <property name="text">
+                         <string>5 near deadline</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QWidget" name="performanceCard" native="true">
+                     <property name="minimumSize">
+                      <size>
+                       <width>250</width>
+                       <height>120</height>
+                      </size>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">QWidget#performanceCard {
+    background-color: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+QWidget#performanceCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}</string>
+                     </property>
+                     <layout class="QVBoxLayout" name="performanceCardLayout">
+                      <property name="spacing">
+                       <number>8</number>
+                      </property>
+                      <property name="leftMargin">
+                       <number>20</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>20</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>20</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>20</number>
+                      </property>
+                      <item>
+                       <widget class="QLabel" name="performanceTitle">
+                        <property name="font">
+                         <font>
+                          <family>Poppins</family>
+                          <pointsize>-1</pointsize>
+                          <fontweight>Light</fontweight>
+                         </font>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">QLabel {
+    color: #6c757d;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+}</string>
+                        </property>
+                        <property name="text">
+                         <string>Performance Score</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="performanceNumber">
+                        <property name="font">
+                         <font>
+                          <family>Poppins</family>
+                          <pointsize>28</pointsize>
+                          <fontweight>DemiBold</fontweight>
+                         </font>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">QLabel {
+    color: #28a745;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+}</string>
+                        </property>
+                        <property name="text">
+                         <string>94.2%</string>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QLabel" name="performanceStatus">
+                        <property name="font">
+                         <font>
+                          <family>Poppins</family>
+                          <pointsize>10</pointsize>
+                          <fontweight>Light</fontweight>
+                         </font>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">QLabel {
+    color: #28a745;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+}</string>
+                        </property>
+                        <property name="text">
+                         <string>Excellent</string>
+                        </property>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QWidget" name="chartsContainer" native="true">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>300</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">QWidget#chartsContainer {
+    background: transparent;
 }</string>
                   </property>
-                  <property name="text">
-                   <string>Analytics, charts, and overview statistics for employee management will be displayed here.</string>
-                  </property>
-                  <property name="alignment">
-                   <set>Qt::AlignmentFlag::AlignTop</set>
-                  </property>
-                  <property name="wordWrap">
-                   <bool>true</bool>
-                  </property>
+                  <layout class="QHBoxLayout" name="chartsLayout">
+                   <property name="spacing">
+                    <number>20</number>
+                   </property>
+                   <property name="leftMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="topMargin">
+                    <number>20</number>
+                   </property>
+                   <property name="rightMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item>
+                    <widget class="QWidget" name="progressCirclesWidget" native="true">
+                     <property name="minimumSize">
+                      <size>
+                       <width>400</width>
+                       <height>300</height>
+                      </size>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">QWidget#progressCirclesWidget {
+    background-color: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}</string>
+                     </property>
+                     <layout class="QVBoxLayout" name="progressCirclesLayout">
+                      <property name="spacing">
+                       <number>20</number>
+                      </property>
+                      <property name="leftMargin">
+                       <number>30</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>25</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>30</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>25</number>
+                      </property>
+                      <item>
+                       <widget class="QLabel" name="progressCirclesTitle">
+                        <property name="font">
+                         <font>
+                          <family>Poppins</family>
+                          <pointsize>-1</pointsize>
+                          <fontweight>Medium</fontweight>
+                         </font>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">QLabel {
+    color: #343a40;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}</string>
+                        </property>
+                        <property name="text">
+                         <string>Department Progress</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignmentFlag::AlignCenter</set>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QWidget" name="circlesRow" native="true">
+                        <layout class="QHBoxLayout" name="circlesRowLayout">
+                         <property name="spacing">
+                          <number>40</number>
+                         </property>
+                         <item>
+                          <widget class="QWidget" name="developmentCircle" native="true">
+                           <property name="minimumSize">
+                            <size>
+                             <width>100</width>
+                             <height>100</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>100</width>
+                             <height>100</height>
+                            </size>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">QWidget#developmentCircle {
+    background-color: qconicalgradient(cx:0.5, cy:0.5, angle:90,
+        stop:0 #007bff, stop:0.75 #007bff, stop:0.751 #e9ecef, stop:1 #e9ecef);
+    border-radius: 50px;
+    border: 3px solid #ffffff;
+}
+
+QWidget#developmentCircle::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    width: 70px;
+    height: 70px;
+    background-color: #ffffff;
+    border-radius: 35px;
+}</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QWidget" name="designCircle" native="true">
+                           <property name="minimumSize">
+                            <size>
+                             <width>100</width>
+                             <height>100</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>100</width>
+                             <height>100</height>
+                            </size>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">QWidget#designCircle {
+    background-color: qconicalgradient(cx:0.5, cy:0.5, angle:90,
+        stop:0 #17a2b8, stop:0.82 #17a2b8, stop:0.821 #e9ecef, stop:1 #e9ecef);
+    border-radius: 50px;
+    border: 3px solid #ffffff;
+}</string>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QWidget" name="managementCircle" native="true">
+                           <property name="minimumSize">
+                            <size>
+                             <width>100</width>
+                             <height>100</height>
+                            </size>
+                           </property>
+                           <property name="maximumSize">
+                            <size>
+                             <width>100</width>
+                             <height>100</height>
+                            </size>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">QWidget#managementCircle {
+    background-color: qconicalgradient(cx:0.5, cy:0.5, angle:90,
+        stop:0 #28a745, stop:0.68 #28a745, stop:0.681 #e9ecef, stop:1 #e9ecef);
+    border-radius: 50px;
+    border: 3px solid #ffffff;
+}</string>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QWidget" name="circlesLabels" native="true">
+                        <layout class="QHBoxLayout" name="circlesLabelsLayout">
+                         <property name="spacing">
+                          <number>40</number>
+                         </property>
+                         <item>
+                          <widget class="QLabel" name="developmentLabel">
+                           <property name="font">
+                            <font>
+                             <family>Poppins</family>
+                             <pointsize>10</pointsize>
+                             <fontweight>Light</fontweight>
+                            </font>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">QLabel {
+    color: #495057;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+}</string>
+                           </property>
+                           <property name="text">
+                            <string>Development
+75%</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignmentFlag::AlignCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLabel" name="designLabel">
+                           <property name="font">
+                            <font>
+                             <family>Poppins</family>
+                             <pointsize>10</pointsize>
+                             <fontweight>Light</fontweight>
+                            </font>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">QLabel {
+    color: #495057;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+}</string>
+                           </property>
+                           <property name="text">
+                            <string>Design
+82%</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignmentFlag::AlignCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QLabel" name="managementLabel">
+                           <property name="font">
+                            <font>
+                             <family>Poppins</family>
+                             <pointsize>10</pointsize>
+                             <fontweight>Light</fontweight>
+                            </font>
+                           </property>
+                           <property name="styleSheet">
+                            <string notr="true">QLabel {
+    color: #495057;
+    font-weight: 300;
+    letter-spacing: 0.3px;
+}</string>
+                           </property>
+                           <property name="text">
+                            <string>Management
+68%</string>
+                           </property>
+                           <property name="alignment">
+                            <set>Qt::AlignmentFlag::AlignCenter</set>
+                           </property>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QWidget" name="chartWidget" native="true">
+                     <property name="minimumSize">
+                      <size>
+                       <width>400</width>
+                       <height>300</height>
+                      </size>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">QWidget#chartWidget {
+    background-color: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}</string>
+                     </property>
+                     <layout class="QVBoxLayout" name="chartLayout">
+                      <property name="spacing">
+                       <number>15</number>
+                      </property>
+                      <property name="leftMargin">
+                       <number>30</number>
+                      </property>
+                      <property name="topMargin">
+                       <number>25</number>
+                      </property>
+                      <property name="rightMargin">
+                       <number>30</number>
+                      </property>
+                      <property name="bottomMargin">
+                       <number>25</number>
+                      </property>
+                      <item>
+                       <widget class="QLabel" name="chartTitle">
+                        <property name="font">
+                         <font>
+                          <family>Poppins</family>
+                          <pointsize>-1</pointsize>
+                          <fontweight>Medium</fontweight>
+                         </font>
+                        </property>
+                        <property name="styleSheet">
+                         <string notr="true">QLabel {
+    color: #343a40;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}</string>
+                        </property>
+                        <property name="text">
+                         <string>Monthly Growth</string>
+                        </property>
+                        <property name="alignment">
+                         <set>Qt::AlignmentFlag::AlignCenter</set>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QWidget" name="chartBars" native="true">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>200</height>
+                         </size>
+                        </property>
+                        <layout class="QHBoxLayout" name="chartBarsLayout">
+                         <property name="spacing">
+                          <number>15</number>
+                         </property>
+                         <property name="leftMargin">
+                          <number>20</number>
+                         </property>
+                         <property name="topMargin">
+                          <number>10</number>
+                         </property>
+                         <property name="rightMargin">
+                          <number>20</number>
+                         </property>
+                         <property name="bottomMargin">
+                          <number>10</number>
+                         </property>
+                         <item>
+                          <widget class="QWidget" name="bar1Container" native="true">
+                           <layout class="QVBoxLayout" name="bar1Layout">
+                            <property name="spacing">
+                             <number>5</number>
+                            </property>
+                            <item>
+                             <spacer name="bar1Spacer">
+                              <property name="orientation">
+                               <enum>Qt::Orientation::Vertical</enum>
+                              </property>
+                              <property name="sizeHint" stdset="0">
+                               <size>
+                                <width>20</width>
+                                <height>60</height>
+                               </size>
+                              </property>
+                             </spacer>
+                            </item>
+                            <item>
+                             <widget class="QWidget" name="bar1" native="true">
+                              <property name="minimumSize">
+                               <size>
+                                <width>40</width>
+                                <height>120</height>
+                               </size>
+                              </property>
+                              <property name="styleSheet">
+                               <string notr="true">QWidget#bar1 {
+    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0,
+        stop:0 #007bff, stop:1 #66b3ff);
+    border-radius: 6px;
+}</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QLabel" name="bar1Label">
+                              <property name="font">
+                               <font>
+                                <family>Poppins</family>
+                                <pointsize>9</pointsize>
+                                <fontweight>Light</fontweight>
+                               </font>
+                              </property>
+                              <property name="styleSheet">
+                               <string notr="true">QLabel {
+    color: #6c757d;
+    font-weight: 300;
+}</string>
+                              </property>
+                              <property name="text">
+                               <string>Jan</string>
+                              </property>
+                              <property name="alignment">
+                               <set>Qt::AlignmentFlag::AlignCenter</set>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QWidget" name="bar2Container" native="true">
+                           <layout class="QVBoxLayout" name="bar2Layout">
+                            <property name="spacing">
+                             <number>5</number>
+                            </property>
+                            <item>
+                             <spacer name="bar2Spacer">
+                              <property name="orientation">
+                               <enum>Qt::Orientation::Vertical</enum>
+                              </property>
+                              <property name="sizeHint" stdset="0">
+                               <size>
+                                <width>20</width>
+                                <height>20</height>
+                               </size>
+                              </property>
+                             </spacer>
+                            </item>
+                            <item>
+                             <widget class="QWidget" name="bar2" native="true">
+                              <property name="minimumSize">
+                               <size>
+                                <width>40</width>
+                                <height>160</height>
+                               </size>
+                              </property>
+                              <property name="styleSheet">
+                               <string notr="true">QWidget#bar2 {
+    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0,
+        stop:0 #17a2b8, stop:1 #70c9d6);
+    border-radius: 6px;
+}</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QLabel" name="bar2Label">
+                              <property name="font">
+                               <font>
+                                <family>Poppins</family>
+                                <pointsize>9</pointsize>
+                                <fontweight>Light</fontweight>
+                               </font>
+                              </property>
+                              <property name="styleSheet">
+                               <string notr="true">QLabel {
+    color: #6c757d;
+    font-weight: 300;
+}</string>
+                              </property>
+                              <property name="text">
+                               <string>Feb</string>
+                              </property>
+                              <property name="alignment">
+                               <set>Qt::AlignmentFlag::AlignCenter</set>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QWidget" name="bar3Container" native="true">
+                           <layout class="QVBoxLayout" name="bar3Layout">
+                            <property name="spacing">
+                             <number>5</number>
+                            </property>
+                            <item>
+                             <spacer name="bar3Spacer">
+                              <property name="orientation">
+                               <enum>Qt::Orientation::Vertical</enum>
+                              </property>
+                              <property name="sizeHint" stdset="0">
+                               <size>
+                                <width>20</width>
+                                <height>40</height>
+                               </size>
+                              </property>
+                             </spacer>
+                            </item>
+                            <item>
+                             <widget class="QWidget" name="bar3" native="true">
+                              <property name="minimumSize">
+                               <size>
+                                <width>40</width>
+                                <height>140</height>
+                               </size>
+                              </property>
+                              <property name="styleSheet">
+                               <string notr="true">QWidget#bar3 {
+    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0,
+        stop:0 #28a745, stop:1 #71dd7a);
+    border-radius: 6px;
+}</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QLabel" name="bar3Label">
+                              <property name="font">
+                               <font>
+                                <family>Poppins</family>
+                                <pointsize>9</pointsize>
+                                <fontweight>Light</fontweight>
+                               </font>
+                              </property>
+                              <property name="styleSheet">
+                               <string notr="true">QLabel {
+    color: #6c757d;
+    font-weight: 300;
+}</string>
+                              </property>
+                              <property name="text">
+                               <string>Mar</string>
+                              </property>
+                              <property name="alignment">
+                               <set>Qt::AlignmentFlag::AlignCenter</set>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
+                          </widget>
+                         </item>
+                         <item>
+                          <widget class="QWidget" name="bar4Container" native="true">
+                           <layout class="QVBoxLayout" name="bar4Layout">
+                            <property name="spacing">
+                             <number>5</number>
+                            </property>
+                            <item>
+                             <spacer name="bar4Spacer">
+                              <property name="orientation">
+                               <enum>Qt::Orientation::Vertical</enum>
+                              </property>
+                              <property name="sizeHint" stdset="0">
+                               <size>
+                                <width>20</width>
+                                <height>5</height>
+                               </size>
+                              </property>
+                             </spacer>
+                            </item>
+                            <item>
+                             <widget class="QWidget" name="bar4" native="true">
+                              <property name="minimumSize">
+                               <size>
+                                <width>40</width>
+                                <height>175</height>
+                               </size>
+                              </property>
+                              <property name="styleSheet">
+                               <string notr="true">QWidget#bar4 {
+    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0,
+        stop:0 #ffc107, stop:1 #ffe066);
+    border-radius: 6px;
+}</string>
+                              </property>
+                             </widget>
+                            </item>
+                            <item>
+                             <widget class="QLabel" name="bar4Label">
+                              <property name="font">
+                               <font>
+                                <family>Poppins</family>
+                                <pointsize>9</pointsize>
+                                <fontweight>Light</fontweight>
+                               </font>
+                              </property>
+                              <property name="styleSheet">
+                               <string notr="true">QLabel {
+    color: #6c757d;
+    font-weight: 300;
+}</string>
+                              </property>
+                              <property name="text">
+                               <string>Apr</string>
+                              </property>
+                              <property name="alignment">
+                               <set>Qt::AlignmentFlag::AlignCenter</set>
+                              </property>
+                             </widget>
+                            </item>
+                           </layout>
+                          </widget>
+                         </item>
+                        </layout>
+                       </widget>
+                      </item>
+                     </layout>
+                    </widget>
+                   </item>
+                  </layout>
                  </widget>
                 </item>
                 <item>
@@ -3281,16 +3206,16 @@ QPushButton:pressed {
           <widget class="QWidget" name="profilePage">
            <layout class="QVBoxLayout" name="profileLayout">
             <property name="leftMargin">
-             <number>0</number>
+             <number>32</number>
             </property>
             <property name="topMargin">
-             <number>0</number>
+             <number>32</number>
             </property>
             <property name="rightMargin">
-             <number>0</number>
+             <number>32</number>
             </property>
             <property name="bottomMargin">
-             <number>0</number>
+             <number>32</number>
             </property>
             <item>
              <widget class="QTabWidget" name="profileTabWidget">
@@ -3314,15 +3239,13 @@ QTabBar::tab {
     border: 1px solid #dee2e6;
     border-bottom: none;
     border-radius: 6px 6px 0 0;
-    padding: 12px 24px;
+    padding: 12px 20px;
     margin-right: 2px;
     font-weight: 700;
-    color: #657786;
+    color: #495057;
     font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
     font-size: 14px;
-    min-width: 80px;
-    min-height: 32px;
-    max-height: 32px;
+    min-width: 100px;
     letter-spacing: 0.3px;
     transition: all 0.3s ease-in-out;
 }
@@ -3596,51 +3519,211 @@ QLabel:hover {
              <number>32</number>
             </property>
             <item>
-             <widget class="QLabel" name="projectsTitle">
-              <property name="font">
-               <font>
-                <family>Poppins</family>
-                <pointsize>-1</pointsize>
-                <fontweight>Light</fontweight>
-               </font>
+             <widget class="QScrollArea" name="projectScrollArea">
+              <property name="minimumSize">
+               <size>
+                <width>900</width>
+                <height>600</height>
+               </size>
               </property>
               <property name="styleSheet">
-               <string notr="true">QLabel {
-    color: #343a40;
-    font-weight: 300;
-    letter-spacing: 1px;
-}</string>
+               <string notr="true">QScrollArea { background: transparent; border: none; }</string>
               </property>
-              <property name="text">
-               <string>Projects</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QLabel" name="projectsContent">
-              <property name="font">
-               <font>
-                <family>Poppins</family>
-                <pointsize>14</pointsize>
-                <fontweight>Light</fontweight>
-               </font>
-              </property>
-              <property name="styleSheet">
-               <string notr="true">QLabel {
-    color: #6c757d;
-    font-weight: 300;
-    letter-spacing: 0.5px;
-}</string>
-              </property>
-              <property name="text">
-               <string>Your projects will be displayed here. Create, manage, and organize your work.</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignmentFlag::AlignTop</set>
-              </property>
-              <property name="wordWrap">
+              <property name="widgetResizable">
                <bool>true</bool>
               </property>
+              <widget class="QWidget" name="projectContainer">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>900</width>
+                 <height>600</height>
+                </rect>
+               </property>
+               <layout class="QVBoxLayout" name="projectContainerLayout">
+                <property name="leftMargin">
+                 <number>24</number>
+                </property>
+                <property name="topMargin">
+                 <number>24</number>
+                </property>
+                <property name="rightMargin">
+                 <number>24</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>24</number>
+                </property>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="clientsPage">
+           <layout class="QVBoxLayout" name="clientsLayout">
+            <property name="leftMargin">
+             <number>32</number>
+            </property>
+            <property name="topMargin">
+             <number>32</number>
+            </property>
+            <property name="rightMargin">
+             <number>32</number>
+            </property>
+            <property name="bottomMargin">
+             <number>32</number>
+            </property>
+            <item>
+             <widget class="QScrollArea" name="clientScrollArea">
+              <property name="minimumSize">
+               <size>
+                <width>900</width>
+                <height>600</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QScrollArea { background: transparent; border: none; }</string>
+              </property>
+              <property name="widgetResizable">
+               <bool>true</bool>
+              </property>
+              <widget class="QWidget" name="clientContainer">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>900</width>
+                 <height>600</height>
+                </rect>
+               </property>
+               <layout class="QVBoxLayout" name="clientContainerLayout">
+                <property name="leftMargin">
+                 <number>24</number>
+                </property>
+                <property name="topMargin">
+                 <number>24</number>
+                </property>
+                <property name="rightMargin">
+                 <number>24</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>24</number>
+                </property>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="resourcesPage">
+           <layout class="QVBoxLayout" name="resourcesLayout">
+            <property name="leftMargin">
+             <number>32</number>
+            </property>
+            <property name="topMargin">
+             <number>32</number>
+            </property>
+            <property name="rightMargin">
+             <number>32</number>
+            </property>
+            <property name="bottomMargin">
+             <number>32</number>
+            </property>
+            <item>
+             <widget class="QScrollArea" name="ressourceScrollArea">
+              <property name="minimumSize">
+               <size>
+                <width>900</width>
+                <height>600</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QScrollArea { background: transparent; border: none; }</string>
+              </property>
+              <property name="widgetResizable">
+               <bool>true</bool>
+              </property>
+              <widget class="QWidget" name="ressourceContainer">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>900</width>
+                 <height>600</height>
+                </rect>
+               </property>
+               <layout class="QVBoxLayout" name="ressourceContainerLayout">
+                <property name="leftMargin">
+                 <number>24</number>
+                </property>
+                <property name="topMargin">
+                 <number>24</number>
+                </property>
+                <property name="rightMargin">
+                 <number>24</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>24</number>
+                </property>
+               </layout>
+              </widget>
+             </widget>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="sponsorsPage">
+           <layout class="QVBoxLayout" name="sponsorsLayout">
+            <property name="leftMargin">
+             <number>32</number>
+            </property>
+            <property name="topMargin">
+             <number>32</number>
+            </property>
+            <property name="rightMargin">
+             <number>32</number>
+            </property>
+            <property name="bottomMargin">
+             <number>32</number>
+            </property>
+            <item>
+             <widget class="QScrollArea" name="sponsorScrollArea">
+              <property name="minimumSize">
+               <size>
+                <width>900</width>
+                <height>600</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QScrollArea { background: transparent; border: none; }</string>
+              </property>
+              <property name="widgetResizable">
+               <bool>true</bool>
+              </property>
+              <widget class="QWidget" name="sponsorContainer">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>900</width>
+                 <height>600</height>
+                </rect>
+               </property>
+               <layout class="QVBoxLayout" name="sponsorContainerLayout">
+                <property name="leftMargin">
+                 <number>24</number>
+                </property>
+                <property name="topMargin">
+                 <number>24</number>
+                </property>
+                <property name="rightMargin">
+                 <number>24</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>24</number>
+                </property>
+               </layout>
+              </widget>
              </widget>
             </item>
            </layout>
@@ -3771,6 +3854,46 @@ QLabel:hover {
               </property>
              </widget>
             </item>
+            <item>
+             <widget class="QScrollArea" name="templateScrollArea">
+              <property name="minimumSize">
+               <size>
+                <width>900</width>
+                <height>600</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QScrollArea { background: transparent; border: none; }</string>
+              </property>
+              <property name="widgetResizable">
+               <bool>true</bool>
+              </property>
+              <widget class="QWidget" name="templateContainer">
+               <property name="geometry">
+                <rect>
+                 <x>0</x>
+                 <y>0</y>
+                 <width>900</width>
+                 <height>600</height>
+                </rect>
+               </property>
+               <layout class="QVBoxLayout" name="templateContainerLayout">
+                <property name="leftMargin">
+                 <number>24</number>
+                </property>
+                <property name="topMargin">
+                 <number>24</number>
+                </property>
+                <property name="rightMargin">
+                 <number>24</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>24</number>
+                </property>
+               </layout>
+              </widget>
+             </widget>
+            </item>
            </layout>
           </widget>
           <widget class="QWidget" name="settingsPage">
@@ -3837,26 +3960,29 @@ QLabel:hover {
             </item>
            </layout>
           </widget>
-          <widget class="QWidget" name="shopPage">
-           <layout class="QVBoxLayout" name="shopLayout">
+          <widget class="QWidget" name="aboutPage">
+           <layout class="QVBoxLayout" name="aboutLayout">
+            <property name="spacing">
+             <number>30</number>
+            </property>
             <property name="leftMargin">
-             <number>0</number>
+             <number>40</number>
             </property>
             <property name="topMargin">
-             <number>0</number>
+             <number>40</number>
             </property>
             <property name="rightMargin">
-             <number>0</number>
+             <number>40</number>
             </property>
             <property name="bottomMargin">
-             <number>0</number>
+             <number>40</number>
             </property>
             <item>
-             <widget class="QLabel" name="shopPlaceholder">
+             <widget class="QLabel" name="aboutTitle">
               <property name="font">
                <font>
                 <family>Poppins</family>
-                <pointsize>24</pointsize>
+                <pointsize>-1</pointsize>
                 <fontweight>Light</fontweight>
                </font>
               </property>
@@ -3864,17 +3990,99 @@ QLabel:hover {
                <string notr="true">QLabel {
     color: #343a40;
     font-weight: 300;
-    letter-spacing: 1px;
-    margin: 32px;
+    letter-spacing: 1.2px;
+    margin-bottom: 20px;
 }</string>
               </property>
               <property name="text">
-               <string>Shop - Coming Soon</string>
+               <string>About Legion IX</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignmentFlag::AlignCenter</set>
               </property>
              </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="legionLogo">
+              <property name="minimumSize">
+               <size>
+                <width>300</width>
+                <height>200</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>800</width>
+                <height>600</height>
+               </size>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLabel {
+    background-color: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    padding: 20px;
+    margin: 20px 0;
+}</string>
+              </property>
+              <property name="pixmap">
+               <pixmap resource="resources.qrc">:/images/legion.png</pixmap>
+              </property>
+              <property name="scaledContents">
+               <bool>false</bool>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QLabel" name="aboutDescription">
+              <property name="font">
+               <font>
+                <family>Poppins</family>
+                <pointsize>-1</pointsize>
+                <fontweight>Light</fontweight>
+               </font>
+              </property>
+              <property name="styleSheet">
+               <string notr="true">QLabel {
+    color: #495057;
+    font-weight: 300;
+    letter-spacing: 0.6px;
+    line-height: 1.8;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    margin-top: 20px;
+    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+    font-size: 15px;
+}</string>
+              </property>
+              <property name="text">
+               <string>Groupe Legion IX is a dynamic and innovative organization focused on technology and creative solutions. I, Amine Helali, am a passionate developer who built the Inspira Studio app, combining my skills in programming and digital innovation to create practical, user-friendly tools. I thrive on learning, problem-solving, and delivering impactful projects that reflect both creativity and technical excellence.</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+              <property name="wordWrap">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="aboutSpacer">
+              <property name="orientation">
+               <enum>Qt::Orientation::Vertical</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>20</width>
+                <height>40</height>
+               </size>
+              </property>
+             </spacer>
             </item>
            </layout>
           </widget>

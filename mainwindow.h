@@ -16,10 +16,13 @@ public:
 
 private slots:
     // Slot for adding a new appointment
-    void addAppointment();
+    void addSponsor();
     void loadSponsoring();
     void deleteSelectedSponsor();
     void updateSponsor();
+    void searchSponsorById();
+    void on_pdfexport_clicked();
+    void on_sort_clicked();
 
 private:
     Ui::MainWindow *ui;

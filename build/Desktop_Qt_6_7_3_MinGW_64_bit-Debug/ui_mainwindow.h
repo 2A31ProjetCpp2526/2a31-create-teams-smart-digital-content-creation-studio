@@ -35,13 +35,12 @@ public:
     QTabWidget *tabWidget;
     QWidget *tab_2;
     QTableWidget *affiche;
-    QLineEdit *lineEdit_3;
-    QPushButton *pushButton_4;
-    QPushButton *pushButton_3;
-    QPushButton *updateButton;
+    QLineEdit *search1;
+    QPushButton *search1_2;
+    QPushButton *pdfexport;
     QPushButton *deleteButton;
     QLabel *label;
-    QPushButton *pushButton_6;
+    QPushButton *sort;
     QPushButton *afficherButton;
     QWidget *tab;
     QLabel *label_7;
@@ -56,8 +55,8 @@ public:
     QLineEdit *EM;
     QDateEdit *dd;
     QDateEdit *df;
-    QPushButton *pushButton_5;
     QComboBox *STS;
+    QPushButton *updateButton;
     QWidget *tab_3;
     QMenuBar *menubar;
     QMenu *menuG_SPONSORING;
@@ -68,12 +67,12 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
         MainWindow->resize(1459, 773);
-        MainWindow->setStyleSheet(QString::fromUtf8(""));
+        MainWindow->setStyleSheet(QString::fromUtf8("background-color:rgb(0, 85, 127)"));
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
         tabWidget = new QTabWidget(centralwidget);
         tabWidget->setObjectName("tabWidget");
-        tabWidget->setGeometry(QRect(20, 80, 1441, 671));
+        tabWidget->setGeometry(QRect(-10, 50, 1441, 671));
         tabWidget->setStyleSheet(QString::fromUtf8("QTabBar::tab {\n"
 "    background: white;             /* white background */\n"
 "    color: black;                  /* black text */\n"
@@ -119,7 +118,7 @@ public:
         QTableWidgetItem *__qtablewidgetitem5 = new QTableWidgetItem();
         affiche->setHorizontalHeaderItem(5, __qtablewidgetitem5);
         affiche->setObjectName("affiche");
-        affiche->setGeometry(QRect(0, 130, 1211, 391));
+        affiche->setGeometry(QRect(50, 130, 1211, 391));
         QSizePolicy sizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -153,10 +152,10 @@ public:
         affiche->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOn);
         affiche->setSizeAdjustPolicy(QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents);
         affiche->setAutoScroll(true);
-        lineEdit_3 = new QLineEdit(tab_2);
-        lineEdit_3->setObjectName("lineEdit_3");
-        lineEdit_3->setGeometry(QRect(10, 60, 361, 41));
-        lineEdit_3->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
+        search1 = new QLineEdit(tab_2);
+        search1->setObjectName("search1");
+        search1->setGeometry(QRect(10, 60, 361, 41));
+        search1->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
 "    border: 2px solid #3498db;   /* bleu d\303\250s le d\303\251part */\n"
 "    border-radius: 8px;\n"
 "    padding: 6px;\n"
@@ -170,11 +169,11 @@ public:
 "    background-color: #ffffff;\n"
 "}\n"
 ""));
-        lineEdit_3->setInputMask(QString::fromUtf8(""));
-        pushButton_4 = new QPushButton(tab_2);
-        pushButton_4->setObjectName("pushButton_4");
-        pushButton_4->setGeometry(QRect(380, 60, 141, 41));
-        pushButton_4->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+        search1->setInputMask(QString::fromUtf8(""));
+        search1_2 = new QPushButton(tab_2);
+        search1_2->setObjectName("search1_2");
+        search1_2->setGeometry(QRect(380, 60, 141, 41));
+        search1_2->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: #2a75b3; /* bleu fonc\303\251 de base */\n"
 "    color: white;\n"
 "    border-radius: 10px;\n"
@@ -191,10 +190,10 @@ public:
 "    background-color: #1e3f66; /* bleu encore plus fonc\303\251 au clic */\n"
 "}\n"
 ""));
-        pushButton_3 = new QPushButton(tab_2);
-        pushButton_3->setObjectName("pushButton_3");
-        pushButton_3->setGeometry(QRect(1190, 50, 211, 41));
-        pushButton_3->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+        pdfexport = new QPushButton(tab_2);
+        pdfexport->setObjectName("pdfexport");
+        pdfexport->setGeometry(QRect(1190, 50, 211, 41));
+        pdfexport->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: #28a745; /* vert normal */\n"
 "    color: white;\n"
 "    border-radius: 10px;\n"
@@ -208,25 +207,6 @@ public:
 "\n"
 "QPushButton:pressed {\n"
 "    background-color: #004080; /* bleu fonc\303\251 quand on clique */\n"
-"}\n"
-""));
-        updateButton = new QPushButton(tab_2);
-        updateButton->setObjectName("updateButton");
-        updateButton->setGeometry(QRect(1100, 550, 151, 41));
-        updateButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
-"    background-color: #e67e22; /* orange normal */\n"
-"    color: white;\n"
-"    border-radius: 10px;\n"
-"    padding: 8px 20px;\n"
-"    font-weight: bold;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #d35400; /* orange fonc\303\251 quand souris dessus */\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: #ff0000; /* rouge pur quand on clique */\n"
 "}\n"
 ""));
         deleteButton = new QPushButton(tab_2);
@@ -250,13 +230,13 @@ public:
 ""));
         label = new QLabel(tab_2);
         label->setObjectName("label");
-        label->setGeometry(QRect(0, 10, 381, 31));
+        label->setGeometry(QRect(20, 10, 381, 31));
         label->setStyleSheet(QString::fromUtf8("font: 700 16pt \"Simplified Arabic\";\n"
 "color: #000000"));
-        pushButton_6 = new QPushButton(tab_2);
-        pushButton_6->setObjectName("pushButton_6");
-        pushButton_6->setGeometry(QRect(1020, 50, 161, 41));
-        pushButton_6->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+        sort = new QPushButton(tab_2);
+        sort->setObjectName("sort");
+        sort->setGeometry(QRect(1020, 50, 161, 41));
+        sort->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: #2a75b3; /* bleu fonc\303\251 de base */\n"
 "    color: white;\n"
 "    border-radius: 10px;\n"
@@ -275,7 +255,7 @@ public:
 ""));
         afficherButton = new QPushButton(tab_2);
         afficherButton->setObjectName("afficherButton");
-        afficherButton->setGeometry(QRect(910, 550, 151, 41));
+        afficherButton->setGeometry(QRect(1100, 550, 151, 41));
         afficherButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: #e67e22; /* orange normal */\n"
 "    color: white;\n"
@@ -409,25 +389,6 @@ public:
         df->setObjectName("df");
         df->setGeometry(QRect(200, 350, 194, 29));
         df->setStyleSheet(QString::fromUtf8("color: #000000;  /* texte noir */"));
-        pushButton_5 = new QPushButton(tab);
-        pushButton_5->setObjectName("pushButton_5");
-        pushButton_5->setGeometry(QRect(1140, 470, 101, 51));
-        pushButton_5->setStyleSheet(QString::fromUtf8("QPushButton {\n"
-"    background-color: #e74c3c; /* rouge normal */\n"
-"    color: white;\n"
-"    border-radius: 10px;\n"
-"    padding: 8px 20px;\n"
-"    font-weight: bold;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #c0392b; /* rouge fonc\303\251 quand souris dessus */\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: #27ae60; /* vert quand on clique */\n"
-"}\n"
-""));
         STS = new QComboBox(tab);
         STS->addItem(QString());
         STS->addItem(QString());
@@ -435,6 +396,25 @@ public:
         STS->setObjectName("STS");
         STS->setGeometry(QRect(660, 350, 171, 28));
         STS->setStyleSheet(QString::fromUtf8("color:rgb(0, 0, 0)"));
+        updateButton = new QPushButton(tab);
+        updateButton->setObjectName("updateButton");
+        updateButton->setGeometry(QRect(910, 470, 111, 51));
+        updateButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: #e67e22; /* orange normal */\n"
+"    color: white;\n"
+"    border-radius: 10px;\n"
+"    padding: 8px 20px;\n"
+"    font-weight: bold;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #d35400; /* orange fonc\303\251 quand souris dessus */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #ff0000; /* rouge pur quand on clique */\n"
+"}\n"
+""));
         tabWidget->addTab(tab, QString());
         tab_3 = new QWidget();
         tab_3->setObjectName("tab_3");
@@ -454,7 +434,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -475,13 +455,13 @@ public:
         ___qtablewidgetitem4->setText(QCoreApplication::translate("MainWindow", "E-Mail", nullptr));
         QTableWidgetItem *___qtablewidgetitem5 = affiche->horizontalHeaderItem(5);
         ___qtablewidgetitem5->setText(QCoreApplication::translate("MainWindow", "Status", nullptr));
-        lineEdit_3->setText(QString());
-        pushButton_4->setText(QCoreApplication::translate("MainWindow", "\360\237\224\215Search", nullptr));
-        pushButton_3->setText(QCoreApplication::translate("MainWindow", "\360\237\223\245Exporter PDF", nullptr));
-        updateButton->setText(QCoreApplication::translate("MainWindow", "\342\234\250Modify ", nullptr));
+        search1->setText(QString());
+        search1->setPlaceholderText(QCoreApplication::translate("MainWindow", "Entrer ID a recherch\303\251", nullptr));
+        search1_2->setText(QCoreApplication::translate("MainWindow", "\360\237\224\215Search", nullptr));
+        pdfexport->setText(QCoreApplication::translate("MainWindow", "\360\237\223\245Exporter PDF", nullptr));
         deleteButton->setText(QCoreApplication::translate("MainWindow", "\360\237\227\221Delete ", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "Gestion Sposoring Management", nullptr));
-        pushButton_6->setText(QCoreApplication::translate("MainWindow", "\360\237\224\204Sort by Name", nullptr));
+        sort->setText(QCoreApplication::translate("MainWindow", "\360\237\224\204Sort by ID", nullptr));
         afficherButton->setText(QCoreApplication::translate("MainWindow", "Afficher", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QCoreApplication::translate("MainWindow", "\360\237\214\220Display", nullptr));
         label_7->setText(QCoreApplication::translate("MainWindow", "Email", nullptr));
@@ -494,11 +474,11 @@ public:
         addButton->setText(QCoreApplication::translate("MainWindow", "\342\236\225 Add", nullptr));
         Nom->setText(QString());
         EM->setText(QString());
-        pushButton_5->setText(QCoreApplication::translate("MainWindow", "Cancel", nullptr));
         STS->setItemText(0, QCoreApplication::translate("MainWindow", "Selectionner...", nullptr));
         STS->setItemText(1, QCoreApplication::translate("MainWindow", "Active", nullptr));
         STS->setItemText(2, QCoreApplication::translate("MainWindow", "Non Active", nullptr));
 
+        updateButton->setText(QCoreApplication::translate("MainWindow", "\342\234\250Modify ", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab), QCoreApplication::translate("MainWindow", "\342\236\225Add", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QCoreApplication::translate("MainWindow", "\360\237\223\212Statistique", nullptr));
         menuG_SPONSORING->setTitle(QCoreApplication::translate("MainWindow", "G SPONSORING", nullptr));

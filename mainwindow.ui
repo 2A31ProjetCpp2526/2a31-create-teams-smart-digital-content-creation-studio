@@ -14,14 +14,14 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">background-color:rgb(0, 85, 127)</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>20</x>
-      <y>80</y>
+      <x>-10</x>
+      <y>50</y>
       <width>1441</width>
       <height>671</height>
      </rect>
@@ -56,7 +56,7 @@ QTabWidget::pane {
 </string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="tab_2">
      <attribute name="title">
@@ -65,7 +65,7 @@ QTabWidget::pane {
      <widget class="QTableWidget" name="affiche">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>50</x>
         <y>130</y>
         <width>1211</width>
         <height>391</height>
@@ -144,7 +144,7 @@ QHeaderView::section {
        </property>
       </column>
      </widget>
-     <widget class="QLineEdit" name="lineEdit_3">
+     <widget class="QLineEdit" name="search1">
       <property name="geometry">
        <rect>
         <x>10</x>
@@ -175,8 +175,11 @@ QLineEdit:focus {
       <property name="text">
        <string/>
       </property>
+      <property name="placeholderText">
+       <string>Entrer ID a recherché</string>
+      </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_4">
+     <widget class="QPushButton" name="search1_2">
       <property name="geometry">
        <rect>
         <x>380</x>
@@ -208,7 +211,7 @@ QPushButton:pressed {
        <string>🔍Search</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_3">
+     <widget class="QPushButton" name="pdfexport">
       <property name="geometry">
        <rect>
         <x>1190</x>
@@ -237,37 +240,6 @@ QPushButton:pressed {
       </property>
       <property name="text">
        <string>📥Exporter PDF</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="updateButton">
-      <property name="geometry">
-       <rect>
-        <x>1100</x>
-        <y>550</y>
-        <width>151</width>
-        <height>41</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton {
-    background-color: #e67e22; /* orange normal */
-    color: white;
-    border-radius: 10px;
-    padding: 8px 20px;
-    font-weight: bold;
-}
-
-QPushButton:hover {
-    background-color: #d35400; /* orange foncé quand souris dessus */
-}
-
-QPushButton:pressed {
-    background-color: #ff0000; /* rouge pur quand on clique */
-}
-</string>
-      </property>
-      <property name="text">
-       <string>✨Modify </string>
       </property>
      </widget>
      <widget class="QPushButton" name="deleteButton">
@@ -304,7 +276,7 @@ QPushButton:pressed {
      <widget class="QLabel" name="label">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>20</x>
         <y>10</y>
         <width>381</width>
         <height>31</height>
@@ -318,7 +290,7 @@ color: #000000</string>
        <string>Gestion Sposoring Management</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_6">
+     <widget class="QPushButton" name="sort">
       <property name="geometry">
        <rect>
         <x>1020</x>
@@ -347,13 +319,13 @@ QPushButton:pressed {
 </string>
       </property>
       <property name="text">
-       <string>🔄Sort by Name</string>
+       <string>🔄Sort by ID</string>
       </property>
      </widget>
      <widget class="QPushButton" name="afficherButton">
       <property name="geometry">
        <rect>
-        <x>910</x>
+        <x>1100</x>
         <y>550</y>
         <width>151</width>
         <height>41</height>
@@ -638,37 +610,6 @@ QLineEdit:focus {
        <string notr="true">color: #000000;  /* texte noir */</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton_5">
-      <property name="geometry">
-       <rect>
-        <x>1140</x>
-        <y>470</y>
-        <width>101</width>
-        <height>51</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton {
-    background-color: #e74c3c; /* rouge normal */
-    color: white;
-    border-radius: 10px;
-    padding: 8px 20px;
-    font-weight: bold;
-}
-
-QPushButton:hover {
-    background-color: #c0392b; /* rouge foncé quand souris dessus */
-}
-
-QPushButton:pressed {
-    background-color: #27ae60; /* vert quand on clique */
-}
-</string>
-      </property>
-      <property name="text">
-       <string>Cancel</string>
-      </property>
-     </widget>
      <widget class="QComboBox" name="STS">
       <property name="geometry">
        <rect>
@@ -696,6 +637,37 @@ QPushButton:pressed {
         <string>Non Active</string>
        </property>
       </item>
+     </widget>
+     <widget class="QPushButton" name="updateButton">
+      <property name="geometry">
+       <rect>
+        <x>910</x>
+        <y>470</y>
+        <width>111</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #e67e22; /* orange normal */
+    color: white;
+    border-radius: 10px;
+    padding: 8px 20px;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background-color: #d35400; /* orange foncé quand souris dessus */
+}
+
+QPushButton:pressed {
+    background-color: #ff0000; /* rouge pur quand on clique */
+}
+</string>
+      </property>
+      <property name="text">
+       <string>✨Modify </string>
+      </property>
      </widget>
     </widget>
     <widget class="QWidget" name="tab_3">

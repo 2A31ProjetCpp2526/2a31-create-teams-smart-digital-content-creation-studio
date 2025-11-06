@@ -2414,7 +2414,10 @@ void MainWindow::onModifyEmployerClicked()
     form.setRecord(existing);
     
     // Load currently assigned resources for pre-selection
-    QVector<qint64> currentResourceIds = Ressource::getResourcesByEmployer(employerId);
+    QVector<Ressource> assignedResources = Ressource::getResourcesByEmployer(employerId);
+    QVector<qint64> currentResourceIds;
+    for (const Ressource& res : assignedResources)
+        currentResourceIds.append(res.idMedia);
     form.setSelectedResourceIds(currentResourceIds);
 
     if (form.exec() != QDialog::Accepted)

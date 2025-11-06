@@ -13,6 +13,8 @@
 #include <QComboBox>
 #include <QPixmap>
 #include <QTableWidgetItem>
+#include <QListWidget>
+#include <QListWidgetItem>
 #include "backend/employer.h"
 
 QT_BEGIN_NAMESPACE

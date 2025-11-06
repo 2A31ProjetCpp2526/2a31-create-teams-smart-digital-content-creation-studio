@@ -424,9 +424,33 @@
 			null
 		],
 		[
+			"C:/Users/user/Documents/Qt - Test/AmineTemplar/ui/clientwidget.h",
+			"MU",
+			"UYX5XTB5RZ/moc_clientwidget.cpp",
+			null
+		],
+		[
+			"C:/Users/user/Documents/Qt - Test/AmineTemplar/ui/projectwidget.h",
+			"MU",
+			"UYX5XTB5RZ/moc_projectwidget.cpp",
+			null
+		],
+		[
 			"C:/Users/user/Documents/Qt - Test/AmineTemplar/ui/ressourcewidget.h",
 			"MU",
 			"UYX5XTB5RZ/moc_ressourcewidget.cpp",
+			null
+		],
+		[
+			"C:/Users/user/Documents/Qt - Test/AmineTemplar/ui/sponsorwidget.h",
+			"MU",
+			"UYX5XTB5RZ/moc_sponsorwidget.cpp",
+			null
+		],
+		[
+			"C:/Users/user/Documents/Qt - Test/AmineTemplar/ui/templatewidget.h",
+			"MU",
+			"UYX5XTB5RZ/moc_templatewidget.cpp",
 			null
 		]
 	],
@@ -535,7 +559,27 @@
 			null
 		],
 		[
+			"C:/Users/user/Documents/Qt - Test/AmineTemplar/ui/clientwidget.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/user/Documents/Qt - Test/AmineTemplar/ui/projectwidget.cpp",
+			"MU",
+			null
+		],
+		[
 			"C:/Users/user/Documents/Qt - Test/AmineTemplar/ui/ressourcewidget.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/user/Documents/Qt - Test/AmineTemplar/ui/sponsorwidget.cpp",
+			"MU",
+			null
+		],
+		[
+			"C:/Users/user/Documents/Qt - Test/AmineTemplar/ui/templatewidget.cpp",
 			"MU",
 			null
 		]

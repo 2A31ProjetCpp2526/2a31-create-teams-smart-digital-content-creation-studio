@@ -129,6 +129,46 @@ build CMakeFiles/AmineTemplar.dir/ui/ressourcewidget.cpp.obj: CXX_COMPILER__Amin
   TARGET_COMPILE_PDB = CMakeFiles\AmineTemplar.dir\
   TARGET_PDB = AmineTemplar.pdb
 
+build CMakeFiles/AmineTemplar.dir/ui/clientwidget.cpp.obj: CXX_COMPILER__AmineTemplar_unscanned_Debug C$:/Users/user/Documents/Qt$ -$ Test/AmineTemplar/ui/clientwidget.cpp || cmake_object_order_depends_target_AmineTemplar
+  DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
+  DEP_FILE = CMakeFiles\AmineTemplar.dir\ui\clientwidget.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -I"C:/Users/user/Documents/Qt - Test/AmineTemplar" -I"C:/Users/user/Documents/Qt - Test/AmineTemplar/backend" -I"C:/Users/user/Documents/Qt - Test/AmineTemplar/ui" -isystem "C:/Users/user/Documents/Qt - Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/include" -isystem C:/Qt/6.7.3/mingw_64/include/QtCore -isystem C:/Qt/6.7.3/mingw_64/include -isystem C:/Qt/6.7.3/mingw_64/mkspecs/win32-g++ -isystem C:/Qt/6.7.3/mingw_64/include/QtGui -isystem C:/Qt/6.7.3/mingw_64/include/QtWidgets -isystem C:/Qt/6.7.3/mingw_64/include/QtSql
+  OBJECT_DIR = CMakeFiles\AmineTemplar.dir
+  OBJECT_FILE_DIR = CMakeFiles\AmineTemplar.dir\ui
+  TARGET_COMPILE_PDB = CMakeFiles\AmineTemplar.dir\
+  TARGET_PDB = AmineTemplar.pdb
+
+build CMakeFiles/AmineTemplar.dir/ui/projectwidget.cpp.obj: CXX_COMPILER__AmineTemplar_unscanned_Debug C$:/Users/user/Documents/Qt$ -$ Test/AmineTemplar/ui/projectwidget.cpp || cmake_object_order_depends_target_AmineTemplar
+  DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
+  DEP_FILE = CMakeFiles\AmineTemplar.dir\ui\projectwidget.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -I"C:/Users/user/Documents/Qt - Test/AmineTemplar" -I"C:/Users/user/Documents/Qt - Test/AmineTemplar/backend" -I"C:/Users/user/Documents/Qt - Test/AmineTemplar/ui" -isystem "C:/Users/user/Documents/Qt - Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/include" -isystem C:/Qt/6.7.3/mingw_64/include/QtCore -isystem C:/Qt/6.7.3/mingw_64/include -isystem C:/Qt/6.7.3/mingw_64/mkspecs/win32-g++ -isystem C:/Qt/6.7.3/mingw_64/include/QtGui -isystem C:/Qt/6.7.3/mingw_64/include/QtWidgets -isystem C:/Qt/6.7.3/mingw_64/include/QtSql
+  OBJECT_DIR = CMakeFiles\AmineTemplar.dir
+  OBJECT_FILE_DIR = CMakeFiles\AmineTemplar.dir\ui
+  TARGET_COMPILE_PDB = CMakeFiles\AmineTemplar.dir\
+  TARGET_PDB = AmineTemplar.pdb
+
+build CMakeFiles/AmineTemplar.dir/ui/sponsorwidget.cpp.obj: CXX_COMPILER__AmineTemplar_unscanned_Debug C$:/Users/user/Documents/Qt$ -$ Test/AmineTemplar/ui/sponsorwidget.cpp || cmake_object_order_depends_target_AmineTemplar
+  DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
+  DEP_FILE = CMakeFiles\AmineTemplar.dir\ui\sponsorwidget.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -I"C:/Users/user/Documents/Qt - Test/AmineTemplar" -I"C:/Users/user/Documents/Qt - Test/AmineTemplar/backend" -I"C:/Users/user/Documents/Qt - Test/AmineTemplar/ui" -isystem "C:/Users/user/Documents/Qt - Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/include" -isystem C:/Qt/6.7.3/mingw_64/include/QtCore -isystem C:/Qt/6.7.3/mingw_64/include -isystem C:/Qt/6.7.3/mingw_64/mkspecs/win32-g++ -isystem C:/Qt/6.7.3/mingw_64/include/QtGui -isystem C:/Qt/6.7.3/mingw_64/include/QtWidgets -isystem C:/Qt/6.7.3/mingw_64/include/QtSql
+  OBJECT_DIR = CMakeFiles\AmineTemplar.dir
+  OBJECT_FILE_DIR = CMakeFiles\AmineTemplar.dir\ui
+  TARGET_COMPILE_PDB = CMakeFiles\AmineTemplar.dir\
+  TARGET_PDB = AmineTemplar.pdb
+
+build CMakeFiles/AmineTemplar.dir/ui/templatewidget.cpp.obj: CXX_COMPILER__AmineTemplar_unscanned_Debug C$:/Users/user/Documents/Qt$ -$ Test/AmineTemplar/ui/templatewidget.cpp || cmake_object_order_depends_target_AmineTemplar
+  DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
+  DEP_FILE = CMakeFiles\AmineTemplar.dir\ui\templatewidget.cpp.obj.d
+  FLAGS = -g -std=gnu++17 -fdiagnostics-color=always
+  INCLUDES = -I"C:/Users/user/Documents/Qt - Test/AmineTemplar" -I"C:/Users/user/Documents/Qt - Test/AmineTemplar/backend" -I"C:/Users/user/Documents/Qt - Test/AmineTemplar/ui" -isystem "C:/Users/user/Documents/Qt - Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/include" -isystem C:/Qt/6.7.3/mingw_64/include/QtCore -isystem C:/Qt/6.7.3/mingw_64/include -isystem C:/Qt/6.7.3/mingw_64/mkspecs/win32-g++ -isystem C:/Qt/6.7.3/mingw_64/include/QtGui -isystem C:/Qt/6.7.3/mingw_64/include/QtWidgets -isystem C:/Qt/6.7.3/mingw_64/include/QtSql
+  OBJECT_DIR = CMakeFiles\AmineTemplar.dir
+  OBJECT_FILE_DIR = CMakeFiles\AmineTemplar.dir\ui
+  TARGET_COMPILE_PDB = CMakeFiles\AmineTemplar.dir\
+  TARGET_PDB = AmineTemplar.pdb
+
 build CMakeFiles/AmineTemplar.dir/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/.qt/rcc/qrc_resources.cpp.obj: CXX_COMPILER__AmineTemplar_unscanned_Debug C$:/Users/user/Documents/Qt$ -$ Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/.qt/rcc/qrc_resources.cpp || cmake_object_order_depends_target_AmineTemplar
   DEFINES = -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_GUI_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64
   DEP_FILE = CMakeFiles\AmineTemplar.dir\build\Desktop_Qt_6_7_3_MinGW_64_bit-Debug\.qt\rcc\qrc_resources.cpp.obj.d
@@ -157,7 +197,7 @@ build CMakeFiles/AmineTemplar.dir/AmineTemplar_autogen/EWIEGA46WW/qrc_resources.
 #############################################
 # Link the executable AmineTemplar.exe
 
-build AmineTemplar.exe: CXX_EXECUTABLE_LINKER__AmineTemplar_Debug CMakeFiles/AmineTemplar.dir/AmineTemplar_autogen/mocs_compilation.cpp.obj CMakeFiles/AmineTemplar.dir/main.cpp.obj CMakeFiles/AmineTemplar.dir/mainwindow.cpp.obj CMakeFiles/AmineTemplar.dir/backend/connection.cpp.obj CMakeFiles/AmineTemplar.dir/backend/employer.cpp.obj CMakeFiles/AmineTemplar.dir/backend/client.cpp.obj CMakeFiles/AmineTemplar.dir/backend/ressource.cpp.obj CMakeFiles/AmineTemplar.dir/ui/ressourcewidget.cpp.obj CMakeFiles/AmineTemplar.dir/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/.qt/rcc/qrc_resources.cpp.obj CMakeFiles/AmineTemplar.dir/AmineTemplar_autogen/EWIEGA46WW/qrc_resources.cpp.obj | C$:/Qt/6.7.3/mingw_64/lib/libQt6Widgets.a C$:/Qt/6.7.3/mingw_64/lib/libQt6Sql.a C$:/Qt/6.7.3/mingw_64/lib/libQt6Gui.a C$:/Qt/6.7.3/mingw_64/lib/libQt6Core.a || AmineTemplar_autogen AmineTemplar_autogen_timestamp_deps
+build AmineTemplar.exe: CXX_EXECUTABLE_LINKER__AmineTemplar_Debug CMakeFiles/AmineTemplar.dir/AmineTemplar_autogen/mocs_compilation.cpp.obj CMakeFiles/AmineTemplar.dir/main.cpp.obj CMakeFiles/AmineTemplar.dir/mainwindow.cpp.obj CMakeFiles/AmineTemplar.dir/backend/connection.cpp.obj CMakeFiles/AmineTemplar.dir/backend/employer.cpp.obj CMakeFiles/AmineTemplar.dir/backend/client.cpp.obj CMakeFiles/AmineTemplar.dir/backend/ressource.cpp.obj CMakeFiles/AmineTemplar.dir/ui/ressourcewidget.cpp.obj CMakeFiles/AmineTemplar.dir/ui/clientwidget.cpp.obj CMakeFiles/AmineTemplar.dir/ui/projectwidget.cpp.obj CMakeFiles/AmineTemplar.dir/ui/sponsorwidget.cpp.obj CMakeFiles/AmineTemplar.dir/ui/templatewidget.cpp.obj CMakeFiles/AmineTemplar.dir/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/.qt/rcc/qrc_resources.cpp.obj CMakeFiles/AmineTemplar.dir/AmineTemplar_autogen/EWIEGA46WW/qrc_resources.cpp.obj | C$:/Qt/6.7.3/mingw_64/lib/libQt6Widgets.a C$:/Qt/6.7.3/mingw_64/lib/libQt6Sql.a C$:/Qt/6.7.3/mingw_64/lib/libQt6Gui.a C$:/Qt/6.7.3/mingw_64/lib/libQt6Core.a || AmineTemplar_autogen AmineTemplar_autogen_timestamp_deps
   FLAGS = -g
   LINK_LIBRARIES = C:/Qt/6.7.3/mingw_64/lib/libQt6Widgets.a  C:/Qt/6.7.3/mingw_64/lib/libQt6Sql.a  C:/Qt/6.7.3/mingw_64/lib/libQt6Gui.a  -ld3d11  -ldxgi  -ldxguid  -ld3d12  C:/Qt/6.7.3/mingw_64/lib/libQt6Core.a  -lmpr  -luserenv  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\AmineTemplar.dir
@@ -208,7 +248,7 @@ build AmineTemplar_autogen_timestamp_deps: phony
 #############################################
 # Utility command for AmineTemplar_autogen
 
-build AmineTemplar_autogen: phony CMakeFiles/AmineTemplar_autogen AmineTemplar_autogen/include/ui_mainwindow.h AmineTemplar_autogen/timestamp AmineTemplar_autogen/mocs_compilation.cpp AmineTemplar_autogen_timestamp_deps
+build AmineTemplar_autogen: phony CMakeFiles/AmineTemplar_autogen AmineTemplar_autogen/include/ui_mainwindow.h AmineTemplar_autogen/include/ui/ui_login.h AmineTemplar_autogen/include/ui/ui_Profile.h AmineTemplar_autogen/include/ui/ui_employerform.h AmineTemplar_autogen/include/ui/ui_client.h AmineTemplar_autogen/include/ui/ui_project.h AmineTemplar_autogen/include/ui/ui_ressource.h AmineTemplar_autogen/include/ui/ui_sponsor.h AmineTemplar_autogen/include/ui/ui_template.h AmineTemplar_autogen/timestamp AmineTemplar_autogen/mocs_compilation.cpp AmineTemplar_autogen_timestamp_deps
 
 
 #############################################
@@ -243,7 +283,7 @@ build AmineTemplar_autogen/EWIEGA46WW/qrc_resources.cpp | ${cmake_ninja_workdir}
 #############################################
 # Phony custom command for CMakeFiles\AmineTemplar_autogen
 
-build CMakeFiles/AmineTemplar_autogen AmineTemplar_autogen/include/ui_mainwindow.h | ${cmake_ninja_workdir}CMakeFiles/AmineTemplar_autogen ${cmake_ninja_workdir}AmineTemplar_autogen/include/ui_mainwindow.h: phony AmineTemplar_autogen/timestamp || AmineTemplar_autogen_timestamp_deps
+build CMakeFiles/AmineTemplar_autogen AmineTemplar_autogen/include/ui_mainwindow.h AmineTemplar_autogen/include/ui/ui_login.h AmineTemplar_autogen/include/ui/ui_Profile.h AmineTemplar_autogen/include/ui/ui_employerform.h AmineTemplar_autogen/include/ui/ui_client.h AmineTemplar_autogen/include/ui/ui_project.h AmineTemplar_autogen/include/ui/ui_ressource.h AmineTemplar_autogen/include/ui/ui_sponsor.h AmineTemplar_autogen/include/ui/ui_template.h | ${cmake_ninja_workdir}CMakeFiles/AmineTemplar_autogen ${cmake_ninja_workdir}AmineTemplar_autogen/include/ui_mainwindow.h ${cmake_ninja_workdir}AmineTemplar_autogen/include/ui/ui_login.h ${cmake_ninja_workdir}AmineTemplar_autogen/include/ui/ui_Profile.h ${cmake_ninja_workdir}AmineTemplar_autogen/include/ui/ui_employerform.h ${cmake_ninja_workdir}AmineTemplar_autogen/include/ui/ui_client.h ${cmake_ninja_workdir}AmineTemplar_autogen/include/ui/ui_project.h ${cmake_ninja_workdir}AmineTemplar_autogen/include/ui/ui_ressource.h ${cmake_ninja_workdir}AmineTemplar_autogen/include/ui/ui_sponsor.h ${cmake_ninja_workdir}AmineTemplar_autogen/include/ui/ui_template.h: phony AmineTemplar_autogen/timestamp || AmineTemplar_autogen_timestamp_deps
 
 # =============================================================================
 # Target aliases.

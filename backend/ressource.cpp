@@ -59,11 +59,9 @@ bool Ressource::isTitleUnique(const QString &title, qint64 excludeId)
     
     // If we're updating, exclude the current record's ID_MEDIA
     if (excludeId >= 0) {
-        sql = QString("SELECT COUNT(*) FROM RESSOURCES WHERE UPPER(TITLE) = UPPER('%1') AND ID_MEDIA != %2")
-                  .arg(escapedTitle, QString::number(excludeId));
+        sql = "SELECT COUNT(*) FROM RESSOURCES WHERE UPPER(TITLE) = UPPER('" + escapedTitle + "') AND ID_MEDIA != " + QString::number(excludeId);
     } else {
-        sql = QString("SELECT COUNT(*) FROM RESSOURCES WHERE UPPER(TITLE) = UPPER('%1')")
-                  .arg(escapedTitle);
+        sql = "SELECT COUNT(*) FROM RESSOURCES WHERE UPPER(TITLE) = UPPER('" + escapedTitle + "')";
     }
 
     QSqlQuery query(db);

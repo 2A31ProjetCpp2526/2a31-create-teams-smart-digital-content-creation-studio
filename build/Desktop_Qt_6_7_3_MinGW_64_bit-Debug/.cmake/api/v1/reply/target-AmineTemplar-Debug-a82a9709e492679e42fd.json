@@ -43,13 +43,13 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 55,
+				"line" : 84,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 58,
+				"line" : 87,
 				"parent" : 0
 			},
 			{
@@ -113,13 +113,13 @@
 			{
 				"command" : 5,
 				"file" : 0,
-				"line" : 66,
+				"line" : 95,
 				"parent" : 0
 			},
 			{
 				"command" : 10,
 				"file" : 0,
-				"line" : 73,
+				"line" : 102,
 				"parent" : 0
 			},
 			{
@@ -275,7 +275,11 @@
 				13,
 				15,
 				17,
-				20
+				19,
+				21,
+				23,
+				33,
+				44
 			]
 		}
 	],
@@ -381,7 +385,11 @@
 				13,
 				15,
 				17,
-				20
+				19,
+				21,
+				23,
+				33,
+				44
 			]
 		},
 		{
@@ -394,14 +402,34 @@
 				12,
 				14,
 				16,
-				18
+				18,
+				20,
+				22,
+				24,
+				34,
+				35,
+				36,
+				37,
+				38,
+				39,
+				40,
+				41,
+				42
 			]
 		},
 		{
 			"name" : "Forms",
 			"sourceIndexes" : 
 			[
-				4
+				4,
+				25,
+				26,
+				27,
+				28,
+				29,
+				30,
+				31,
+				32
 			]
 		},
 		{
@@ -409,7 +437,7 @@
 			"sourceIndexes" : 
 			[
 				5,
-				19
+				43
 			]
 		},
 		{
@@ -423,9 +451,9 @@
 			"name" : "CMake Rules",
 			"sourceIndexes" : 
 			[
-				21,
-				22,
-				23
+				45,
+				46,
+				47
 			]
 		}
 	],
@@ -526,6 +554,90 @@
 			"sourceGroupIndex" : 1
 		},
 		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "ui/clientwidget.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "ui/clientwidget.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "ui/projectwidget.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "ui/projectwidget.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "ui/sponsorwidget.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "ui/sponsorwidget.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "ui/templatewidget.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "ui/templatewidget.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "ui/login.ui",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "ui/Profile.ui",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "ui/employerform.ui",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "ui/client.ui",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "ui/project.ui",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "ui/ressource.ui",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "ui/sponsor.ui",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 1,
+			"path" : "ui/template.ui",
+			"sourceGroupIndex" : 2
+		},
+		{
 			"backtrace" : 19,
 			"compileGroupIndex" : 0,
 			"isGenerated" : true,
@@ -536,6 +648,54 @@
 			"backtrace" : 0,
 			"isGenerated" : true,
 			"path" : "build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/include/ui_mainwindow.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/include/ui/ui_login.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/include/ui/ui_Profile.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/include/ui/ui_employerform.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/include/ui/ui_client.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/include/ui/ui_project.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/include/ui/ui_ressource.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/include/ui/ui_sponsor.h",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/include/ui/ui_template.h",
 			"sourceGroupIndex" : 1
 		},
 		{

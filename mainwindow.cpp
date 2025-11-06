@@ -564,7 +564,7 @@ void EmployerUIHelper::populateTable(QTableWidget *table, const QVector<Employer
             const QPixmap pixmap(rec.avatarPath);
             if (!pixmap.isNull())
             {
-                avatarItem->setIcon(QIcon(pixmap.scaled(120, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+                avatarItem->setIcon(QIcon(pixmap.scaled(130, 130, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
             }
         }
         avatarItem->setToolTip(rec.avatarPath);
@@ -596,11 +596,16 @@ void EmployerUIHelper::populateTable(QTableWidget *table, const QVector<Employer
             if (i > 0) resourceNames += ", ";
             resourceNames += employerResources.at(i).title;
         }
+        if (!employerResources.isEmpty())
+        {
+            qDebug() << "[EmployerUIHelper::populateTable] Employer" << rec.employerId 
+                     << "has" << employerResources.size() << "resources:" << resourceNames;
+        }
         auto *resourcesItem = new QTableWidgetItem(resourceNames);
         resourcesItem->setToolTip(resourceNames);  // Show full list in tooltip
         table->setItem(row, 8, resourcesItem);
 
-        table->setRowHeight(row, 140);
+        table->setRowHeight(row, 135);
     }
 
     table->clearSelection();
@@ -2200,16 +2205,16 @@ void MainWindow::setupEmployeeTable()
     ui->employeeTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     ui->employeeTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     
-    // Set specific column widths with better distribution - INCREASED FOR BETTER DISPLAY
+    // Set specific column widths with better distribution - OPTIMIZED FOR LARGE DISPLAY
     ui->employeeTable->setColumnWidth(0, 60);   // Select column
-    ui->employeeTable->setColumnWidth(1, 140);  // Avatar column - INCREASED
-    ui->employeeTable->setColumnWidth(2, 80);   // ID column - INCREASED
-    ui->employeeTable->setColumnWidth(3, 200);  // Name column - INCREASED
-    ui->employeeTable->setColumnWidth(4, 250);  // Email column - INCREASED
-    ui->employeeTable->setColumnWidth(5, 150);  // Role column - INCREASED
-    ui->employeeTable->setColumnWidth(6, 170);  // Phone column - INCREASED
-    ui->employeeTable->setColumnWidth(7, 150);  // Start Date column - INCREASED
-    ui->employeeTable->setColumnWidth(8, 250);  // Resources column - INCREASED
+    ui->employeeTable->setColumnWidth(1, 150);  // Avatar column - LARGE
+    ui->employeeTable->setColumnWidth(2, 100);  // ID column - INCREASED
+    ui->employeeTable->setColumnWidth(3, 250);  // Name column - INCREASED
+    ui->employeeTable->setColumnWidth(4, 300);  // Email column - INCREASED
+    ui->employeeTable->setColumnWidth(5, 180);  // Role column - INCREASED
+    ui->employeeTable->setColumnWidth(6, 200);  // Phone column - INCREASED
+    ui->employeeTable->setColumnWidth(7, 180);  // Start Date column - INCREASED
+    ui->employeeTable->setColumnWidth(8, 200);  // Resources column - KEEP REASONABLE
     
     // Stretch last column to fill remaining space
     ui->employeeTable->horizontalHeader()->setStretchLastSection(false);
@@ -2217,8 +2222,8 @@ void MainWindow::setupEmployeeTable()
     ui->employeeTable->horizontalHeader()->setSectionResizeMode(8, QHeaderView::Stretch); // Resources stretches
     
     // Increase row height for better avatar and content display
-    ui->employeeTable->verticalHeader()->setDefaultSectionSize(140);
-    ui->employeeTable->verticalHeader()->setMinimumSectionSize(140);
+    ui->employeeTable->verticalHeader()->setDefaultSectionSize(135);
+    ui->employeeTable->verticalHeader()->setMinimumSectionSize(135);
     
     // Enable better selection behavior
     ui->employeeTable->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -2373,13 +2378,21 @@ void MainWindow::onAddEmployerClicked()
         
         // Assign selected resources if any
         QVector<qint64> selectedResources = form.selectedResourceIds();
+        qDebug() << "[MainWindow::onAddEmployerClicked] Selected resources count:" << selectedResources.size();
+        
         if (!selectedResources.isEmpty())
         {
             qDebug() << "[MainWindow::onAddEmployerClicked] Assigning" << selectedResources.size() << "resources...";
             for (qint64 resourceId : selectedResources)
             {
+                qDebug() << "  → Adding resource" << resourceId;
                 Ressource::addResourceToEmployer(newEmployer.employerId, resourceId);
             }
+            qDebug() << "[MainWindow::onAddEmployerClicked] All resources assigned successfully!";
+        }
+        else
+        {
+            qDebug() << "[MainWindow::onAddEmployerClicked] No resources selected for this employer.";
         }
     }
 
@@ -2460,13 +2473,19 @@ void MainWindow::onModifyEmployerClicked()
     
     // Update employer resources
     QVector<qint64> selectedResources = form.selectedResourceIds();
+    qDebug() << "[MainWindow::onModifyEmployerClicked] Current resources:" << currentResourceIds.size();
+    qDebug() << "[MainWindow::onModifyEmployerClicked] New resources selected:" << selectedResources.size();
+    
     Ressource::clearEmployerResources(employerId);
+    qDebug() << "[MainWindow::onModifyEmployerClicked] Cleared old resources";
+    
     for (qint64 resourceId : selectedResources)
     {
+        qDebug() << "  → Adding resource" << resourceId;
         Ressource::addResourceToEmployer(employerId, resourceId);
     }
     
-    qDebug() << "[MainWindow::onModifyEmployerClicked] Resources updated:" << selectedResources.size() << "resources assigned";
+    qDebug() << "[MainWindow::onModifyEmployerClicked] All resources updated:" << selectedResources.size() << "resources assigned";
     qDebug() << "[MainWindow::onModifyEmployerClicked] Reloading employers...";
     
     loadEmployers();

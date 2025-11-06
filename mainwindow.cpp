@@ -594,7 +594,7 @@ void EmployerUIHelper::populateTable(QTableWidget *table, const QVector<Employer
         for (int i = 0; i < employerResources.size(); ++i)
         {
             if (i > 0) resourceNames += ", ";
-            resourceNames += employerResources.at(i).name;
+            resourceNames += employerResources.at(i).title;
         }
         auto *resourcesItem = new QTableWidgetItem(resourceNames);
         resourcesItem->setToolTip(resourceNames);  // Show full list in tooltip

@@ -152,9 +152,16 @@ void EmployerForm::setRecord(const Employer &record)
     ui->avatarLineEdit->setText(record.avatarPath);
     updateAvatarPreview(record.avatarPath);
     
-    // Load assigned resources if editing
-    if (m_mode == EditMode && m_employerId > 0)
+    // If m_selectedResourceIds was already set (via setSelectedResourceIds), display them
+    // Otherwise, load from database if editing
+    if (!m_selectedResourceIds.isEmpty())
     {
+        qDebug() << "[EmployerForm::setRecord] m_selectedResourceIds already set with" << m_selectedResourceIds.size() << "resources";
+        refreshResourceList();
+    }
+    else if (m_mode == EditMode && m_employerId > 0)
+    {
+        qDebug() << "[EmployerForm::setRecord] Loading resources from database for employer" << m_employerId;
         loadEmployerResources(m_employerId);
     }
     
@@ -360,26 +367,40 @@ void EmployerForm::loadEmployerResources(qint64 employerId)
 
 void EmployerForm::refreshResourceList()
 {
-    if (m_employerId > 0)
+    ui->resourceListWidget->clear();
+    
+    if (m_selectedResourceIds.isEmpty())
     {
-        loadEmployerResources(m_employerId);
+        qDebug() << "[EmployerForm::refreshResourceList] No resources to display";
+        return;
     }
+    
+    // Load resource details from database
+    for (qint64 resourceId : m_selectedResourceIds)
+    {
+        Ressource resource;
+        if (Ressource::fetchById(resourceId, resource))
+        {
+            ui->resourceListWidget->addItem(resource.title);
+            qDebug() << "[EmployerForm::refreshResourceList] Added resource:" << resource.title;
+        }
+        else
+        {
+            qDebug() << "[EmployerForm::refreshResourceList] Failed to fetch resource ID:" << resourceId;
+        }
+    }
+    
+    qDebug() << "[EmployerForm::refreshResourceList] Displayed" << m_selectedResourceIds.size() << "resources";
 }
 
 void EmployerForm::onAddResourceClicked()
 {
-    qDebug() << "Add resource clicked";
+    qDebug() << "[EmployerForm::onAddResourceClicked] Add resource clicked";
     
-    // Get currently assigned resource IDs
-    QVector<qint64> currentResourceIds;
-    if (m_employerId > 0)
-    {
-        QVector<Ressource> currentResources = Ressource::getResourcesByEmployer(m_employerId);
-        for (const Ressource &res : currentResources)
-        {
-            currentResourceIds.append(res.idMedia);
-        }
-    }
+    // Get currently assigned resource IDs from m_selectedResourceIds
+    QVector<qint64> currentResourceIds = m_selectedResourceIds;
+    
+    qDebug() << "[EmployerForm::onAddResourceClicked] Current m_selectedResourceIds count:" << currentResourceIds.size();
     
     // Show resource selection dialog
     ResourceSelectionDialog dialog(this);
@@ -387,21 +408,33 @@ void EmployerForm::onAddResourceClicked()
     
     if (dialog.exec() != QDialog::Accepted)
     {
+        qDebug() << "[EmployerForm::onAddResourceClicked] Dialog cancelled";
         return;
     }
     
     QVector<qint64> selectedResourceIds = dialog.selectedResourceIds();
+    qDebug() << "[EmployerForm::onAddResourceClicked] Dialog returned" << selectedResourceIds.size() << "selected resources";
     
-    // Only update if employer already exists in database
+    // IMPORTANT: Store selected resources in m_selectedResourceIds for later use
+    m_selectedResourceIds = selectedResourceIds;
+    qDebug() << "[EmployerForm::onAddResourceClicked] Stored in m_selectedResourceIds:" << m_selectedResourceIds.size() << "resources";
+    
+    // Only update database if employer already exists
     if (m_employerId > 0)
     {
+        qDebug() << "[EmployerForm::onAddResourceClicked] Employer exists (ID:" << m_employerId << "), updating database";
+        
         // Clear current resources and add new ones
         Ressource::clearEmployerResources(m_employerId);
+        qDebug() << "[EmployerForm::onAddResourceClicked] Cleared old resources";
         
         for (qint64 resourceId : selectedResourceIds)
         {
+            qDebug() << "[EmployerForm::onAddResourceClicked] Adding resource" << resourceId << "to employer" << m_employerId;
             Ressource::addResourceToEmployer(m_employerId, resourceId);
         }
+        
+        qDebug() << "[EmployerForm::onAddResourceClicked] Database updated successfully";
         
         QMessageBox::information(this, tr("Success"),
                                tr("Resources assigned successfully."));
@@ -409,15 +442,21 @@ void EmployerForm::onAddResourceClicked()
     }
     else
     {
-        // For new employers, just show info
+        // For new employers, just update the form's internal state
+        qDebug() << "[EmployerForm::onAddResourceClicked] New employer (ID not assigned yet), skipping database update";
+        
+        // Update the list widget to show the selected resources
+        refreshResourceList();
+        
         QMessageBox::information(this, tr("Info"),
-                               tr("Save the employer first, then you can assign resources."));
+                               tr("Selected resources will be assigned when you save the employer."));
     }
 }
 
 void EmployerForm::onRemoveResourceClicked()
 {
-    qDebug() << "Remove resource clicked";
+    qDebug() << "[EmployerForm::onRemoveResourceClicked] Remove resource clicked";
+    
     QListWidgetItem *item = ui->resourceListWidget->currentItem();
     if (!item)
     {
@@ -426,31 +465,53 @@ void EmployerForm::onRemoveResourceClicked()
         return;
     }
 
-    if (m_employerId <= 0)
+    QString selectedTitle = item->text();
+    qDebug() << "[EmployerForm::onRemoveResourceClicked] Selected resource:" << selectedTitle;
+    
+    // Find and remove the resource from m_selectedResourceIds
+    for (int i = 0; i < m_selectedResourceIds.size(); ++i)
     {
-        return;
-    }
-
-    // Find the resource by title and remove it
-    QVector<Ressource> resources = Ressource::getResourcesByEmployer(m_employerId);
-    for (const Ressource &res : resources)
-    {
-        if (res.title == item->text())
+        qint64 resourceId = m_selectedResourceIds[i];
+        Ressource resource;
+        
+        if (Ressource::fetchById(resourceId, resource))
         {
-            if (Ressource::removeResourceFromEmployer(m_employerId, res.idMedia))
+            if (resource.title == selectedTitle)
             {
+                qDebug() << "[EmployerForm::onRemoveResourceClicked] Found resource ID" << resourceId << "with title:" << resource.title;
+                
+                m_selectedResourceIds.removeAt(i);
+                qDebug() << "[EmployerForm::onRemoveResourceClicked] Removed from m_selectedResourceIds. New count:" << m_selectedResourceIds.size();
+                
+                // If employer exists in database, also remove from there
+                if (m_employerId > 0)
+                {
+                    if (Ressource::removeResourceFromEmployer(m_employerId, resourceId))
+                    {
+                        qDebug() << "[EmployerForm::onRemoveResourceClicked] Removed from database";
+                    }
+                    else
+                    {
+                        qDebug() << "[EmployerForm::onRemoveResourceClicked] Failed to remove from database";
+                        QMessageBox::critical(this, tr("Error"),
+                                            tr("Failed to remove resource from database."));
+                        // Add it back to the list since DB removal failed
+                        m_selectedResourceIds.insert(i, resourceId);
+                        return;
+                    }
+                }
+                
                 QMessageBox::information(this, tr("Success"),
                                        tr("Resource removed successfully."));
                 refreshResourceList();
+                return;
             }
-            else
-            {
-                QMessageBox::critical(this, tr("Error"),
-                                    tr("Failed to remove resource."));
-            }
-            return;
         }
     }
+    
+    qDebug() << "[EmployerForm::onRemoveResourceClicked] Resource not found";
+    QMessageBox::warning(this, tr("Error"),
+                        tr("Could not find the selected resource."));
 }
 
 // =============================================================================

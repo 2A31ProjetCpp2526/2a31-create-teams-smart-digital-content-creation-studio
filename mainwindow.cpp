@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "ui_login.h"
-#include "ui_Profile.h"
 #include "ui_employerform.h"
 
 #include "ui/clientwidget.h"

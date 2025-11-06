@@ -68,11 +68,16 @@ private slots:
     void browseAvatar();
     void updateAvatarPreview(const QString &path);
     void clearErrorMessage();
+    void onAddResourceClicked();
+    void onRemoveResourceClicked();
 
 private:
     bool validate(QString *message) const;
+    void loadEmployerResources(qint64 employerId);
+    void refreshResourceList();
 
     Mode m_mode { CreateMode };
+    qint64 m_employerId { -1 };
     Ui::EmployerForm *ui;
 };
 

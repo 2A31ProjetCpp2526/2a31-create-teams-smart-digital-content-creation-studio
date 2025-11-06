@@ -36,6 +36,12 @@ public:
     static bool isTitleValid(const QString &title, QString &errorMsg);
     static bool isTitleUnique(const QString &title, qint64 excludeId = -1);
 
+    // Employer-Resource relations (N-N via UTILISER table)
+    static QVector<Ressource> getResourcesByEmployer(qint64 employerId);
+    static bool addResourceToEmployer(qint64 employerId, qint64 resourceId);
+    static bool removeResourceFromEmployer(qint64 employerId, qint64 resourceId);
+    static bool clearEmployerResources(qint64 employerId);
+
     // Display & Query Methods
     static QSqlQueryModel* displayAll();
     static QSqlQueryModel* search(const QString &keyword);

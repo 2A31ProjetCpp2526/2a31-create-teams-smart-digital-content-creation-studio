@@ -426,3 +426,122 @@ bool Ressource::exportToCsv(const QString &filePath)
     Q_UNUSED(filePath);
     return false;
 }
+
+// ========================================
+// EMPLOYER-RESOURCE RELATIONS (N-N)
+// ========================================
+
+QVector<Ressource> Ressource::getResourcesByEmployer(qint64 employerId)
+{
+    QVector<Ressource> resources;
+    QSqlDatabase db = QSqlDatabase::database();
+    if (!db.isOpen()) {
+        qDebug() << "❌ Database not open for getResourcesByEmployer";
+        return resources;
+    }
+
+    QString sql = QString("SELECT r.ID_MEDIA, r.TITLE, r.PATH, r.OWNER, r.FORMAT, r.ACCESS_LEVEL, r.UPLOAD_DATE "
+                         "FROM RESSOURCES r "
+                         "INNER JOIN UTILISER u ON r.ID_MEDIA = u.ID_MEDIA "
+                         "WHERE u.ID_EMP = %1 "
+                         "ORDER BY r.TITLE").arg(employerId);
+
+    QSqlQuery query(db);
+    if (!query.exec(sql)) {
+        qDebug() << "❌ Failed to get resources for employer" << employerId;
+        qDebug() << "Error:" << query.lastError().text();
+        return resources;
+    }
+
+    while (query.next()) {
+        Ressource r;
+        r.idMedia = query.value(0).toLongLong();
+        r.title = query.value(1).toString();
+        r.path = query.value(2).toString();
+        r.owner = query.value(3).toString();
+        r.format = query.value(4).toString();
+        r.accessLevel = query.value(5).toString();
+        r.uploadDate = query.value(6).toDateTime();
+        resources.append(r);
+    }
+
+    qDebug() << "✅ Found" << resources.count() << "resources for employer" << employerId;
+    return resources;
+}
+
+bool Ressource::addResourceToEmployer(qint64 employerId, qint64 resourceId)
+{
+    QSqlDatabase db = QSqlDatabase::database();
+    if (!db.isOpen()) {
+        qDebug() << "❌ Database not open for addResourceToEmployer";
+        return false;
+    }
+
+    // Check if relation already exists
+    QString checkSql = QString("SELECT COUNT(*) FROM UTILISER WHERE ID_EMP = %1 AND ID_MEDIA = %2")
+                      .arg(employerId).arg(resourceId);
+    QSqlQuery checkQuery(db);
+    if (checkQuery.exec(checkSql) && checkQuery.next()) {
+        if (checkQuery.value(0).toInt() > 0) {
+            qDebug() << "ℹ️  Resource" << resourceId << "already assigned to employer" << employerId;
+            return true; // Already exists, not an error
+        }
+    }
+
+    // Insert new relation
+    QString sql = QString("INSERT INTO UTILISER (ID_EMP, ID_MEDIA) VALUES (%1, %2)")
+                 .arg(employerId).arg(resourceId);
+
+    QSqlQuery query(db);
+    if (!query.exec(sql)) {
+        qDebug() << "❌ Failed to add resource" << resourceId << "to employer" << employerId;
+        qDebug() << "Error:" << query.lastError().text();
+        return false;
+    }
+
+    qDebug() << "✅ Resource" << resourceId << "added to employer" << employerId;
+    return true;
+}
+
+bool Ressource::removeResourceFromEmployer(qint64 employerId, qint64 resourceId)
+{
+    QSqlDatabase db = QSqlDatabase::database();
+    if (!db.isOpen()) {
+        qDebug() << "❌ Database not open for removeResourceFromEmployer";
+        return false;
+    }
+
+    QString sql = QString("DELETE FROM UTILISER WHERE ID_EMP = %1 AND ID_MEDIA = %2")
+                 .arg(employerId).arg(resourceId);
+
+    QSqlQuery query(db);
+    if (!query.exec(sql)) {
+        qDebug() << "❌ Failed to remove resource" << resourceId << "from employer" << employerId;
+        qDebug() << "Error:" << query.lastError().text();
+        return false;
+    }
+
+    qDebug() << "✅ Resource" << resourceId << "removed from employer" << employerId;
+    return true;
+}
+
+bool Ressource::clearEmployerResources(qint64 employerId)
+{
+    QSqlDatabase db = QSqlDatabase::database();
+    if (!db.isOpen()) {
+        qDebug() << "❌ Database not open for clearEmployerResources";
+        return false;
+    }
+
+    QString sql = QString("DELETE FROM UTILISER WHERE ID_EMP = %1").arg(employerId);
+
+    QSqlQuery query(db);
+    if (!query.exec(sql)) {
+        qDebug() << "❌ Failed to clear resources for employer" << employerId;
+        qDebug() << "Error:" << query.lastError().text();
+        return false;
+    }
+
+    qDebug() << "✅ All resources cleared for employer" << employerId;
+    return true;
+}

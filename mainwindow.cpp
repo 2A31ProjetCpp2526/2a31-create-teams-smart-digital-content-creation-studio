@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "ui_login.h"
+#include "ui_Profile.h"
 #include "ui_employerform.h"
 
 #include "ui/clientwidget.h"
@@ -11,6 +12,7 @@
 
 #include "backend/connection.h"
 #include "backend/employer.h"
+#include "backend/ressource.h"
 
 #include <QAbstractItemView>
 #include <QCheckBox>
@@ -78,6 +80,7 @@ QString escapeCsv(const QString &value)
 EmployerForm::EmployerForm(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::EmployerForm)
+    , m_employerId(-1)
 {
     ui->setupUi(this);
     ui->startDateEdit->setDate(QDate::currentDate());
@@ -92,6 +95,10 @@ EmployerForm::EmployerForm(QWidget *parent)
     connect(ui->emailLineEdit, &QLineEdit::textChanged, this, &EmployerForm::clearErrorMessage);
     connect(ui->roleComboBox, &QComboBox::currentTextChanged, this, &EmployerForm::clearErrorMessage);
     connect(ui->passwordLineEdit, &QLineEdit::textChanged, this, &EmployerForm::clearErrorMessage);
+    
+    // Resource management
+    connect(ui->addResourceButton, &QPushButton::clicked, this, &EmployerForm::onAddResourceClicked);
+    connect(ui->removeResourceButton, &QPushButton::clicked, this, &EmployerForm::onRemoveResourceClicked);
 
     setModal(true);
 }
@@ -119,6 +126,7 @@ void EmployerForm::setMode(Mode mode)
 
 void EmployerForm::setRecord(const Employer &record)
 {
+    m_employerId = record.employerId;
     ui->firstNameLineEdit->setText(record.firstName);
     ui->lastNameLineEdit->setText(record.lastName);
     ui->emailLineEdit->setText(record.email);
@@ -138,6 +146,13 @@ void EmployerForm::setRecord(const Employer &record)
     }
     ui->avatarLineEdit->setText(record.avatarPath);
     updateAvatarPreview(record.avatarPath);
+    
+    // Load assigned resources if editing
+    if (m_mode == EditMode && m_employerId > 0)
+    {
+        loadEmployerResources(m_employerId);
+    }
+    
     clearErrorMessage();
 }
 
@@ -208,7 +223,21 @@ void EmployerForm::updateAvatarPreview(const QString &path)
         return;
     }
 
-    ui->avatarPreviewLabel->setPixmap(pixmap.scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    // Scale to square (300x300) - crop if needed to maintain aspect ratio
+    int size = 300;
+    int w = pixmap.width();
+    int h = pixmap.height();
+    int minDim = qMin(w, h);
+    
+    // Crop to square first
+    int x = (w - minDim) / 2;
+    int y = (h - minDim) / 2;
+    QPixmap cropped = pixmap.copy(x, y, minDim, minDim);
+    
+    // Scale to target size
+    QPixmap scaled = cropped.scaledToWidth(size, Qt::SmoothTransformation);
+    
+    ui->avatarPreviewLabel->setPixmap(scaled);
     ui->avatarPreviewLabel->setText(QString());
 }
 
@@ -304,6 +333,79 @@ bool EmployerForm::validate(QString *message) const
         message->clear();
     }
     return true;
+}
+
+void EmployerForm::loadEmployerResources(qint64 employerId)
+{
+    ui->resourceListWidget->clear();
+    
+    if (employerId <= 0)
+    {
+        return;
+    }
+
+    QVector<Ressource> resources = Ressource::getResourcesByEmployer(employerId);
+    for (const Ressource &res : resources)
+    {
+        ui->resourceListWidget->addItem(res.title);
+    }
+    
+    qDebug() << "Loaded" << resources.count() << "resources for employer" << employerId;
+}
+
+void EmployerForm::refreshResourceList()
+{
+    if (m_employerId > 0)
+    {
+        loadEmployerResources(m_employerId);
+    }
+}
+
+void EmployerForm::onAddResourceClicked()
+{
+    qDebug() << "Add resource clicked";
+    // TODO: Show dialog to select resources from database
+    // For now, this is a placeholder for future resource selection dialog
+    QMessageBox::information(this, tr("Add Resource"),
+                           tr("Resource selection dialog will be implemented here."));
+}
+
+void EmployerForm::onRemoveResourceClicked()
+{
+    qDebug() << "Remove resource clicked";
+    QListWidgetItem *item = ui->resourceListWidget->currentItem();
+    if (!item)
+    {
+        QMessageBox::warning(this, tr("Remove Resource"),
+                           tr("Please select a resource to remove."));
+        return;
+    }
+
+    if (m_employerId <= 0)
+    {
+        return;
+    }
+
+    // Find the resource by title and remove it
+    QVector<Ressource> resources = Ressource::getResourcesByEmployer(m_employerId);
+    for (const Ressource &res : resources)
+    {
+        if (res.title == item->text())
+        {
+            if (Ressource::removeResourceFromEmployer(m_employerId, res.idMedia))
+            {
+                QMessageBox::information(this, tr("Success"),
+                                       tr("Resource removed successfully."));
+                refreshResourceList();
+            }
+            else
+            {
+                QMessageBox::critical(this, tr("Error"),
+                                    tr("Failed to remove resource."));
+            }
+            return;
+        }
+    }
 }
 
 // =============================================================================

@@ -588,6 +588,18 @@ void EmployerUIHelper::populateTable(QTableWidget *table, const QVector<Employer
         auto *dateItem = new QTableWidgetItem(formatDate(rec.startDate));
         table->setItem(row, 7, dateItem);
 
+        // Load and display resources for this employer
+        QVector<Ressource> employerResources = Ressource::getResourcesByEmployer(rec.employerId);
+        QString resourceNames;
+        for (int i = 0; i < employerResources.size(); ++i)
+        {
+            if (i > 0) resourceNames += ", ";
+            resourceNames += employerResources.at(i).name;
+        }
+        auto *resourcesItem = new QTableWidgetItem(resourceNames);
+        resourcesItem->setToolTip(resourceNames);  // Show full list in tooltip
+        table->setItem(row, 8, resourcesItem);
+
         table->setRowHeight(row, 90);
     }
 
@@ -2197,11 +2209,12 @@ void MainWindow::setupEmployeeTable()
     ui->employeeTable->setColumnWidth(5, 120);  // Role column
     ui->employeeTable->setColumnWidth(6, 140);  // Phone column
     ui->employeeTable->setColumnWidth(7, 120);  // Start Date column
+    ui->employeeTable->setColumnWidth(8, 200);  // Resources column
     
     // Stretch last column to fill remaining space
     ui->employeeTable->horizontalHeader()->setStretchLastSection(false);
     ui->employeeTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    ui->employeeTable->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Stretch); // Email stretches
+    ui->employeeTable->horizontalHeader()->setSectionResizeMode(8, QHeaderView::Stretch); // Resources stretches
     
     // Ensure the table rows have the proper height
     ui->employeeTable->verticalHeader()->setDefaultSectionSize(80);

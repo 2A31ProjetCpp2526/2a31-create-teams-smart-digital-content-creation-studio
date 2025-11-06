@@ -12,6 +12,8 @@
 #include <QFormLayout>
 #include <QComboBox>
 #include <QPixmap>
+#include <QTableWidgetItem>
+#include "backend/employer.h"
 
 QT_BEGIN_NAMESPACE
 class QLineEdit;
@@ -23,18 +25,86 @@ class ClientWidget;
 class SponsorWidget;
 class RessourceWidget;
 class ProjectWidget;
-namespace employer {
-class EmployerController;
-class EmployerModel;
-}
+class Employer;
 
 namespace Ui {
 class MainWindow;
 class LoginPage;
 class Profile;
+class EmployerForm;
 }
 QT_END_NAMESPACE
 
+// =============================================================================
+// EmployerForm - Dialog for adding/editing employers
+// =============================================================================
+class EmployerForm : public QDialog
+{
+    Q_OBJECT
+
+public:
+    enum Mode
+    {
+        CreateMode,
+        EditMode
+    };
+
+    explicit EmployerForm(QWidget *parent = nullptr);
+    ~EmployerForm() override;
+
+    void setMode(Mode mode);
+    void setRecord(const Employer &record);
+    Employer record() const;
+
+    bool passwordProvided() const;
+    QString rawPassword() const;
+
+    void setErrorMessage(const QString &message);
+
+protected:
+    void accept() override;
+
+private slots:
+    void browseAvatar();
+    void updateAvatarPreview(const QString &path);
+    void clearErrorMessage();
+
+private:
+    bool validate(QString *message) const;
+
+    Mode m_mode { CreateMode };
+    Ui::EmployerForm *ui;
+};
+
+// =============================================================================
+// EmployerUIHelper - Static UI utility methods
+// =============================================================================
+class EmployerUIHelper
+{
+public:
+    // Table population
+    static void populateTable(QTableWidget* table, const QVector<Employer>& records);
+    
+    // Selection helpers
+    static qint64 getSelectedEmployerId(QTableWidget* table, bool* ok);
+    static Employer getSelectedRecord(QTableWidget* table, const QVector<Employer>& cache, bool* ok);
+    static void handleSelectionToggle(QTableWidget* table, QTableWidgetItem* item);
+    static void updateButtonStates(QPushButton* modifyBtn, QPushButton* deleteBtn, QTableWidget* table);
+    
+    // Search and sort
+    static QVector<Employer> searchRecords(const QVector<Employer>& records, const QString& query);
+    static QVector<Employer> sortRecords(const QVector<Employer>& records);
+    
+    // Export
+    static bool exportToCsv(const QString& filePath, const QVector<Employer>& records, QString* errorMessage);
+
+private:
+    EmployerUIHelper() = delete; // Static class - no instances
+};
+
+// =============================================================================
+// MainWindow - Main Application Window
+// =============================================================================
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
@@ -70,6 +140,18 @@ private slots:
     // Login/Signup validation
     void validateAndLogin();
     void validateAndSignUp();
+    
+    // Employer management slots
+    void onAddEmployerClicked();
+    void onModifyEmployerClicked();
+    void onDeleteEmployerClicked();
+    void onExportEmployersClicked();
+    void onSearchEmployersClicked();
+    void onSortEmployersClicked();
+    void onEmployeeTableSelectionChanged();
+    void onEmployeeTableItemClicked(QTableWidgetItem *item);
+    void onCancelSelectionClicked();
+    
 private:
     void setupPages();
     void setupLoginForms();
@@ -98,6 +180,10 @@ private:
     void setFieldError(QLineEdit* field, bool hasError);
     void addInputFieldEnhancements(QLineEdit* field);
     
+    // Employer helper methods
+    void loadEmployers();
+    void updateEmployerButtonStates();
+    
     Ui::MainWindow *ui;
     QPixmap legionPixmap;
 
@@ -124,8 +210,7 @@ private:
     SponsorWidget *sponsorWidget;
     RessourceWidget *ressourceWidget;
     ProjectWidget *projectWidget;
-    employer::EmployerModel *employerModel;
-    employer::EmployerController *employerController;
+    QVector<Employer> cachedEmployers;
     
     // Login page widget and auth stacked widget reference
     QWidget *loginPageWidget;

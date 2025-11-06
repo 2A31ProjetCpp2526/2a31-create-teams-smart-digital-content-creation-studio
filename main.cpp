@@ -7,9 +7,52 @@
 #include <QDebug>
 #include <QDir>
 
+// Custom message handler to write debug output to file
+void customMessageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    static QFile logFile("debug_output.log");
+    static bool opened = false;
+    
+    if (!opened) {
+        logFile.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate);
+        opened = true;
+    }
+    
+    QString formattedMsg;
+    switch (type) {
+        case QtDebugMsg:
+            formattedMsg = QString("[DEBUG] %1\n").arg(msg);
+            break;
+        case QtWarningMsg:
+          //  formattedMsg = QString("[WARNING] %1\n").arg(msg);
+            break;
+        case QtCriticalMsg:
+            formattedMsg = QString("[CRITICAL] %1\n").arg(msg);
+            break;
+        case QtFatalMsg:
+            formattedMsg = QString("[FATAL] %1\n").arg(msg);
+            break;
+        default:
+            formattedMsg = QString("%1\n").arg(msg);
+    }
+    
+    if (logFile.isOpen()) {
+        logFile.write(formattedMsg.toUtf8());
+        logFile.flush();
+    }
+    
+    // Also output to console (won't show in GUI but useful for debugging)
+    fprintf(stderr, "%s", formattedMsg.toLocal8Bit().constData());
+}
+
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+    
+    // Install custom message handler to capture all qDebug/qCritical output
+    qInstallMessageHandler(customMessageHandler);
+    
+    qDebug() << "Application started - logging to debug_output.log";
     
     // Load Poppins font
     int fontId = QFontDatabase::addApplicationFont(":/resources/fonts/Poppins-Light.ttf");

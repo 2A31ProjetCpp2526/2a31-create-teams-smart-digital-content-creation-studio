@@ -2,19 +2,21 @@
 #include "ui_mainwindow.h"
 #include "ui_login.h"
 #include "ui_Profile.h"
+#include "ui_employerform.h"
 
-#include "clientwidget.h"
-#include "projectwidget.h"
-#include "ressourcewidget.h"
-#include "sponsorwidget.h"
-#include "templatewidget.h"
+#include "ui/clientwidget.h"
+#include "ui/projectwidget.h"
+#include "ui/ressourcewidget.h"
+#include "ui/sponsorwidget.h"
+#include "ui/templatewidget.h"
 
-#include "src/modules/employer/databasemanager.h"
-#include "src/modules/employer/employercontroller.h"
-#include "src/modules/employer/employermodel.h"
+#include "backend/connection.h"
+#include "backend/employer.h"
 
 #include <QAbstractItemView>
 #include <QCheckBox>
+#include <QCoreApplication>
+#include <QFileDialog>
 #include <QGraphicsOpacityEffect>
 #include <QHeaderView>
 #include <QIcon>
@@ -26,11 +28,553 @@
 #include <QPropertyAnimation>
 #include <QPushButton>
 #include <QRegularExpression>
+#include <QRegularExpressionValidator>
 #include <QResizeEvent>
 #include <QSize>
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QEasingCurve>
+#include <QTextStream>
+#include <QFile>
+#include <QDate>
+#include <QComboBox>
+#include <QtSql/QSqlDatabase>
+#include <QtSql/QSqlError>
+#include <algorithm>
+
+// =============================================================================
+// Helper Functions and Constants
+// =============================================================================
+namespace
+{
+// Email validation regex
+QRegularExpression emailRegex()
+{
+    return QRegularExpression(QStringLiteral(R"(^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$)"), 
+                             QRegularExpression::CaseInsensitiveOption);
+}
+
+// Selection symbols for table UI
+constexpr auto kSelectSymbol = "☑";
+constexpr auto kUnselectSymbol = "☐";
+
+// CSV formatting helpers
+QString formatDate(const QDate &date)
+{
+    return date.isValid() ? date.toString(QStringLiteral("yyyy-MM-dd")) : QString();
+}
+
+QString escapeCsv(const QString &value)
+{
+    QString copy = value;
+    copy.replace('"', "\"\"");
+    return QStringLiteral("\"%1\"").arg(copy);
+}
+}
+
+// =============================================================================
+// EmployerForm Implementation
+// =============================================================================
+
+EmployerForm::EmployerForm(QWidget *parent)
+    : QDialog(parent)
+    , ui(new Ui::EmployerForm)
+{
+    ui->setupUi(this);
+    ui->startDateEdit->setDate(QDate::currentDate());
+
+    auto *emailValidator = new QRegularExpressionValidator(emailRegex(), ui->emailLineEdit);
+    ui->emailLineEdit->setValidator(emailValidator);
+
+    connect(ui->browseAvatarButton, &QPushButton::clicked, this, &EmployerForm::browseAvatar);
+    connect(ui->avatarLineEdit, &QLineEdit::textChanged, this, &EmployerForm::updateAvatarPreview);
+    connect(ui->firstNameLineEdit, &QLineEdit::textChanged, this, &EmployerForm::clearErrorMessage);
+    connect(ui->lastNameLineEdit, &QLineEdit::textChanged, this, &EmployerForm::clearErrorMessage);
+    connect(ui->emailLineEdit, &QLineEdit::textChanged, this, &EmployerForm::clearErrorMessage);
+    connect(ui->roleComboBox, &QComboBox::currentTextChanged, this, &EmployerForm::clearErrorMessage);
+    connect(ui->passwordLineEdit, &QLineEdit::textChanged, this, &EmployerForm::clearErrorMessage);
+
+    setModal(true);
+}
+
+EmployerForm::~EmployerForm()
+{
+    delete ui;
+}
+
+void EmployerForm::setMode(Mode mode)
+{
+    m_mode = mode;
+    if (mode == EditMode)
+    {
+        setWindowTitle(tr("Update Employer"));
+        ui->passwordLabel->setText(tr("Password (leave blank to keep)"));
+    }
+    else
+    {
+        setWindowTitle(tr("Add Employer"));
+        ui->passwordLabel->setText(tr("Password *"));
+        ui->passwordLineEdit->clear();
+    }
+}
+
+void EmployerForm::setRecord(const Employer &record)
+{
+    ui->firstNameLineEdit->setText(record.firstName);
+    ui->lastNameLineEdit->setText(record.lastName);
+    ui->emailLineEdit->setText(record.email);
+    ui->phoneLineEdit->setText(record.phone);
+    const int roleIndex = ui->roleComboBox->findText(record.role, Qt::MatchFixedString);
+    if (roleIndex >= 0)
+    {
+        ui->roleComboBox->setCurrentIndex(roleIndex);
+    }
+    else
+    {
+        ui->roleComboBox->setCurrentText(record.role);
+    }
+    if (record.startDate.isValid())
+    {
+        ui->startDateEdit->setDate(record.startDate);
+    }
+    ui->avatarLineEdit->setText(record.avatarPath);
+    updateAvatarPreview(record.avatarPath);
+    clearErrorMessage();
+}
+
+Employer EmployerForm::record() const
+{
+    Employer rec;
+    rec.firstName = ui->firstNameLineEdit->text().trimmed();
+    rec.lastName = ui->lastNameLineEdit->text().trimmed();
+    rec.email = ui->emailLineEdit->text().trimmed();
+    rec.phone = ui->phoneLineEdit->text().trimmed();
+    rec.role = ui->roleComboBox->currentText().trimmed();
+    rec.startDate = ui->startDateEdit->date();
+    rec.avatarPath = ui->avatarLineEdit->text().trimmed();
+    return rec;
+}
+
+bool EmployerForm::passwordProvided() const
+{
+    return !ui->passwordLineEdit->text().trimmed().isEmpty();
+}
+
+QString EmployerForm::rawPassword() const
+{
+    return ui->passwordLineEdit->text();
+}
+
+void EmployerForm::setErrorMessage(const QString &message)
+{
+    ui->errorLabel->setText(message);
+}
+
+void EmployerForm::accept()
+{
+    QString validationMessage;
+    if (!validate(&validationMessage))
+    {
+        setErrorMessage(validationMessage);
+        return;
+    }
+    QDialog::accept();
+}
+
+void EmployerForm::browseAvatar()
+{
+    const QString filePath = QFileDialog::getOpenFileName(this, tr("Select avatar"), 
+                                                          QString(), 
+                                                          tr("Images (*.png *.jpg *.jpeg *.bmp)"));
+    if (!filePath.isEmpty())
+    {
+        ui->avatarLineEdit->setText(filePath);
+    }
+}
+
+void EmployerForm::updateAvatarPreview(const QString &path)
+{
+    if (path.trimmed().isEmpty())
+    {
+        ui->avatarPreviewLabel->setText(tr("No preview"));
+        ui->avatarPreviewLabel->setPixmap(QPixmap());
+        return;
+    }
+
+    QPixmap pixmap(path);
+    if (pixmap.isNull())
+    {
+        ui->avatarPreviewLabel->setText(tr("Preview unavailable"));
+        ui->avatarPreviewLabel->setPixmap(QPixmap());
+        return;
+    }
+
+    ui->avatarPreviewLabel->setPixmap(pixmap.scaled(100, 100, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+    ui->avatarPreviewLabel->setText(QString());
+}
+
+void EmployerForm::clearErrorMessage()
+{
+    ui->errorLabel->clear();
+}
+
+bool EmployerForm::validate(QString *message) const
+{
+    const Employer rec = record();
+
+    if (rec.firstName.isEmpty())
+    {
+        if (message)
+        {
+            *message = tr("First name is required.");
+        }
+        return false;
+    }
+
+    if (rec.lastName.isEmpty())
+    {
+        if (message)
+        {
+            *message = tr("Last name is required.");
+        }
+        return false;
+    }
+
+    if (rec.email.isEmpty())
+    {
+        if (message)
+        {
+            *message = tr("Email is required.");
+        }
+        return false;
+    }
+
+    if (!emailRegex().match(rec.email).hasMatch())
+    {
+        if (message)
+        {
+            *message = tr("Email format is invalid.");
+        }
+        return false;
+    }
+
+    if (rec.role.isEmpty() || rec.role.compare(QStringLiteral("Select role"), Qt::CaseInsensitive) == 0)
+    {
+        if (message)
+        {
+            *message = tr("Select a role for the employer.");
+        }
+        return false;
+    }
+
+    if (!rec.startDate.isValid())
+    {
+        if (message)
+        {
+            *message = tr("Start date is invalid.");
+        }
+        return false;
+    }
+
+    const QString password = ui->passwordLineEdit->text();
+    if (m_mode == CreateMode)
+    {
+        if (password.trimmed().size() < 8)
+        {
+            if (message)
+            {
+                *message = tr("Password must be at least 8 characters long.");
+            }
+            return false;
+        }
+    }
+    else
+    {
+        if (!password.trimmed().isEmpty() && password.trimmed().size() < 8)
+        {
+            if (message)
+            {
+                *message = tr("New password must be at least 8 characters long.");
+            }
+            return false;
+        }
+    }
+
+    if (message)
+    {
+        message->clear();
+    }
+    return true;
+}
+
+// =============================================================================
+// EmployerUIHelper Implementation
+// =============================================================================
+
+void EmployerUIHelper::populateTable(QTableWidget *table, const QVector<Employer> &records)
+{
+    qDebug() << "[EmployerUIHelper::populateTable] CALLED with" << records.size() << "records";
+    
+    if (!table)
+    {
+        qDebug() << "[EmployerUIHelper::populateTable] ERROR: table is NULL!";
+        return;
+    }
+
+    table->setRowCount(records.size());
+
+    for (int row = 0; row < records.size(); ++row)
+    {
+        const Employer &rec = records.at(row);
+
+        qDebug() << "[EmployerUIHelper::populateTable] Row" << row << "- ID:" << rec.employerId 
+                 << "Name:" << rec.firstName << rec.lastName;
+
+        auto *selectItem = new QTableWidgetItem(QString::fromUtf8(kUnselectSymbol));
+        selectItem->setTextAlignment(Qt::AlignCenter);
+        selectItem->setData(Qt::UserRole, rec.employerId);
+        qDebug() << "[EmployerUIHelper::populateTable] Storing ID in UserRole:" << rec.employerId;
+        table->setItem(row, 0, selectItem);
+
+        auto *avatarItem = new QTableWidgetItem();
+        if (!rec.avatarPath.isEmpty())
+        {
+            const QPixmap pixmap(rec.avatarPath);
+            if (!pixmap.isNull())
+            {
+                avatarItem->setIcon(QIcon(pixmap.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+            }
+        }
+        avatarItem->setToolTip(rec.avatarPath);
+        table->setItem(row, 1, avatarItem);
+
+        auto *idItem = new QTableWidgetItem(rec.employerId > 0 ? QString::number(rec.employerId) : QString());
+        table->setItem(row, 2, idItem);
+
+        auto *nameItem = new QTableWidgetItem(QStringLiteral("%1 %2").arg(rec.firstName, rec.lastName));
+        table->setItem(row, 3, nameItem);
+
+        auto *emailItem = new QTableWidgetItem(rec.email);
+        table->setItem(row, 4, emailItem);
+
+        auto *roleItem = new QTableWidgetItem(rec.role);
+        table->setItem(row, 5, roleItem);
+
+        auto *phoneItem = new QTableWidgetItem(rec.phone);
+        table->setItem(row, 6, phoneItem);
+
+        auto *dateItem = new QTableWidgetItem(formatDate(rec.startDate));
+        table->setItem(row, 7, dateItem);
+
+        table->setRowHeight(row, 90);
+    }
+
+    table->clearSelection();
+    qDebug() << "[EmployerUIHelper::populateTable] Table populated successfully";
+}
+
+qint64 EmployerUIHelper::getSelectedEmployerId(QTableWidget *table, bool *ok)
+{
+    qDebug() << "[EmployerUIHelper::getSelectedEmployerId] CALLED";
+    
+    if (!table)
+    {
+        qDebug() << "[EmployerUIHelper::getSelectedEmployerId] ERROR: table is NULL!";
+        if (ok) *ok = false;
+        return -1;
+    }
+
+    qDebug() << "[EmployerUIHelper::getSelectedEmployerId] Table has" << table->rowCount() << "rows";
+
+    int row = table->currentRow();
+    qDebug() << "[EmployerUIHelper::getSelectedEmployerId] currentRow():" << row;
+    
+    if (row < 0)
+    {
+        qDebug() << "[EmployerUIHelper::getSelectedEmployerId] No currentRow, searching for selected symbol...";
+        for (int r = 0; r < table->rowCount(); ++r)
+        {
+            const QTableWidgetItem *item = table->item(r, 0);
+            if (item && item->text() == QString::fromUtf8(kSelectSymbol))
+            {
+                qDebug() << "[EmployerUIHelper::getSelectedEmployerId] Found selected symbol at row" << r;
+                row = r;
+                break;
+            }
+        }
+    }
+
+    if (row < 0)
+    {
+        qDebug() << "[EmployerUIHelper::getSelectedEmployerId] ERROR: No row selected!";
+        if (ok) *ok = false;
+        return -1;
+    }
+
+    qDebug() << "[EmployerUIHelper::getSelectedEmployerId] Selected row:" << row;
+
+    const QTableWidgetItem *item = table->item(row, 0);
+    qint64 id = -1;
+    if (item)
+    {
+        QVariant userData = item->data(Qt::UserRole);
+        qDebug() << "[EmployerUIHelper::getSelectedEmployerId] UserRole data type:" << userData.typeName();
+        qDebug() << "[EmployerUIHelper::getSelectedEmployerId] UserRole data value:" << userData;
+        
+        id = userData.toLongLong();
+        qDebug() << "[EmployerUIHelper::getSelectedEmployerId] Extracted ID:" << id;
+    }
+    else
+    {
+        qDebug() << "[EmployerUIHelper::getSelectedEmployerId] ERROR: item at row" << row << "col 0 is NULL!";
+    }
+
+    bool result = (id > 0);
+    qDebug() << "[EmployerUIHelper::getSelectedEmployerId] Returning ID:" << id << "valid:" << result;
+    
+    if (ok) *ok = result;
+    return id;
+}
+
+Employer EmployerUIHelper::getSelectedRecord(QTableWidget *table, const QVector<Employer> &records, bool *ok)
+{
+    Employer record;
+    bool localOk = false;
+    const qint64 id = getSelectedEmployerId(table, &localOk);
+    
+    if (localOk)
+    {
+        for (const auto &candidate : records)
+        {
+            if (candidate.employerId == id)
+            {
+                record = candidate;
+                break;
+            }
+        }
+    }
+
+    if (ok) *ok = localOk;
+    return record;
+}
+
+void EmployerUIHelper::handleSelectionToggle(QTableWidget *table, QTableWidgetItem *item)
+{
+    if (!table || !item || item->column() != 0)
+    {
+        return;
+    }
+
+    for (int row = 0; row < table->rowCount(); ++row)
+    {
+        if (row == item->row())
+        {
+            const bool alreadySelected = item->text() == QString::fromUtf8(kSelectSymbol);
+            item->setText(alreadySelected ? QString::fromUtf8(kUnselectSymbol)
+                                          : QString::fromUtf8(kSelectSymbol));
+            table->selectRow(row);
+        }
+        else
+        {
+            QTableWidgetItem *other = table->item(row, 0);
+            if (other)
+            {
+                other->setText(QString::fromUtf8(kUnselectSymbol));
+            }
+        }
+    }
+}
+
+void EmployerUIHelper::updateButtonStates(QPushButton *modifyBtn, QPushButton *deleteBtn, QTableWidget *table)
+{
+    bool ok = false;
+    getSelectedEmployerId(table, &ok);
+    const bool hasSelection = ok;
+
+    if (modifyBtn)
+    {
+        modifyBtn->setEnabled(hasSelection);
+    }
+    if (deleteBtn)
+    {
+        deleteBtn->setEnabled(hasSelection);
+    }
+}
+
+QVector<Employer> EmployerUIHelper::searchRecords(const QVector<Employer> &records, const QString &searchTerm)
+{
+    if (searchTerm.isEmpty())
+    {
+        return records;
+    }
+
+    QVector<Employer> filtered;
+    filtered.reserve(records.size());
+    
+    for (const auto &record : records)
+    {
+        const QString composite = QStringLiteral("%1 %2 %3").arg(record.firstName, record.lastName, record.email);
+        if (composite.contains(searchTerm, Qt::CaseInsensitive))
+        {
+            filtered.push_back(record);
+        }
+    }
+
+    return filtered;
+}
+
+QVector<Employer> EmployerUIHelper::sortRecords(const QVector<Employer> &records)
+{
+    QVector<Employer> sorted = records;
+    std::sort(sorted.begin(), sorted.end(), [](const Employer &lhs, const Employer &rhs) {
+        if (lhs.lastName.compare(rhs.lastName, Qt::CaseInsensitive) == 0)
+        {
+            return lhs.firstName.compare(rhs.firstName, Qt::CaseInsensitive) < 0;
+        }
+        return lhs.lastName.compare(rhs.lastName, Qt::CaseInsensitive) < 0;
+    });
+    
+    return sorted;
+}
+
+bool EmployerUIHelper::exportToCsv(const QString &filePath, const QVector<Employer> &records, QString *errorMessage)
+{
+    if (records.isEmpty())
+    {
+        if (errorMessage) *errorMessage = QObject::tr("No employer data available for export.");
+        return false;
+    }
+
+    QFile file(filePath);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+    {
+        if (errorMessage) *errorMessage = QObject::tr("Cannot open file for writing.");
+        return false;
+    }
+
+    QTextStream stream(&file);
+    stream << "EMPLOYER_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,ROLE,START_DATE,AVATAR_PATH" << '\n';
+    
+    for (const auto &rec : records)
+    {
+        stream << rec.employerId << ','
+               << escapeCsv(rec.firstName) << ','
+               << escapeCsv(rec.lastName) << ','
+               << escapeCsv(rec.email) << ','
+               << escapeCsv(rec.phone) << ','
+               << escapeCsv(rec.role) << ','
+               << escapeCsv(formatDate(rec.startDate)) << ','
+               << escapeCsv(rec.avatarPath)
+               << '\n';
+    }
+
+    return true;
+}
+
+// =============================================================================
+// MainWindow Implementation
+// =============================================================================
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -47,8 +591,6 @@ MainWindow::MainWindow(QWidget *parent)
     , sponsorWidget(nullptr)
     , ressourceWidget(nullptr)
     , projectWidget(nullptr)
-    , employerModel(nullptr)
-    , employerController(nullptr)
     , loginPageWidget(nullptr)
     , authStackedWidget(nullptr)
     , loginUI(nullptr)
@@ -58,6 +600,311 @@ MainWindow::MainWindow(QWidget *parent)
     , currentPageIndex(-1)
 {
     ui->setupUi(this);
+
+    // =============================================================================
+    // 🔐 ELEGANT LOGIN DIALOG - NO ANIMATIONS, FIXED DESIGN
+    // =============================================================================
+    QDialog *loginDialog = new QDialog(this);
+    loginDialog->setWindowTitle("InspiraStudio Login");
+    loginDialog->setFixedSize(560, 520);
+    loginDialog->setModal(true);
+    loginDialog->setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
+    loginDialog->setAttribute(Qt::WA_TranslucentBackground);
+    
+    // Main container with shadow effect
+    QWidget *container = new QWidget(loginDialog);
+    container->setGeometry(15, 15, 530, 490);
+    container->setStyleSheet(
+        "QWidget {"
+        "    background: qlineargradient(x1:0, y1:0, x2:0, y2:1,"
+        "        stop:0 #ffffff, stop:1 #f8f9fa);"
+        "    border-radius: 20px;"
+        "    border: 1px solid rgba(30, 136, 255, 0.1);"
+        "}"
+    );
+    
+    // Add drop shadow effect
+    QGraphicsDropShadowEffect *shadowEffect = new QGraphicsDropShadowEffect();
+    shadowEffect->setBlurRadius(40);
+    shadowEffect->setXOffset(0);
+    shadowEffect->setYOffset(10);
+    shadowEffect->setColor(QColor(30, 136, 255, 80));
+    container->setGraphicsEffect(shadowEffect);
+
+    QVBoxLayout *loginLayout = new QVBoxLayout(container);
+    loginLayout->setSpacing(22);
+    loginLayout->setContentsMargins(55, 55, 55, 55);
+
+    // Logo/Header area with animated gradient background
+    QWidget *headerWidget = new QWidget();
+    headerWidget->setFixedHeight(120);
+    headerWidget->setStyleSheet(
+        "QWidget {"
+        "    background: qlineargradient(x1:0, y1:0, x2:1, y2:1,"
+        "        stop:0 #667eea, stop:0.5 #1e88ff, stop:1 #764ba2);"
+        "    border-radius: 15px;"
+        "    border: 2px solid rgba(255, 255, 255, 0.3);"
+        "}"
+    );
+    
+    // Header glow effect
+    QGraphicsDropShadowEffect *headerGlow = new QGraphicsDropShadowEffect();
+    headerGlow->setBlurRadius(25);
+    headerGlow->setXOffset(0);
+    headerGlow->setYOffset(0);
+    headerGlow->setColor(QColor(30, 136, 255, 120));
+    headerWidget->setGraphicsEffect(headerGlow);
+    
+    QVBoxLayout *headerLayout = new QVBoxLayout(headerWidget);
+    headerLayout->setContentsMargins(0, 15, 0, 15);
+    headerLayout->setSpacing(5);
+    
+    // Animated title
+    QLabel *titleLabel = new QLabel("🔐 InspiraStudio");
+    titleLabel->setAlignment(Qt::AlignCenter);
+    titleLabel->setStyleSheet(
+        "QLabel {"
+        "    color: #ffffff;"
+        "    font-size: 36px;"
+        "    font-weight: 700;"
+        "    font-family: 'Poppins Light', sans-serif;"
+        "    background: transparent;"
+        "    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);"
+        "}"
+    );
+    headerLayout->addWidget(titleLabel);
+    
+    QLabel *subtitleLabel = new QLabel("✨ Welcome Back ✨");
+    subtitleLabel->setAlignment(Qt::AlignCenter);
+    subtitleLabel->setStyleSheet(
+        "QLabel {"
+        "    color: rgba(255, 255, 255, 0.95);"
+        "    font-size: 16px;"
+        "    font-family: 'Poppins Light', sans-serif;"
+        "    background: transparent;"
+        "    letter-spacing: 1px;"
+        "}"
+    );
+    headerLayout->addWidget(subtitleLabel);
+    
+    loginLayout->addWidget(headerWidget);
+    loginLayout->addSpacing(20);
+
+    // Username label with icon
+    QLabel *usernameLabel = new QLabel("👤  Username");
+    usernameLabel->setStyleSheet(
+        "QLabel {"
+        "    color: #2c3e50;"
+        "    font-size: 15px;"
+        "    font-weight: 600;"
+        "    font-family: 'Poppins Light', sans-serif;"
+        "    margin-bottom: 6px;"
+        "}"
+    );
+    loginLayout->addWidget(usernameLabel);
+
+    // Username field with enhanced styling
+    QLineEdit *usernameEdit = new QLineEdit();
+    usernameEdit->setPlaceholderText("Enter your username...");
+    usernameEdit->setText("adminInspiraStudio");
+    usernameEdit->setFixedHeight(55);
+    usernameEdit->setStyleSheet(
+        "QLineEdit {"
+        "    padding: 15px 20px;"
+        "    border: 2px solid #e1e8ed;"
+        "    border-radius: 12px;"
+        "    background-color: #ffffff;"
+        "    color: #000000;"
+        "    font-size: 15px;"
+        "    font-family: 'Poppins Light', sans-serif;"
+        "    selection-background-color: #1e88ff;"
+        "    margin: 0px;"
+        "}"
+        "QLineEdit:focus {"
+        "    border: 2px solid #1e88ff;"
+        "    background-color: #f0f8ff;"
+        "    padding: 15px 20px;"
+        "    margin: 0px;"
+        "}"
+        "QLineEdit:hover {"
+        "    background-color: #fafbfc;"
+        "    border: 2px solid #b0c4de;"
+        "    padding: 15px 20px;"
+        "    margin: 0px;"
+        "}"
+    );
+    loginLayout->addWidget(usernameEdit);
+
+    loginLayout->addSpacing(8);
+
+    // Password label with icon
+    QLabel *passwordLabel = new QLabel("🔒  Password");
+    passwordLabel->setStyleSheet(
+        "QLabel {"
+        "    color: #2c3e50;"
+        "    font-size: 15px;"
+        "    font-weight: 600;"
+        "    font-family: 'Poppins Light', sans-serif;"
+        "    margin-bottom: 6px;"
+        "}"
+    );
+    loginLayout->addWidget(passwordLabel);
+
+    // Password field with enhanced styling
+    QLineEdit *passwordEdit = new QLineEdit();
+    passwordEdit->setPlaceholderText("Enter your password...");
+    passwordEdit->setEchoMode(QLineEdit::Password);
+    passwordEdit->setText("alawi");
+    passwordEdit->setFixedHeight(55);
+    passwordEdit->setStyleSheet(
+        "QLineEdit {"
+        "    padding: 15px 20px;"
+        "    border: 2px solid #e1e8ed;"
+        "    border-radius: 12px;"
+        "    background-color: #ffffff;"
+        "    color: #000000;"
+        "    font-size: 15px;"
+        "    font-family: 'Poppins Light', sans-serif;"
+        "    selection-background-color: #1e88ff;"
+        "    margin: 0px;"
+        "}"
+        "QLineEdit:focus {"
+        "    border: 2px solid #1e88ff;"
+        "    background-color: #f0f8ff;"
+        "    padding: 15px 20px;"
+        "    margin: 0px;"
+        "}"
+        "QLineEdit:hover {"
+        "    background-color: #fafbfc;"
+        "    border: 2px solid #b0c4de;"
+        "    padding: 15px 20px;"
+        "    margin: 0px;"
+        "}"
+    );
+    loginLayout->addWidget(passwordEdit);
+
+    // Error label (hidden by default) with slide animation
+    QLabel *errorLabel = new QLabel();
+    errorLabel->setAlignment(Qt::AlignCenter);
+    errorLabel->setWordWrap(true);
+    errorLabel->setVisible(false);
+    errorLabel->setFixedHeight(0);
+    errorLabel->setStyleSheet(
+        "QLabel {"
+        "    color: #dc3545;"
+        "    font-size: 14px;"
+        "    font-weight: 600;"
+        "    font-family: 'Poppins Light', sans-serif;"
+        "    padding: 12px;"
+        "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,"
+        "        stop:0 #f8d7da, stop:1 #f5c2c7);"
+        "    border: 2px solid #f1aeb5;"
+        "    border-radius: 10px;"
+        "}"
+    );
+    loginLayout->addWidget(errorLabel);
+
+    loginLayout->addSpacing(15);
+
+    // Login button with gradient and hover animation
+    QPushButton *loginButton = new QPushButton("🚀  Login to InspiraStudio");
+    loginButton->setFixedHeight(58);
+    loginButton->setCursor(Qt::PointingHandCursor);
+    loginButton->setStyleSheet(
+        "QPushButton {"
+        "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,"
+        "        stop:0 #667eea, stop:0.5 #1e88ff, stop:1 #764ba2);"
+        "    color: white;"
+        "    padding: 15px;"
+        "    margin: 0px;"
+        "    border: none;"
+        "    border-radius: 12px;"
+        "    font-size: 18px;"
+        "    font-weight: 700;"
+        "    font-family: 'Poppins Light', sans-serif;"
+        "    letter-spacing: 0.5px;"
+        "}"
+        "QPushButton:hover {"
+        "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,"
+        "        stop:0 #5568d3, stop:0.5 #0d6efd, stop:1 #6a3f8f);"
+        "    padding: 15px;"
+        "    margin: 0px;"
+        "    border: none;"
+        "}"
+        "QPushButton:pressed {"
+        "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0,"
+        "        stop:0 #4a5bbd, stop:0.5 #0a58ca, stop:1 #5a3579);"
+        "    padding: 15px;"
+        "    margin: 0px;"
+        "    border: none;"
+        "}"
+    );
+    
+    // Button glow effect
+    QGraphicsDropShadowEffect *buttonGlow = new QGraphicsDropShadowEffect();
+    buttonGlow->setBlurRadius(20);
+    buttonGlow->setXOffset(0);
+    buttonGlow->setYOffset(4);
+    buttonGlow->setColor(QColor(30, 136, 255, 100));
+    loginButton->setGraphicsEffect(buttonGlow);
+    
+    loginLayout->addWidget(loginButton);
+
+    loginLayout->addStretch();
+
+    // Footer text with gradient
+    QLabel *footerLabel = new QLabel("🌟 InspiraStudio © 2025 - Secure Access 🌟");
+    footerLabel->setAlignment(Qt::AlignCenter);
+    footerLabel->setStyleSheet(
+        "QLabel {"
+        "    color: #95a5a6;"
+        "    font-size: 13px;"
+        "    font-family: 'Poppins Light', sans-serif;"
+        "    font-weight: 500;"
+        "    letter-spacing: 0.5px;"
+        "}"
+    );
+    loginLayout->addWidget(footerLabel);
+
+    // Login button connection - NO ANIMATIONS
+    connect(loginButton, &QPushButton::clicked, [=]() {
+        QString username = usernameEdit->text().trimmed();
+        QString password = passwordEdit->text();
+
+        // Validate credentials - database connection will be established after login
+        if (username == "adminInspiraStudio" && password == "alawi") {
+            qDebug() << "[Login] Credentials validated successfully";
+            // Success - close immediately without animation
+            loginDialog->accept();
+            loginDialog->close();
+        } else {
+            qDebug() << "[Login] Invalid credentials entered";
+            // Show error message without animation
+            errorLabel->setText("❌ Invalid credentials. Please try again.");
+            errorLabel->setVisible(true);
+            errorLabel->setFixedHeight(60);
+        }
+    });
+
+    // Allow Enter key to submit
+    connect(passwordEdit, &QLineEdit::returnPressed, loginButton, &QPushButton::click);
+
+    // Center dialog on screen
+    loginDialog->move(
+        (QApplication::primaryScreen()->geometry().width() - loginDialog->width()) / 2,
+        (QApplication::primaryScreen()->geometry().height() - loginDialog->height()) / 2
+    );
+
+    // Show login dialog and wait - NO ENTRANCE ANIMATIONS
+    if (loginDialog->exec() != QDialog::Accepted) {
+        QApplication::quit();
+        return;
+    }
+
+    delete loginDialog;
+    // =============================================================================
+    // END LOGIN DIALOG
+    // =============================================================================
 
     legionPixmap = QPixmap(QStringLiteral(":/images/legion.png"));
     updateLegionLogoScaled();
@@ -94,44 +941,56 @@ MainWindow::MainWindow(QWidget *parent)
     addButtonHoverEffect(ui->shopBtn);
     addButtonHoverEffect(ui->loginBtn);
 
-    employer::DatabaseManager::instance().configure(QStringLiteral("OracleQt"), QStringLiteral("system"), QStringLiteral("123456789"));
-    employerModel = new employer::EmployerModel(this, employer::DatabaseManager::instance().database());
-    employerController = new employer::EmployerController(
-        employerModel,
-        ui->employeeTable,
-        ui->saveEmployeeBtn,
-        ui->modifyBtn,
-        ui->deleteBtn,
-        ui->exportBtn,
-        ui->searchInput,
-        ui->searchBtn,
-        ui->sortBtn,
-        this);
+    // Configure database connection with EmployerDB DSN
+    qDebug() << "=== Configuring Database Connection ===";
+    
+    // Initialize the singleton connection
+    Connection* conn = Connection::instance();
+    bool connected = conn->createConnect();
+    
+    // Show connection status in a message box
+    QString statusMsg;
+    if (!connected) {
+        qCritical() << "CRITICAL: Database failed to open during MainWindow initialization!";
+        statusMsg = QString("❌ DATABASE CONNECTION FAILED!\n\n"
+                           "DSN: InspiraStudio\n"
+                           "Username: adminInspiraStudio\n\n"
+                           "Please check:\n"
+                           "1. ODBC DSN 'InspiraStudio' exists (64-bit)\n"
+                           "2. Oracle ODBC driver is installed (64-bit)\n"
+                           "3. Credentials are correct\n"
+                           "4. Oracle service is running");
+        QMessageBox::critical(this, "Database Connection Error", statusMsg);
+    } else {
+        qDebug() << "SUCCESS: Database connection established!";
+        statusMsg = QString("✅ Database Connected Successfully!\nInspiraStudio - Oracle XE");
+        QMessageBox::information(this, "Database Connection", statusMsg);
+    }
+    qDebug() << "===================================";
 
-    connect(ui->saveEmployeeBtn, &QPushButton::clicked, employerController, &employer::EmployerController::openAddDialog);
-    connect(ui->employeeTable, &QTableWidget::itemSelectionChanged, employerController, &employer::EmployerController::updateSelectionState);
-    connect(ui->employeeTable, &QTableWidget::itemClicked, employerController, &employer::EmployerController::handleSelectionToggle);
-    connect(ui->modifyBtn, &QPushButton::clicked, employerController, &employer::EmployerController::openModifyDialog);
-    connect(ui->deleteBtn, &QPushButton::clicked, employerController, &employer::EmployerController::removeSelectedEmployer);
-    connect(ui->exportBtn, &QPushButton::clicked, employerController, &employer::EmployerController::exportEmployers);
-    connect(ui->searchBtn, &QPushButton::clicked, employerController, &employer::EmployerController::runSearch);
-    connect(ui->searchInput, &QLineEdit::returnPressed, employerController, &employer::EmployerController::runSearch);
-    connect(ui->sortBtn, &QPushButton::clicked, employerController, &employer::EmployerController::runSort);
+    // Connect employer UI buttons to slots
+    connect(ui->saveEmployeeBtn, &QPushButton::clicked, this, &MainWindow::onAddEmployerClicked);
+    connect(ui->employeeTable, &QTableWidget::itemSelectionChanged, this, &MainWindow::onEmployeeTableSelectionChanged);
+    connect(ui->employeeTable, &QTableWidget::itemClicked, this, &MainWindow::onEmployeeTableItemClicked);
+    connect(ui->modifyBtn, &QPushButton::clicked, this, &MainWindow::onModifyEmployerClicked);
+    connect(ui->deleteBtn, &QPushButton::clicked, this, &MainWindow::onDeleteEmployerClicked);
+    connect(ui->exportBtn, &QPushButton::clicked, this, &MainWindow::onExportEmployersClicked);
+    connect(ui->searchBtn, &QPushButton::clicked, this, &MainWindow::onSearchEmployersClicked);
+    connect(ui->searchInput, &QLineEdit::returnPressed, this, &MainWindow::onSearchEmployersClicked);
+    connect(ui->sortBtn, &QPushButton::clicked, this, &MainWindow::onSortEmployersClicked);
+    connect(ui->cancelBtn, &QPushButton::clicked, this, &MainWindow::onCancelSelectionClicked);
 
-    connect(ui->cancelBtn, &QPushButton::clicked, this, [this]() {
-        if (ui->employeeTable) {
-            ui->employeeTable->clearSelection();
-        }
-        if (employerController) {
-            employerController->updateSelectionState();
-        }
-    });
-
-    if (!employerController->initialize())
-    {
-        QMessageBox::warning(this,
-                             tr("Employer Module"),
-                             tr("Failed to initialize the employer module. Verify the Oracle DSN 'OracleQt'."));
+    // Initialize employer table
+    loadEmployers();
+    
+    // Initialize ressource table (after DB connection is established)
+    qDebug() << "[MainWindow::setupUI] ressourceWidget pointer:" << ressourceWidget;
+    if (ressourceWidget) {
+        qDebug() << "[MainWindow::setupUI] Calling ressourceWidget->loadRessources()...";
+        ressourceWidget->loadRessources();
+        qDebug() << "[MainWindow::setupUI] ✅ Ressources loaded successfully!";
+    } else {
+        qDebug() << "[MainWindow::setupUI] ❌ ERROR: ressourceWidget is NULL!";
     }
 
     if (ui->modifyBtn) {
@@ -289,8 +1148,11 @@ void MainWindow::setupSponsorWidget()
 
 void MainWindow::setupRessourceWidget()
 {
+    qDebug() << "[MainWindow::setupRessourceWidget] CALLED - Creating RessourceWidget...";
+    
     // Create Ressource widget using the RessourceWidget class
     ressourceWidget = new RessourceWidget();
+    qDebug() << "[MainWindow::setupRessourceWidget] RessourceWidget created at:" << ressourceWidget;
     
     // Find which stacked widget page contains the ressource container
     int ressourcePageIndex = -1;
@@ -298,6 +1160,7 @@ void MainWindow::setupRessourceWidget()
         QWidget* page = ui->stackedWidget->widget(i);
         if (page && page->findChild<QWidget*>("ressourceContainer")) {
             ressourcePageIndex = i;
+            qDebug() << "[MainWindow::setupRessourceWidget] Found ressource page at index:" << i;
             break;
         }
     }
@@ -309,7 +1172,10 @@ void MainWindow::setupRessourceWidget()
             ui->stackedWidget->removeWidget(ressourcePlaceholder);
             ui->stackedWidget->insertWidget(ressourcePageIndex, ressourceWidget);
             delete ressourcePlaceholder;
+            qDebug() << "[MainWindow::setupRessourceWidget] ✅ RessourceWidget inserted into stacked widget";
         }
+    } else {
+        qDebug() << "[MainWindow::setupRessourceWidget] ❌ Could not find ressource page in stacked widget";
     }
 }
 
@@ -1174,4 +2040,269 @@ void MainWindow::setupDashboardAnimations()
     group->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
+// Employer Management Slots
 
+void MainWindow::loadEmployers()
+{
+    qDebug() << "\n[MainWindow::loadEmployers] ========== LOADING EMPLOYERS ==========";
+    qDebug() << "[MainWindow::loadEmployers] Calling Employer::selectAll()...";
+    
+    cachedEmployers = Employer::selectAll();
+    
+    qDebug() << "[MainWindow::loadEmployers] Retrieved" << cachedEmployers.size() << "employers from database";
+    
+    if (cachedEmployers.isEmpty())
+    {
+        qDebug() << "[MainWindow::loadEmployers] WARNING: No employers found or database error";
+        // Don't show error if table is just empty
+    }
+    else
+    {
+        qDebug() << "[MainWindow::loadEmployers] Employers loaded successfully:";
+        for (int i = 0; i < cachedEmployers.size(); ++i)
+        {
+            const Employer &emp = cachedEmployers.at(i);
+            qDebug() << "  [" << i << "] ID:" << emp.employerId 
+                     << "Name:" << emp.firstName << emp.lastName
+                     << "Email:" << emp.email;
+        }
+    }
+    
+    qDebug() << "[MainWindow::loadEmployers] Populating table...";
+    EmployerUIHelper::populateTable(ui->employeeTable, cachedEmployers);
+    
+    qDebug() << "[MainWindow::loadEmployers] Updating button states...";
+    updateEmployerButtonStates();
+    
+    qDebug() << "[MainWindow::loadEmployers] ========== LOAD COMPLETE ==========\n";
+}
+
+void MainWindow::updateEmployerButtonStates()
+{
+    EmployerUIHelper::updateButtonStates(ui->modifyBtn, ui->deleteBtn, ui->employeeTable);
+}
+
+void MainWindow::onAddEmployerClicked()
+{
+    qDebug() << "\n========== ADD EMPLOYER CLICKED ==========";
+    
+    EmployerForm form(this);
+    form.setMode(EmployerForm::CreateMode);
+
+    qDebug() << "[MainWindow::onAddEmployerClicked] Opening form in Create mode...";
+
+    if (form.exec() != QDialog::Accepted)
+    {
+        qDebug() << "[MainWindow::onAddEmployerClicked] User cancelled the form";
+        return;
+    }
+
+    qDebug() << "[MainWindow::onAddEmployerClicked] Form accepted, getting data...";
+    
+    const Employer rec = form.record();
+    const QString password = form.rawPassword();
+
+    qDebug() << "[MainWindow::onAddEmployerClicked] New employer data:";
+    qDebug() << "  Name:" << rec.firstName << rec.lastName;
+    qDebug() << "  Email:" << rec.email;
+    qDebug() << "  Phone:" << rec.phone;
+    qDebug() << "  Role:" << rec.role;
+    qDebug() << "  Hire Date:" << rec.startDate;
+    qDebug() << "[MainWindow::onAddEmployerClicked] Calling Employer::insert()...";
+
+    if (!Employer::insert(rec, password))
+    {
+        qDebug() << "[MainWindow::onAddEmployerClicked] CRITICAL: insert FAILED!";
+        QMessageBox::critical(this, tr("Insert Employer"), 
+            tr("Failed to insert employer. Check logs for details."));
+        return;
+    }
+
+    qDebug() << "[MainWindow::onAddEmployerClicked] Insert SUCCESS! Reloading employers...";
+
+    loadEmployers();
+    QMessageBox::information(this, tr("Employer Added"), 
+        tr("The employer has been created successfully."));
+    
+    qDebug() << "========== ADD EMPLOYER COMPLETED ==========\n";
+}
+
+void MainWindow::onModifyEmployerClicked()
+{
+    qDebug() << "\n========== MODIFY EMPLOYER CLICKED ==========";
+    
+    bool ok = false;
+    const qint64 employerId = EmployerUIHelper::getSelectedEmployerId(ui->employeeTable, &ok);
+    
+    qDebug() << "[MainWindow::onModifyEmployerClicked] getSelectedEmployerId returned:" << employerId;
+    qDebug() << "[MainWindow::onModifyEmployerClicked] Selection valid (ok):" << ok;
+    
+    if (!ok)
+    {
+        qDebug() << "[MainWindow::onModifyEmployerClicked] ERROR: No valid selection!";
+        QMessageBox::critical(this, tr("Update Employer"), 
+            tr("Select a single employer to modify."));
+        return;
+    }
+
+    qDebug() << "[MainWindow::onModifyEmployerClicked] Calling Employer::fetchById with ID:" << employerId;
+    
+    Employer existing;
+    if (!Employer::fetchById(employerId, existing))
+    {
+        qDebug() << "[MainWindow::onModifyEmployerClicked] CRITICAL: fetchById FAILED for ID:" << employerId;
+        QMessageBox::critical(this, tr("Update Employer"), 
+            tr("Unable to locate the selected employer record."));
+        return;
+    }
+
+    qDebug() << "[MainWindow::onModifyEmployerClicked] fetchById SUCCESS! Found:" << existing.firstName << existing.lastName;
+    qDebug() << "[MainWindow::onModifyEmployerClicked] Opening edit form...";
+
+    EmployerForm form(this);
+    form.setMode(EmployerForm::EditMode);
+    form.setRecord(existing);
+
+    if (form.exec() != QDialog::Accepted)
+    {
+        qDebug() << "[MainWindow::onModifyEmployerClicked] User cancelled the form";
+        return;
+    }
+
+    qDebug() << "[MainWindow::onModifyEmployerClicked] Form accepted, getting updates...";
+    
+    const Employer updates = form.record();
+    const bool passwordProvided = form.passwordProvided();
+    const QString password = passwordProvided ? form.rawPassword() : existing.passwordHash;
+
+    qDebug() << "[MainWindow::onModifyEmployerClicked] Calling Employer::update with ID:" << employerId;
+    qDebug() << "[MainWindow::onModifyEmployerClicked] Updated data:" << updates.firstName << updates.lastName << updates.email;
+
+    if (!Employer::update(employerId, updates, password, passwordProvided))
+    {
+        qDebug() << "[MainWindow::onModifyEmployerClicked] CRITICAL: update FAILED!";
+        QMessageBox::critical(this, tr("Update Employer"), 
+            tr("Failed to update employer. Check logs for details."));
+        return;
+    }
+
+    qDebug() << "[MainWindow::onModifyEmployerClicked] Update SUCCESS! Reloading employers...";
+    
+    loadEmployers();
+    QMessageBox::information(this, tr("Employer Updated"), 
+        tr("Changes saved successfully."));
+    
+    qDebug() << "========== MODIFY EMPLOYER COMPLETED ==========\n";
+}
+
+void MainWindow::onDeleteEmployerClicked()
+{
+    qDebug() << "\n========== DELETE EMPLOYER CLICKED ==========";
+    
+    bool ok = false;
+    const qint64 employerId = EmployerUIHelper::getSelectedEmployerId(ui->employeeTable, &ok);
+    
+    qDebug() << "[MainWindow::onDeleteEmployerClicked] getSelectedEmployerId returned:" << employerId;
+    qDebug() << "[MainWindow::onDeleteEmployerClicked] Selection valid (ok):" << ok;
+    
+    if (!ok)
+    {
+        qDebug() << "[MainWindow::onDeleteEmployerClicked] ERROR: No valid selection!";
+        QMessageBox::critical(this, tr("Remove Employer"), 
+            tr("Select a single employer row before deleting."));
+        return;
+    }
+
+    qDebug() << "[MainWindow::onDeleteEmployerClicked] Showing confirmation dialog...";
+    
+    const auto reply = QMessageBox::question(this, tr("Confirm Delete"),
+                                             tr("Are you sure you want to delete this employer?"));
+    if (reply != QMessageBox::Yes)
+    {
+        qDebug() << "[MainWindow::onDeleteEmployerClicked] User cancelled deletion";
+        return;
+    }
+
+    qDebug() << "[MainWindow::onDeleteEmployerClicked] User confirmed. Calling Employer::remove with ID:" << employerId;
+
+    if (!Employer::remove(employerId))
+    {
+        qDebug() << "[MainWindow::onDeleteEmployerClicked] CRITICAL: remove FAILED for ID:" << employerId;
+        QMessageBox::critical(this, tr("Delete Employer"), 
+            tr("Failed to delete employer. Check logs for details."));
+        return;
+    }
+
+    qDebug() << "[MainWindow::onDeleteEmployerClicked] Delete SUCCESS! Reloading employers...";
+
+    loadEmployers();
+    QMessageBox::information(this, tr("Employer Deleted"), 
+        tr("Employer removed successfully."));
+    
+    qDebug() << "========== DELETE EMPLOYER COMPLETED ==========\n";
+}
+
+void MainWindow::onExportEmployersClicked()
+{
+    const QString basePath = QCoreApplication::applicationDirPath();
+    const QString filePath = QFileDialog::getSaveFileName(this,
+                                                          tr("Export Employers"),
+                                                          basePath + QStringLiteral("/employers.csv"),
+                                                          tr("CSV Files (*.csv)"));
+    if (filePath.isEmpty())
+    {
+        return;
+    }
+
+    QString errorMessage;
+    if (!EmployerUIHelper::exportToCsv(filePath, cachedEmployers, &errorMessage))
+    {
+        QMessageBox::critical(this, tr("Export"), errorMessage);
+        return;
+    }
+
+    QMessageBox::information(this, tr("Export"), 
+        tr("Employer list exported successfully."));
+}
+
+void MainWindow::onSearchEmployersClicked()
+{
+    const QString term = ui->searchInput ? ui->searchInput->text().trimmed() : QString();
+
+    QVector<Employer> filtered = EmployerUIHelper::searchRecords(cachedEmployers, term);
+
+    if (filtered.isEmpty() && !term.isEmpty())
+    {
+        QMessageBox::information(this, tr("Search"), 
+            tr("No employers matched the search term."));
+    }
+
+    EmployerUIHelper::populateTable(ui->employeeTable, filtered);
+    updateEmployerButtonStates();
+}
+
+void MainWindow::onSortEmployersClicked()
+{
+    QVector<Employer> sorted = EmployerUIHelper::sortRecords(cachedEmployers);
+    EmployerUIHelper::populateTable(ui->employeeTable, sorted);
+    updateEmployerButtonStates();
+}
+
+void MainWindow::onEmployeeTableSelectionChanged()
+{
+    updateEmployerButtonStates();
+}
+
+void MainWindow::onEmployeeTableItemClicked(QTableWidgetItem *item)
+{
+    EmployerUIHelper::handleSelectionToggle(ui->employeeTable, item);
+    updateEmployerButtonStates();
+}
+
+void MainWindow::onCancelSelectionClicked()
+{
+    if (ui->employeeTable) {
+        ui->employeeTable->clearSelection();
+    }
+    updateEmployerButtonStates();
+}

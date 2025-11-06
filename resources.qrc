@@ -2,10 +2,87 @@
     <qresource prefix="/">
         <file>resources/fonts/Poppins-Light.ttf</file>
         <file>resources/icons/dashboard.svg</file>
+        <file>resources/icons/profile.svg</file>
         <file>resources/icons/projects.svg</file>
         <file>resources/icons/editor.svg</file>
         <file>resources/icons/library.svg</file>
         <file>resources/icons/settings.svg</file>
+        <file>resources/icons/shop.svg</file>
+        <file>resources/icons/employer.svg</file>
+        <file>resources/icons/search.svg</file>
+        <file>resources/icons/sort.svg</file>
+        <file>resources/icons/export.svg</file>
+        <file>resources/icons/delete.svg</file>
+        <file>resources/icons/modify.svg</file>
+        <file>resources/icons/add.svg</file>
+        <file>resources/icons/chatbot.svg</file>
+        <file>resources/icons/display.svg</file>
+        <file>resources/icons/download.svg</file>
+        <file>resources/icons/upload.svg</file>
+        <file>resources/icons/save.svg</file>
+        <file>resources/icons/link.svg</file>
+        <file>resources/icons/star.svg</file>
+        <file>resources/icons/clients.svg</file>
+        <file>resources/icons/info.svg</file>
+        <file>resources/icons/security.svg</file>
+        <file>resources/icons/history.svg</file>
+        <file>resources/icons/transactions.svg</file>
+        <file>resources/icons/upgrade.svg</file>
+        <file>resources/icons/login.svg</file>
+        <file>resources/icons/logout.svg</file>
+        <file>resources/icons/map.svg</file>
+        <file>resources/icons/undo.svg</file>
+        <file>resources/icons/camera.svg</file>
+        <file>resources/icons/calendar.svg</file>
+        <file>resources/icons/qrcode.svg</file>
+        <file>resources/icons/bell.svg</file>
+        <file>resources/icons/mail.svg</file>
+        <file>images/background.jpg</file>
+        <file>images/exemple.jpg</file>
+    <file>images/legion.png</file>
+    <file>images/inspira.png</file>
+    <file>ui/template.ui</file>
         <file>style.qss</file>
+    </qresource>
+    <!-- Alias resources so UI files referencing :/icons/... work without changing .ui -->
+    <qresource prefix="/icons">
+        <file alias="dashboard.svg">resources/icons/dashboard.svg</file>
+        <file alias="profile.svg">resources/icons/profile.svg</file>
+        <file alias="projects.svg">resources/icons/projects.svg</file>
+        <file alias="editor.svg">resources/icons/editor.svg</file>
+        <file alias="library.svg">resources/icons/library.svg</file>
+        <file alias="settings.svg">resources/icons/settings.svg</file>
+        <file alias="shop.svg">resources/icons/shop.svg</file>
+        <file alias="employer.svg">resources/icons/employer.svg</file>
+        <file alias="search.svg">resources/icons/search.svg</file>
+        <file alias="sort.svg">resources/icons/sort.svg</file>
+        <file alias="export.svg">resources/icons/export.svg</file>
+        <file alias="delete.svg">resources/icons/delete.svg</file>
+        <file alias="modify.svg">resources/icons/modify.svg</file>
+        <file alias="add.svg">resources/icons/add.svg</file>
+        <file alias="chatbot.svg">resources/icons/chatbot.svg</file>
+        <file alias="display.svg">resources/icons/display.svg</file>
+        <file alias="download.svg">resources/icons/download.svg</file>
+        <file alias="upload.svg">resources/icons/upload.svg</file>
+        <file alias="save.svg">resources/icons/save.svg</file>
+        <file alias="link.svg">resources/icons/link.svg</file>
+        <file alias="star.svg">resources/icons/star.svg</file>
+        <file alias="clients.svg">resources/icons/clients.svg</file>
+        <file alias="info.svg">resources/icons/info.svg</file>
+        <file alias="security.svg">resources/icons/security.svg</file>
+        <file alias="history.svg">resources/icons/history.svg</file>
+        <file alias="transactions.svg">resources/icons/transactions.svg</file>
+        <file alias="upgrade.svg">resources/icons/upgrade.svg</file>
+        <file alias="login.svg">resources/icons/login.svg</file>
+        <file alias="map.svg">resources/icons/map.svg</file>
+        <file alias="logout.svg">resources/icons/logout.svg</file>
+        <file alias="undo.svg">resources/icons/undo.svg</file>
+        <file alias="camera.svg">resources/icons/camera.svg</file>
+        <file alias="calendar.svg">resources/icons/calendar.svg</file>
+        <file alias="qrcode.svg">resources/icons/qrcode.svg</file>
+        <file alias="bell.svg">resources/icons/bell.svg</file>
+        <file alias="mail.svg">resources/icons/mail.svg</file>
+        <!-- Provide a PNG alias expected by some styleSheets by mapping it to an existing svg -->
+        <file alias="check-white.png">resources/icons/info.svg</file>
     </qresource>
 </RCC>

@@ -1,76 +1,73 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.28)
 
-project(AmineTemplar VERSION 0.1 LANGUAGES CXX)
+# Project declaration
+project(AmineTemplar LANGUAGES CXX)
 
-set(CMAKE_AUTOUIC ON)
+# Qt configuration
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
-find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
-
-set(PROJECT_SOURCES
-        main.cpp
-        mainwindow.cpp
-        mainwindow.h
-        mainwindow.ui
-        projects.ui
-        editor.ui
-        library.ui
-        settings.ui
-        login.ui
-        resources.qrc
+# Find Qt6
+find_package(Qt6 COMPONENTS
+    Core
+    Gui
+    Widgets
+    Sql
+    REQUIRED
 )
 
-if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
-    qt_add_executable(AmineTemplar
-        MANUAL_FINALIZATION
-        ${PROJECT_SOURCES}
-    )
-# Define target properties for Android with Qt 6 as:
-#    set_property(TARGET AmineTemplar APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR
-#                 ${CMAKE_CURRENT_SOURCE_DIR}/android)
-# For more information, see https://doc.qt.io/qt-6/qt-add-executable.html#target-creation
-else()
-    if(ANDROID)
-        add_library(AmineTemplar SHARED
-            ${PROJECT_SOURCES}
-        )
-# Define properties for Android with Qt 5 after find_package() calls as:
-#    set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-    else()
-        add_executable(AmineTemplar
-            ${PROJECT_SOURCES}
-        )
-    endif()
-endif()
-
-target_link_libraries(AmineTemplar PRIVATE Qt${QT_VERSION_MAJOR}::Widgets)
-
-# Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
-# If you are developing for iOS or macOS you should consider setting an
-# explicit, fixed bundle identifier manually though.
-if(${QT_VERSION} VERSION_LESS 6.1.0)
-  set(BUNDLE_ID_OPTION MACOSX_BUNDLE_GUI_IDENTIFIER com.example.AmineTemplar)
-endif()
-set_target_properties(AmineTemplar PROPERTIES
-    ${BUNDLE_ID_OPTION}
-    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
-    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
-    MACOSX_BUNDLE TRUE
-    WIN32_EXECUTABLE TRUE
+# Source files - Main application
+set(SOURCES
+    main.cpp
+    mainwindow.cpp
+    mainwindow.h
+    mainwindow.ui
+    style.qss
+    resources.qrc
 )
 
-include(GNUInstallDirs)
-install(TARGETS AmineTemplar
-    BUNDLE DESTINATION .
-    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+# Backend source files
+set(BACKEND_SOURCES
+    backend/connection.cpp
+    backend/connection.h
+    backend/employer.cpp
+    backend/employer.h
+    backend/client.cpp
+    backend/client.h
+    backend/ressource.cpp
+    backend/ressource.h
 )
 
-if(QT_VERSION_MAJOR EQUAL 6)
-    qt_finalize_executable(AmineTemplar)
-endif()
+# UI source files
+set(UI_SOURCES
+    ui/ressourcewidget.cpp
+    ui/ressourcewidget.h
+)
+
+# Combine all sources
+set(ALL_SOURCES ${SOURCES} ${BACKEND_SOURCES} ${UI_SOURCES})
+
+# Create executable
+add_executable(${PROJECT_NAME} ${ALL_SOURCES})
+
+# Link Qt6 libraries
+target_link_libraries(${PROJECT_NAME}
+    Qt6::Core
+    Qt6::Gui
+    Qt6::Widgets
+    Qt6::Sql
+)
+
+# Include directories
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/backend
+    ${CMAKE_CURRENT_SOURCE_DIR}/ui
+)
+
+# Resource files
+qt_add_resources(${PROJECT_NAME} "resources" FILES resources.qrc)

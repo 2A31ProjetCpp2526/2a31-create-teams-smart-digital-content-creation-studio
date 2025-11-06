@@ -24,6 +24,8 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QList>
+#include <QListWidget>
+#include <QListWidgetItem>
 #include <QMessageBox>
 #include <QPixmap>
 #include <QPropertyAnimation>
@@ -39,6 +41,9 @@
 #include <QFile>
 #include <QDate>
 #include <QComboBox>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QDialogButtonBox>
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlError>
 #include <algorithm>
@@ -364,10 +369,50 @@ void EmployerForm::refreshResourceList()
 void EmployerForm::onAddResourceClicked()
 {
     qDebug() << "Add resource clicked";
-    // TODO: Show dialog to select resources from database
-    // For now, this is a placeholder for future resource selection dialog
-    QMessageBox::information(this, tr("Add Resource"),
-                           tr("Resource selection dialog will be implemented here."));
+    
+    // Get currently assigned resource IDs
+    QVector<qint64> currentResourceIds;
+    if (m_employerId > 0)
+    {
+        QVector<Ressource> currentResources = Ressource::getResourcesByEmployer(m_employerId);
+        for (const Ressource &res : currentResources)
+        {
+            currentResourceIds.append(res.idMedia);
+        }
+    }
+    
+    // Show resource selection dialog
+    ResourceSelectionDialog dialog(this);
+    dialog.setAssignedResources(currentResourceIds);
+    
+    if (dialog.exec() != QDialog::Accepted)
+    {
+        return;
+    }
+    
+    QVector<qint64> selectedResourceIds = dialog.selectedResourceIds();
+    
+    // Only update if employer already exists in database
+    if (m_employerId > 0)
+    {
+        // Clear current resources and add new ones
+        Ressource::clearEmployerResources(m_employerId);
+        
+        for (qint64 resourceId : selectedResourceIds)
+        {
+            Ressource::addResourceToEmployer(m_employerId, resourceId);
+        }
+        
+        QMessageBox::information(this, tr("Success"),
+                               tr("Resources assigned successfully."));
+        refreshResourceList();
+    }
+    else
+    {
+        // For new employers, just show info
+        QMessageBox::information(this, tr("Info"),
+                               tr("Save the employer first, then you can assign resources."));
+    }
 }
 
 void EmployerForm::onRemoveResourceClicked()
@@ -406,6 +451,82 @@ void EmployerForm::onRemoveResourceClicked()
             return;
         }
     }
+}
+
+// =============================================================================
+// ResourceSelectionDialog Implementation
+// =============================================================================
+
+ResourceSelectionDialog::ResourceSelectionDialog(QWidget *parent)
+    : QDialog(parent)
+{
+    setupUi();
+    loadAllResources();
+}
+
+ResourceSelectionDialog::~ResourceSelectionDialog()
+{
+}
+
+void ResourceSelectionDialog::setupUi()
+{
+    setWindowTitle(tr("Select Resources"));
+    setMinimumSize(500, 400);
+    
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    
+    QLabel *label = new QLabel(tr("Select resources to assign to this employer:"));
+    layout->addWidget(label);
+    
+    resourceListWidget = new QListWidget();
+    resourceListWidget->setSelectionMode(QAbstractItemView::MultiSelection);
+    layout->addWidget(resourceListWidget);
+    
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    layout->addWidget(buttonBox);
+    
+    setLayout(layout);
+}
+
+void ResourceSelectionDialog::loadAllResources()
+{
+    resourceListWidget->clear();
+    
+    QVector<Ressource> allResources = Ressource::selectAll();
+    for (const Ressource &res : allResources)
+    {
+        QListWidgetItem *item = new QListWidgetItem(res.title);
+        item->setData(Qt::UserRole, res.idMedia);
+        
+        // Pre-select already assigned resources
+        if (m_assignedResourceIds.contains(res.idMedia))
+        {
+            item->setSelected(true);
+        }
+        
+        resourceListWidget->addItem(item);
+    }
+}
+
+void ResourceSelectionDialog::setAssignedResources(const QVector<qint64>& resourceIds)
+{
+    m_assignedResourceIds = resourceIds;
+}
+
+QVector<qint64> ResourceSelectionDialog::selectedResourceIds() const
+{
+    QVector<qint64> selected;
+    for (int i = 0; i < resourceListWidget->count(); ++i)
+    {
+        QListWidgetItem *item = resourceListWidget->item(i);
+        if (item && item->isSelected())
+        {
+            selected.append(item->data(Qt::UserRole).toLongLong());
+        }
+    }
+    return selected;
 }
 
 // =============================================================================
@@ -2063,19 +2184,28 @@ void MainWindow::onResetProfileClicked()
 
 void MainWindow::setupEmployeeTable()
 {
-    // Set specific column widths for better layout with more space since Actions column removed
-    ui->employeeTable->setColumnWidth(0, 90);  // Select column
-    ui->employeeTable->setColumnWidth(1, 100); // Avatar column
-    ui->employeeTable->setColumnWidth(2, 90);  // ID column  
-    ui->employeeTable->setColumnWidth(3, 220); // Name column (more space)
-    ui->employeeTable->setColumnWidth(4, 280); // Email column (more space)
-    ui->employeeTable->setColumnWidth(5, 150); // Role column (more space)
-    ui->employeeTable->setColumnWidth(6, 180); // Phone column (more space)
-    ui->employeeTable->setColumnWidth(7, 150); // Start Date column
+    // Enable horizontal scrollbar
+    ui->employeeTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    ui->employeeTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    
+    // Set specific column widths with better distribution
+    ui->employeeTable->setColumnWidth(0, 60);   // Select column
+    ui->employeeTable->setColumnWidth(1, 80);   // Avatar column
+    ui->employeeTable->setColumnWidth(2, 70);   // ID column  
+    ui->employeeTable->setColumnWidth(3, 150);  // Name column
+    ui->employeeTable->setColumnWidth(4, 200);  // Email column
+    ui->employeeTable->setColumnWidth(5, 120);  // Role column
+    ui->employeeTable->setColumnWidth(6, 140);  // Phone column
+    ui->employeeTable->setColumnWidth(7, 120);  // Start Date column
+    
+    // Stretch last column to fill remaining space
+    ui->employeeTable->horizontalHeader()->setStretchLastSection(false);
+    ui->employeeTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    ui->employeeTable->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Stretch); // Email stretches
     
     // Ensure the table rows have the proper height
-    ui->employeeTable->verticalHeader()->setDefaultSectionSize(90);
-    ui->employeeTable->verticalHeader()->setMinimumSectionSize(90);
+    ui->employeeTable->verticalHeader()->setDefaultSectionSize(80);
+    ui->employeeTable->verticalHeader()->setMinimumSectionSize(80);
     
     // Enable better selection behavior
     ui->employeeTable->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -2219,7 +2349,26 @@ void MainWindow::onAddEmployerClicked()
         return;
     }
 
-    qDebug() << "[MainWindow::onAddEmployerClicked] Insert SUCCESS! Reloading employers...";
+    qDebug() << "[MainWindow::onAddEmployerClicked] Insert SUCCESS!";
+    
+    // Get the newly created employer to get its ID
+    QVector<Employer> allEmployers = Employer::selectAll();
+    if (!allEmployers.isEmpty())
+    {
+        const Employer& newEmployer = allEmployers.last();
+        qDebug() << "[MainWindow::onAddEmployerClicked] New employer ID:" << newEmployer.employerId;
+        
+        // Assign selected resources if any
+        QVector<qint64> selectedResources = form.selectedResourceIds();
+        if (!selectedResources.isEmpty())
+        {
+            qDebug() << "[MainWindow::onAddEmployerClicked] Assigning" << selectedResources.size() << "resources...";
+            for (qint64 resourceId : selectedResources)
+            {
+                Ressource::addResourceToEmployer(newEmployer.employerId, resourceId);
+            }
+        }
+    }
 
     loadEmployers();
     QMessageBox::information(this, tr("Employer Added"), 
@@ -2263,6 +2412,10 @@ void MainWindow::onModifyEmployerClicked()
     EmployerForm form(this);
     form.setMode(EmployerForm::EditMode);
     form.setRecord(existing);
+    
+    // Load currently assigned resources for pre-selection
+    QVector<qint64> currentResourceIds = Ressource::getResourcesByEmployer(employerId);
+    form.setSelectedResourceIds(currentResourceIds);
 
     if (form.exec() != QDialog::Accepted)
     {
@@ -2287,7 +2440,18 @@ void MainWindow::onModifyEmployerClicked()
         return;
     }
 
-    qDebug() << "[MainWindow::onModifyEmployerClicked] Update SUCCESS! Reloading employers...";
+    qDebug() << "[MainWindow::onModifyEmployerClicked] Update SUCCESS! Now updating resources...";
+    
+    // Update employer resources
+    QVector<qint64> selectedResources = form.selectedResourceIds();
+    Ressource::clearEmployerResources(employerId);
+    for (qint64 resourceId : selectedResources)
+    {
+        Ressource::addResourceToEmployer(employerId, resourceId);
+    }
+    
+    qDebug() << "[MainWindow::onModifyEmployerClicked] Resources updated:" << selectedResources.size() << "resources assigned";
+    qDebug() << "[MainWindow::onModifyEmployerClicked] Reloading employers...";
     
     loadEmployers();
     QMessageBox::information(this, tr("Employer Updated"), 

@@ -78,7 +78,38 @@ private:
 
     Mode m_mode { CreateMode };
     qint64 m_employerId { -1 };
+    QVector<qint64> m_selectedResourceIds;
     Ui::EmployerForm *ui;
+
+    // Getters for resource data
+public:
+    QVector<qint64> selectedResourceIds() const { return m_selectedResourceIds; }
+    void setSelectedResourceIds(const QVector<qint64>& ids) { m_selectedResourceIds = ids; }
+};
+
+// =============================================================================
+// ResourceSelectionDialog - Dialog for selecting resources for employer
+// =============================================================================
+class ResourceSelectionDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
+    explicit ResourceSelectionDialog(QWidget *parent = nullptr);
+    ~ResourceSelectionDialog() override;
+
+    // Set resources that are already assigned
+    void setAssignedResources(const QVector<qint64>& resourceIds);
+    
+    // Get selected resource IDs
+    QVector<qint64> selectedResourceIds() const;
+
+private:
+    void setupUi();
+    void loadAllResources();
+    
+    QListWidget *resourceListWidget;
+    QVector<qint64> m_assignedResourceIds;
 };
 
 // =============================================================================

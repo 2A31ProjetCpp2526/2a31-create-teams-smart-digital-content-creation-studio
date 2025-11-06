@@ -564,7 +564,7 @@ void EmployerUIHelper::populateTable(QTableWidget *table, const QVector<Employer
             const QPixmap pixmap(rec.avatarPath);
             if (!pixmap.isNull())
             {
-                avatarItem->setIcon(QIcon(pixmap.scaled(64, 64, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+                avatarItem->setIcon(QIcon(pixmap.scaled(120, 120, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
             }
         }
         avatarItem->setToolTip(rec.avatarPath);
@@ -600,7 +600,7 @@ void EmployerUIHelper::populateTable(QTableWidget *table, const QVector<Employer
         resourcesItem->setToolTip(resourceNames);  // Show full list in tooltip
         table->setItem(row, 8, resourcesItem);
 
-        table->setRowHeight(row, 90);
+        table->setRowHeight(row, 140);
     }
 
     table->clearSelection();
@@ -2200,25 +2200,25 @@ void MainWindow::setupEmployeeTable()
     ui->employeeTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     ui->employeeTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     
-    // Set specific column widths with better distribution
+    // Set specific column widths with better distribution - INCREASED FOR BETTER DISPLAY
     ui->employeeTable->setColumnWidth(0, 60);   // Select column
-    ui->employeeTable->setColumnWidth(1, 80);   // Avatar column
-    ui->employeeTable->setColumnWidth(2, 70);   // ID column  
-    ui->employeeTable->setColumnWidth(3, 150);  // Name column
-    ui->employeeTable->setColumnWidth(4, 200);  // Email column
-    ui->employeeTable->setColumnWidth(5, 120);  // Role column
-    ui->employeeTable->setColumnWidth(6, 140);  // Phone column
-    ui->employeeTable->setColumnWidth(7, 120);  // Start Date column
-    ui->employeeTable->setColumnWidth(8, 200);  // Resources column
+    ui->employeeTable->setColumnWidth(1, 140);  // Avatar column - INCREASED
+    ui->employeeTable->setColumnWidth(2, 80);   // ID column - INCREASED
+    ui->employeeTable->setColumnWidth(3, 200);  // Name column - INCREASED
+    ui->employeeTable->setColumnWidth(4, 250);  // Email column - INCREASED
+    ui->employeeTable->setColumnWidth(5, 150);  // Role column - INCREASED
+    ui->employeeTable->setColumnWidth(6, 170);  // Phone column - INCREASED
+    ui->employeeTable->setColumnWidth(7, 150);  // Start Date column - INCREASED
+    ui->employeeTable->setColumnWidth(8, 250);  // Resources column - INCREASED
     
     // Stretch last column to fill remaining space
     ui->employeeTable->horizontalHeader()->setStretchLastSection(false);
     ui->employeeTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ui->employeeTable->horizontalHeader()->setSectionResizeMode(8, QHeaderView::Stretch); // Resources stretches
     
-    // Ensure the table rows have the proper height
-    ui->employeeTable->verticalHeader()->setDefaultSectionSize(80);
-    ui->employeeTable->verticalHeader()->setMinimumSectionSize(80);
+    // Increase row height for better avatar and content display
+    ui->employeeTable->verticalHeader()->setDefaultSectionSize(140);
+    ui->employeeTable->verticalHeader()->setMinimumSectionSize(140);
     
     // Enable better selection behavior
     ui->employeeTable->setSelectionBehavior(QAbstractItemView::SelectRows);

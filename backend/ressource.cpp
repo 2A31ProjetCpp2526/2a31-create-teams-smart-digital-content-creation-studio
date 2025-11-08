@@ -273,6 +273,12 @@ bool Ressource::remove(qint64 id)
     qDebug() << "========================================";
     qDebug() << "[Ressource::remove] Attempting to delete resource with ID_MEDIA:" << id;
 
+    // First, clear all references in UTILISER table
+    qDebug() << "[Ressource::remove] Clearing all references in UTILISER table...";
+    if (!clearAllReferencesForResource(id)) {
+        qDebug() << "[Ressource::remove] WARNING: Failed to clear references, continuing...";
+    }
+
     // Use direct SQL string instead of bind values (QODBC compatibility issue)
     QString sql = QString("DELETE FROM RESSOURCES WHERE ID_MEDIA = %1").arg(id);
     QSqlQuery query(db);
@@ -292,6 +298,31 @@ bool Ressource::remove(qint64 id)
     qDebug() << "✅ Ressource supprimée avec succès, ID_MEDIA:" << id;
     qDebug() << "Rows affected:" << rowsAffected;
     qDebug() << "========================================";
+    return true;
+}
+
+bool Ressource::clearAllReferencesForResource(qint64 resourceId)
+{
+    QSqlDatabase db = QSqlDatabase::database();
+    if (!db.isOpen()) {
+        qDebug() << "❌ Database not open for clearAllReferencesForResource";
+        return false;
+    }
+
+    qDebug() << "[Ressource::clearAllReferencesForResource] Clearing all references for resource ID:" << resourceId;
+
+    // Delete all associations in UTILISER table
+    QString sql = QString("DELETE FROM UTILISER WHERE ID_MEDIA = %1").arg(resourceId);
+    QSqlQuery query(db);
+
+    if (!query.exec(sql)) {
+        qDebug() << "❌ Failed to clear references for resource" << resourceId;
+        qDebug() << "Error:" << query.lastError().text();
+        return false;
+    }
+
+    int rowsAffected = query.numRowsAffected();
+    qDebug() << "✅ All references cleared for resource" << resourceId << "- Rows affected:" << rowsAffected;
     return true;
 }
 

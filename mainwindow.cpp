@@ -3,6 +3,7 @@
 #include "ui_login.h"
 #include "ui_Profile.h"
 #include "ui_employerform.h"
+#include "ui_projectform.h"
 
 #include "ui/clientwidget.h"
 #include "ui/projectwidget.h"
@@ -28,6 +29,7 @@
 #include <QListWidgetItem>
 #include <QMessageBox>
 #include <QPixmap>
+#include <QPlainTextEdit>
 #include <QPropertyAnimation>
 #include <QPushButton>
 #include <QRegularExpression>
@@ -104,6 +106,10 @@ EmployerForm::EmployerForm(QWidget *parent)
     // Resource management
     connect(ui->addResourceButton, &QPushButton::clicked, this, &EmployerForm::onAddResourceClicked);
     connect(ui->removeResourceButton, &QPushButton::clicked, this, &EmployerForm::onRemoveResourceClicked);
+    
+    // Project management
+    connect(ui->addProjectButton, &QPushButton::clicked, this, &EmployerForm::onAddProjectClicked);
+    connect(ui->removeProjectButton, &QPushButton::clicked, this, &EmployerForm::onRemoveProjectClicked);
 
     setModal(true);
 }
@@ -163,6 +169,19 @@ void EmployerForm::setRecord(const Employer &record)
     {
         qDebug() << "[EmployerForm::setRecord] Loading resources from database for employer" << m_employerId;
         loadEmployerResources(m_employerId);
+    }
+    
+    // If m_selectedProjectIds was already set (via setSelectedProjectIds), display them
+    // Otherwise, load from database if editing
+    if (!m_selectedProjectIds.isEmpty())
+    {
+        qDebug() << "[EmployerForm::setRecord] m_selectedProjectIds already set with" << m_selectedProjectIds.size() << "projects";
+        refreshProjectList();
+    }
+    else if (m_mode == EditMode && m_employerId > 0)
+    {
+        qDebug() << "[EmployerForm::setRecord] Loading projects from database for employer" << m_employerId;
+        loadEmployerProjects(m_employerId);
     }
     
     clearErrorMessage();
@@ -393,6 +412,50 @@ void EmployerForm::refreshResourceList()
     qDebug() << "[EmployerForm::refreshResourceList] Displayed" << m_selectedResourceIds.size() << "resources";
 }
 
+void EmployerForm::loadEmployerProjects(qint64 employerId)
+{
+    qDebug() << "[EmployerForm::loadEmployerProjects] Loading projects for employer" << employerId;
+    
+    QVector<Project> projects = Project::getProjectsByEmployer(employerId);
+    m_selectedProjectIds.clear();
+    
+    for (const Project &proj : projects)
+    {
+        m_selectedProjectIds.append(proj.projectId);
+        qDebug() << "[EmployerForm::loadEmployerProjects] Added project:" << proj.title;
+    }
+    
+    qDebug() << "[EmployerForm::loadEmployerProjects] Loaded" << m_selectedProjectIds.size() << "projects";
+}
+
+void EmployerForm::refreshProjectList()
+{
+    ui->projectListWidget->clear();
+    
+    if (m_selectedProjectIds.isEmpty())
+    {
+        qDebug() << "[EmployerForm::refreshProjectList] No projects to display";
+        return;
+    }
+    
+    // Load project details from database
+    for (qint64 projectId : m_selectedProjectIds)
+    {
+        Project project;
+        if (Project::fetchById(projectId, project))
+        {
+            ui->projectListWidget->addItem(project.title);
+            qDebug() << "[EmployerForm::refreshProjectList] Added project:" << project.title;
+        }
+        else
+        {
+            qDebug() << "[EmployerForm::refreshProjectList] Failed to fetch project ID:" << projectId;
+        }
+    }
+    
+    qDebug() << "[EmployerForm::refreshProjectList] Displayed" << m_selectedProjectIds.size() << "projects";
+}
+
 void EmployerForm::onAddResourceClicked()
 {
     qDebug() << "[EmployerForm::onAddResourceClicked] Add resource clicked";
@@ -514,6 +577,243 @@ void EmployerForm::onRemoveResourceClicked()
                         tr("Could not find the selected resource."));
 }
 
+void EmployerForm::onAddProjectClicked()
+{
+    qDebug() << "[EmployerForm::onAddProjectClicked] Add project clicked";
+    
+    // Get currently assigned project IDs from m_selectedProjectIds
+    QVector<qint64> currentProjectIds = m_selectedProjectIds;
+    
+    qDebug() << "[EmployerForm::onAddProjectClicked] Current m_selectedProjectIds count:" << currentProjectIds.size();
+    
+    // Show project selection dialog
+    ProjectSelectionDialog dialog(this);
+    dialog.setAssignedProjects(currentProjectIds);
+    
+    if (dialog.exec() != QDialog::Accepted)
+    {
+        qDebug() << "[EmployerForm::onAddProjectClicked] Dialog cancelled";
+        return;
+    }
+    
+    QVector<qint64> selectedProjectIds = dialog.selectedProjectIds();
+    qDebug() << "[EmployerForm::onAddProjectClicked] Dialog returned" << selectedProjectIds.size() << "selected projects";
+    
+    // IMPORTANT: Store selected projects in m_selectedProjectIds for later use
+    m_selectedProjectIds = selectedProjectIds;
+    qDebug() << "[EmployerForm::onAddProjectClicked] Stored in m_selectedProjectIds:" << m_selectedProjectIds.size() << "projects";
+    
+    // Only update database if employer already exists
+    if (m_employerId > 0)
+    {
+        qDebug() << "[EmployerForm::onAddProjectClicked] Employer exists (ID:" << m_employerId << "), updating database";
+        
+        // Clear current projects and add new ones
+        Project::removeAllEmployersFromProject(m_employerId);  // Note: This removes employer from all projects
+        qDebug() << "[EmployerForm::onAddProjectClicked] Cleared old projects";
+        
+        for (qint64 projectId : selectedProjectIds)
+        {
+            qDebug() << "[EmployerForm::onAddProjectClicked] Adding project" << projectId << "to employer" << m_employerId;
+            Project::addEmployerToProject(projectId, m_employerId);
+        }
+        
+        qDebug() << "[EmployerForm::onAddProjectClicked] Database updated successfully";
+        
+        QMessageBox::information(this, tr("Success"),
+                               tr("Projects assigned successfully."));
+        refreshProjectList();
+    }
+    else
+    {
+        // For new employers, just update the form's internal state
+        qDebug() << "[EmployerForm::onAddProjectClicked] New employer (ID not assigned yet), skipping database update";
+        
+        // Update the list widget to show the selected projects
+        refreshProjectList();
+        
+        QMessageBox::information(this, tr("Info"),
+                               tr("Selected projects will be assigned when you save the employer."));
+    }
+}
+
+void EmployerForm::onRemoveProjectClicked()
+{
+    qDebug() << "[EmployerForm::onRemoveProjectClicked] Remove project clicked";
+    
+    QListWidgetItem *item = ui->projectListWidget->currentItem();
+    if (!item)
+    {
+        QMessageBox::warning(this, tr("Remove Project"),
+                           tr("Please select a project to remove."));
+        return;
+    }
+
+    QString selectedTitle = item->text();
+    qDebug() << "[EmployerForm::onRemoveProjectClicked] Selected project:" << selectedTitle;
+    
+    // Find and remove the project from m_selectedProjectIds
+    for (int i = 0; i < m_selectedProjectIds.size(); ++i)
+    {
+        qint64 projectId = m_selectedProjectIds[i];
+        Project project;
+        
+        if (Project::fetchById(projectId, project))
+        {
+            if (project.title == selectedTitle)
+            {
+                qDebug() << "[EmployerForm::onRemoveProjectClicked] Found project ID" << projectId << "with title:" << project.title;
+                
+                m_selectedProjectIds.removeAt(i);
+                qDebug() << "[EmployerForm::onRemoveProjectClicked] Removed from m_selectedProjectIds. New count:" << m_selectedProjectIds.size();
+                
+                // If employer exists in database, also remove from there
+                if (m_employerId > 0)
+                {
+                    if (Project::removeEmployerFromProject(projectId, m_employerId))
+                    {
+                        qDebug() << "[EmployerForm::onRemoveProjectClicked] Removed from database";
+                    }
+                    else
+                    {
+                        qDebug() << "[EmployerForm::onRemoveProjectClicked] Failed to remove from database";
+                        QMessageBox::critical(this, tr("Error"),
+                                            tr("Failed to remove project from database."));
+                        // Add it back to the list since DB removal failed
+                        m_selectedProjectIds.insert(i, projectId);
+                        return;
+                    }
+                }
+                
+                QMessageBox::information(this, tr("Success"),
+                                       tr("Project removed successfully."));
+                refreshProjectList();
+                return;
+            }
+        }
+    }
+    
+    qDebug() << "[EmployerForm::onRemoveProjectClicked] Project not found";
+    QMessageBox::warning(this, tr("Error"),
+                        tr("Could not find the selected project."));
+}
+
+// =============================================================================
+// ProjectForm Implementation
+// =============================================================================
+
+ProjectForm::ProjectForm(QWidget *parent)
+    : QDialog(parent)
+    , ui(new Ui::ProjectForm)
+    , m_projectId(-1)
+{
+    ui->setupUi(this);
+    ui->creationDateEdit->setDate(QDate::currentDate());
+    ui->modificationDateEdit->setDate(QDate::currentDate());
+
+    connect(ui->titleLineEdit, &QLineEdit::textChanged, this, &ProjectForm::clearErrorMessage);
+    connect(ui->descriptionTextEdit, &QTextEdit::textChanged, this, &ProjectForm::clearErrorMessage);
+
+    setModal(true);
+}
+
+ProjectForm::~ProjectForm()
+{
+    delete ui;
+}
+
+void ProjectForm::setMode(Mode mode)
+{
+    m_mode = mode;
+    if (mode == EditMode)
+    {
+        setWindowTitle(tr("Update Project"));
+    }
+    else
+    {
+        setWindowTitle(tr("Add Project"));
+    }
+}
+
+void ProjectForm::setRecord(const Project &record)
+{
+    m_projectId = record.projectId;
+    ui->titleLineEdit->setText(record.title);
+    ui->descriptionTextEdit->setPlainText(record.description);
+    ui->clientLineEdit->setText(QString::number(record.clientId));
+    ui->serviceLineEdit->setText(QString::number(record.serviceId));
+    
+    if (record.creationDate.isValid())
+    {
+        ui->creationDateEdit->setDate(record.creationDate);
+    }
+    if (record.modificationDate.isValid())
+    {
+        ui->modificationDateEdit->setDate(record.modificationDate);
+    }
+    
+    clearErrorMessage();
+}
+
+Project ProjectForm::record() const
+{
+    Project proj;
+    proj.projectId = m_projectId;
+    proj.title = ui->titleLineEdit->text().trimmed();
+    proj.description = ui->descriptionTextEdit->toPlainText().trimmed();
+    proj.clientId = ui->clientLineEdit->text().toLongLong();
+    proj.serviceId = ui->serviceLineEdit->text().toLongLong();
+    proj.creationDate = ui->creationDateEdit->date();
+    proj.modificationDate = ui->modificationDateEdit->date();
+    return proj;
+}
+
+void ProjectForm::setErrorMessage(const QString &message)
+{
+    ui->errorLabel->setText(message);
+}
+
+void ProjectForm::clearErrorMessage()
+{
+    ui->errorLabel->clear();
+}
+
+bool ProjectForm::validate(QString *message) const
+{
+    const Project proj = record();
+
+    if (proj.title.isEmpty())
+    {
+        if (message)
+        {
+            *message = tr("Title is required.");
+        }
+        return false;
+    }
+
+    if (proj.description.isEmpty())
+    {
+        if (message)
+        {
+            *message = tr("Description is required.");
+        }
+        return false;
+    }
+
+    return true;
+}
+
+void ProjectForm::accept()
+{
+    QString validationMessage;
+    if (!validate(&validationMessage))
+    {
+        setErrorMessage(validationMessage);
+        return;
+    }
+    QDialog::accept();
+}
+
 // =============================================================================
 // ResourceSelectionDialog Implementation
 // =============================================================================
@@ -522,7 +822,8 @@ ResourceSelectionDialog::ResourceSelectionDialog(QWidget *parent)
     : QDialog(parent)
 {
     setupUi();
-    loadAllResources();
+    // Don't load resources here - wait for setAssignedResources() to be called
+    qDebug() << "[ResourceSelectionDialog::Constructor] Dialog created (resources not loaded yet)";
 }
 
 ResourceSelectionDialog::~ResourceSelectionDialog()
@@ -541,6 +842,7 @@ void ResourceSelectionDialog::setupUi()
     
     resourceListWidget = new QListWidget();
     resourceListWidget->setSelectionMode(QAbstractItemView::MultiSelection);
+    qDebug() << "[ResourceSelectionDialog::setupUi] Selection mode set to MultiSelection";
     layout->addWidget(resourceListWidget);
     
     QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
@@ -556,6 +858,8 @@ void ResourceSelectionDialog::loadAllResources()
     resourceListWidget->clear();
     
     QVector<Ressource> allResources = Ressource::selectAll();
+    qDebug() << "[ResourceSelectionDialog::loadAllResources] Loading" << allResources.size() << "total resources";
+    
     for (const Ressource &res : allResources)
     {
         QListWidgetItem *item = new QListWidgetItem(res.title);
@@ -565,6 +869,7 @@ void ResourceSelectionDialog::loadAllResources()
         if (m_assignedResourceIds.contains(res.idMedia))
         {
             item->setSelected(true);
+            qDebug() << "[ResourceSelectionDialog::loadAllResources] Pre-selected resource:" << res.idMedia << res.title;
         }
         
         resourceListWidget->addItem(item);
@@ -574,6 +879,11 @@ void ResourceSelectionDialog::loadAllResources()
 void ResourceSelectionDialog::setAssignedResources(const QVector<qint64>& resourceIds)
 {
     m_assignedResourceIds = resourceIds;
+    qDebug() << "[ResourceSelectionDialog::setAssignedResources] Setting" << resourceIds.size() << "assigned resources";
+    
+    // Now load resources AFTER setting the assigned IDs
+    // This ensures pre-selection works correctly
+    loadAllResources();
 }
 
 QVector<qint64> ResourceSelectionDialog::selectedResourceIds() const
@@ -584,9 +894,101 @@ QVector<qint64> ResourceSelectionDialog::selectedResourceIds() const
         QListWidgetItem *item = resourceListWidget->item(i);
         if (item && item->isSelected())
         {
-            selected.append(item->data(Qt::UserRole).toLongLong());
+            qint64 resourceId = item->data(Qt::UserRole).toLongLong();
+            selected.append(resourceId);
+            qDebug() << "[ResourceSelectionDialog::selectedResourceIds] Selected resource:" << resourceId;
         }
     }
+    qDebug() << "[ResourceSelectionDialog::selectedResourceIds] Total selected:" << selected.size();
+    return selected;
+}
+
+// =============================================================================
+// ProjectSelectionDialog Implementation
+// =============================================================================
+
+ProjectSelectionDialog::ProjectSelectionDialog(QWidget *parent)
+    : QDialog(parent)
+{
+    setupUi();
+    // Don't load projects here - wait for setAssignedProjects() to be called
+    qDebug() << "[ProjectSelectionDialog::Constructor] Dialog created (projects not loaded yet)";
+}
+
+ProjectSelectionDialog::~ProjectSelectionDialog()
+{
+}
+
+void ProjectSelectionDialog::setupUi()
+{
+    setWindowTitle(tr("Select Projects"));
+    setMinimumSize(500, 400);
+    
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    
+    QLabel *label = new QLabel(tr("Select projects to assign to this employer:"));
+    layout->addWidget(label);
+    
+    projectListWidget = new QListWidget();
+    projectListWidget->setSelectionMode(QAbstractItemView::MultiSelection);
+    qDebug() << "[ProjectSelectionDialog::setupUi] Selection mode set to MultiSelection";
+    layout->addWidget(projectListWidget);
+    
+    QDialogButtonBox *buttonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel);
+    connect(buttonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
+    connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
+    layout->addWidget(buttonBox);
+    
+    setLayout(layout);
+}
+
+void ProjectSelectionDialog::loadAllProjects()
+{
+    projectListWidget->clear();
+    
+    QVector<Project> allProjects = Project::selectAll();
+    qDebug() << "[ProjectSelectionDialog::loadAllProjects] Loading" << allProjects.size() << "total projects";
+    
+    for (const Project &proj : allProjects)
+    {
+        QListWidgetItem *item = new QListWidgetItem(proj.title);
+        item->setData(Qt::UserRole, proj.projectId);
+        
+        // Pre-select already assigned projects
+        if (m_assignedProjectIds.contains(proj.projectId))
+        {
+            item->setSelected(true);
+            qDebug() << "[ProjectSelectionDialog::loadAllProjects] Pre-selected project:" << proj.projectId << proj.title;
+        }
+        
+        projectListWidget->addItem(item);
+    }
+}
+
+void ProjectSelectionDialog::setAssignedProjects(const QVector<qint64>& projectIds)
+{
+    m_assignedProjectIds = projectIds;
+    qDebug() << "[ProjectSelectionDialog::setAssignedProjects] Setting" << projectIds.size() << "assigned projects";
+    
+    // Now load projects AFTER setting the assigned IDs
+    // This ensures pre-selection works correctly
+    loadAllProjects();
+}
+
+QVector<qint64> ProjectSelectionDialog::selectedProjectIds() const
+{
+    QVector<qint64> selected;
+    for (int i = 0; i < projectListWidget->count(); ++i)
+    {
+        QListWidgetItem *item = projectListWidget->item(i);
+        if (item && item->isSelected())
+        {
+            qint64 projectId = item->data(Qt::UserRole).toLongLong();
+            selected.append(projectId);
+            qDebug() << "[ProjectSelectionDialog::selectedProjectIds] Selected project:" << projectId;
+        }
+    }
+    qDebug() << "[ProjectSelectionDialog::selectedProjectIds] Total selected:" << selected.size();
     return selected;
 }
 
@@ -2455,6 +2857,25 @@ void MainWindow::onAddEmployerClicked()
         {
             qDebug() << "[MainWindow::onAddEmployerClicked] No resources selected for this employer.";
         }
+        
+        // Assign selected projects if any
+        QVector<qint64> selectedProjects = form.selectedProjectIds();
+        qDebug() << "[MainWindow::onAddEmployerClicked] Selected projects count:" << selectedProjects.size();
+        
+        if (!selectedProjects.isEmpty())
+        {
+            qDebug() << "[MainWindow::onAddEmployerClicked] Assigning" << selectedProjects.size() << "projects...";
+            for (qint64 projectId : selectedProjects)
+            {
+                qDebug() << "  → Adding project" << projectId;
+                Project::addEmployerToProject(projectId, newEmployer.employerId);
+            }
+            qDebug() << "[MainWindow::onAddEmployerClicked] All projects assigned successfully!";
+        }
+        else
+        {
+            qDebug() << "[MainWindow::onAddEmployerClicked] No projects selected for this employer.";
+        }
     }
 
     loadEmployers();
@@ -2506,6 +2927,13 @@ void MainWindow::onModifyEmployerClicked()
     for (const Ressource& res : assignedResources)
         currentResourceIds.append(res.idMedia);
     form.setSelectedResourceIds(currentResourceIds);
+    
+    // Load currently assigned projects for pre-selection
+    QVector<Project> assignedProjects = Project::getProjectsByEmployer(employerId);
+    QVector<qint64> currentProjectIds;
+    for (const Project& proj : assignedProjects)
+        currentProjectIds.append(proj.projectId);
+    form.setSelectedProjectIds(currentProjectIds);
 
     if (form.exec() != QDialog::Accepted)
     {
@@ -2547,6 +2975,27 @@ void MainWindow::onModifyEmployerClicked()
     }
     
     qDebug() << "[MainWindow::onModifyEmployerClicked] All resources updated:" << selectedResources.size() << "resources assigned";
+    
+    // Update employer projects
+    QVector<qint64> selectedProjects = form.selectedProjectIds();
+    qDebug() << "[MainWindow::onModifyEmployerClicked] Current projects:" << currentProjectIds.size();
+    qDebug() << "[MainWindow::onModifyEmployerClicked] New projects selected:" << selectedProjects.size();
+    
+    // Clear all assignments for this employer from all projects
+    QVector<Project> allProjects = Project::selectAll();
+    for (const Project& proj : allProjects)
+    {
+        Project::removeEmployerFromProject(proj.projectId, employerId);
+    }
+    qDebug() << "[MainWindow::onModifyEmployerClicked] Cleared old projects";
+    
+    for (qint64 projectId : selectedProjects)
+    {
+        qDebug() << "  → Adding project" << projectId;
+        Project::addEmployerToProject(projectId, employerId);
+    }
+    
+    qDebug() << "[MainWindow::onModifyEmployerClicked] All projects updated:" << selectedProjects.size() << "projects assigned";
     qDebug() << "[MainWindow::onModifyEmployerClicked] Reloading employers...";
     
     loadEmployers();
@@ -2584,11 +3033,11 @@ void MainWindow::onDeleteEmployerClicked()
         return;
     }
 
-    qDebug() << "[MainWindow::onDeleteEmployerClicked] User confirmed. Calling Employer::remove with ID:" << employerId;
+    qDebug() << "[MainWindow::onDeleteEmployerClicked] User confirmed. Calling Employer::removeCascade with ID:" << employerId;
 
-    if (!Employer::remove(employerId))
+    if (!Employer::removeCascade(employerId))
     {
-        qDebug() << "[MainWindow::onDeleteEmployerClicked] CRITICAL: remove FAILED for ID:" << employerId;
+        qDebug() << "[MainWindow::onDeleteEmployerClicked] CRITICAL: removeCascade FAILED for ID:" << employerId;
         QMessageBox::critical(this, tr("Delete Employer"), 
             tr("Failed to delete employer. Check logs for details."));
         return;

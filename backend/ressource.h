@@ -31,6 +31,7 @@ public:
     static bool update(const Ressource &ressource);
     static bool remove(qint64 id);
     static bool fetchById(qint64 id, Ressource &ressource);
+    static bool clearAllReferencesForResource(qint64 resourceId);
 
     // Validation
     static bool isTitleValid(const QString &title, QString &errorMsg);

@@ -14,6 +14,7 @@
 #include "backend/connection.h"
 #include "backend/employer.h"
 #include "backend/ressource.h"
+#include "backend/project.h"
 
 #include <QAbstractItemView>
 #include <QCheckBox>
@@ -1067,6 +1068,23 @@ void EmployerUIHelper::populateTable(QTableWidget *table, const QVector<Employer
         auto *resourcesItem = new QTableWidgetItem(resourceNames);
         resourcesItem->setToolTip(resourceNames);  // Show full list in tooltip
         table->setItem(row, 8, resourcesItem);
+
+        // Load and display projects for this employer
+        QVector<Project> employerProjects = Project::getProjectsByEmployer(rec.employerId);
+        QString projectNames;
+        for (int i = 0; i < employerProjects.size(); ++i)
+        {
+            if (i > 0) projectNames += ", ";
+            projectNames += employerProjects.at(i).title;
+        }
+        if (!employerProjects.isEmpty())
+        {
+            qDebug() << "[EmployerUIHelper::populateTable] Employer" << rec.employerId 
+                     << "has" << employerProjects.size() << "projects:" << projectNames;
+        }
+        auto *projectsItem = new QTableWidgetItem(projectNames);
+        projectsItem->setToolTip(projectNames);  // Show full list in tooltip
+        table->setItem(row, 9, projectsItem);
 
         table->setRowHeight(row, 135);
     }
@@ -2678,11 +2696,12 @@ void MainWindow::setupEmployeeTable()
     ui->employeeTable->setColumnWidth(6, 200);  // Phone column - INCREASED
     ui->employeeTable->setColumnWidth(7, 180);  // Start Date column - INCREASED
     ui->employeeTable->setColumnWidth(8, 200);  // Resources column - KEEP REASONABLE
+    ui->employeeTable->setColumnWidth(9, 250);  // Projects column - NEW
     
     // Stretch last column to fill remaining space
     ui->employeeTable->horizontalHeader()->setStretchLastSection(false);
     ui->employeeTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    ui->employeeTable->horizontalHeader()->setSectionResizeMode(8, QHeaderView::Stretch); // Resources stretches
+    ui->employeeTable->horizontalHeader()->setSectionResizeMode(9, QHeaderView::Stretch); // Projects stretches
     
     // Increase row height for better avatar and content display
     ui->employeeTable->verticalHeader()->setDefaultSectionSize(135);

@@ -1588,7 +1588,7 @@ QTableWidget::item:focus {
                    <number>1</number>
                   </property>
                   <property name="columnCount">
-                   <number>9</number>
+                   <number>10</number>
                   </property>
                   <attribute name="horizontalHeaderVisible">
                    <bool>true</bool>
@@ -1652,6 +1652,11 @@ QTableWidget::item:focus {
                   <column>
                    <property name="text">
                     <string>Resources</string>
+                   </property>
+                  </column>
+                  <column>
+                   <property name="text">
+                    <string>Projects</string>
                    </property>
                   </column>
                   <item row="0" column="0">

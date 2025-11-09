@@ -12,10 +12,12 @@
 #include <QFormLayout>
 #include <QComboBox>
 #include <QPixmap>
+#include <QSize>
 #include <QTableWidgetItem>
 #include <QListWidget>
 #include <QListWidgetItem>
 #include "backend/employer.h"
+#include "backend/project.h"
 
 QT_BEGIN_NAMESPACE
 class QLineEdit;
@@ -34,6 +36,7 @@ class MainWindow;
 class LoginPage;
 class Profile;
 class EmployerForm;
+class ProjectForm;
 }
 QT_END_NAMESPACE
 
@@ -72,21 +75,66 @@ private slots:
     void clearErrorMessage();
     void onAddResourceClicked();
     void onRemoveResourceClicked();
+    void onAddProjectClicked();
+    void onRemoveProjectClicked();
 
 private:
     bool validate(QString *message) const;
     void loadEmployerResources(qint64 employerId);
+    void loadEmployerProjects(qint64 employerId);
     void refreshResourceList();
+    void refreshProjectList();
 
     Mode m_mode { CreateMode };
     qint64 m_employerId { -1 };
     QVector<qint64> m_selectedResourceIds;
+    QVector<qint64> m_selectedProjectIds;
     Ui::EmployerForm *ui;
 
-    // Getters for resource data
+    // Getters for resource and project data
 public:
     QVector<qint64> selectedResourceIds() const { return m_selectedResourceIds; }
     void setSelectedResourceIds(const QVector<qint64>& ids) { m_selectedResourceIds = ids; }
+    
+    QVector<qint64> selectedProjectIds() const { return m_selectedProjectIds; }
+    void setSelectedProjectIds(const QVector<qint64>& ids) { m_selectedProjectIds = ids; }
+};
+
+// =============================================================================
+// ProjectForm - Dialog for adding/editing projects
+// =============================================================================
+class ProjectForm : public QDialog
+{
+    Q_OBJECT
+
+public:
+    enum Mode
+    {
+        CreateMode,
+        EditMode
+    };
+
+    explicit ProjectForm(QWidget *parent = nullptr);
+    ~ProjectForm() override;
+
+    void setMode(Mode mode);
+    void setRecord(const Project &record);
+    Project record() const;
+
+    void setErrorMessage(const QString &message);
+
+protected:
+    void accept() override;
+
+private slots:
+    void clearErrorMessage();
+
+private:
+    bool validate(QString *message) const;
+
+    Mode m_mode { CreateMode };
+    qint64 m_projectId { -1 };
+    Ui::ProjectForm *ui;
 };
 
 // =============================================================================
@@ -112,6 +160,31 @@ private:
     
     QListWidget *resourceListWidget;
     QVector<qint64> m_assignedResourceIds;
+};
+
+// =============================================================================
+// ProjectSelectionDialog - Dialog for selecting projects for employer
+// =============================================================================
+class ProjectSelectionDialog : public QDialog
+{
+    Q_OBJECT
+
+public:
+    explicit ProjectSelectionDialog(QWidget *parent = nullptr);
+    ~ProjectSelectionDialog() override;
+
+    // Set projects that are already assigned
+    void setAssignedProjects(const QVector<qint64>& projectIds);
+    
+    // Get selected project IDs
+    QVector<qint64> selectedProjectIds() const;
+
+private:
+    void setupUi();
+    void loadAllProjects();
+    
+    QListWidget *projectListWidget;
+    QVector<qint64> m_assignedProjectIds;
 };
 
 // =============================================================================

@@ -2,55 +2,39 @@
 <ui version="4.0">
  <class>EmployerForm</class>
  <widget class="QDialog" name="EmployerForm">
-  <property name="geometry">
-   <rect>
-    <x>100</x>
-    <y>75</y>
-    <width>1120</width>
-    <height>750</height>
-   </rect>
-  </property>
-  <property name="minimumSize">
-   <size>
-    <width>1000</width>
-    <height>720</height>
-   </size>
-  </property>
+    <property name="geometry">
+     <rect>
+        <x>120</x>
+        <y>60</y>
+        <width>980</width>
+        <height>700</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+        <width>900</width>
+        <height>680</height>
+     </size>
+    </property>
   <property name="windowTitle">
    <string>Employer</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="spacing">
-    <number>14</number>
-   </property>
-   <property name="leftMargin">
-    <number>20</number>
-   </property>
-   <property name="topMargin">
-    <number>20</number>
-   </property>
-   <property name="rightMargin">
-    <number>20</number>
-   </property>
-   <property name="bottomMargin">
-    <number>20</number>
-   </property>
-   <item>
-    <widget class="QLabel" name="errorLabel">
-     <property name="styleSheet">
-      <string notr="true">QLabel { color: #c82333; }</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
-     </property>
-     <property name="wordWrap">
-      <bool>true</bool>
-     </property>
-    </widget>
-   </item>
+    <property name="spacing">
+     <number>2</number>
+    </property>
+    <property name="leftMargin">
+     <number>2</number>
+    </property>
+    <property name="topMargin">
+     <number>2</number>
+    </property>
+    <property name="rightMargin">
+     <number>2</number>
+    </property>
+    <property name="bottomMargin">
+     <number>2</number>
+    </property>
    <item>
     <widget class="QLabel" name="titleLabel">
      <property name="text">
@@ -62,9 +46,15 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="introLabel">
+    <widget class="QLabel" name="errorLabel">
+     <property name="styleSheet">
+      <string notr="true">QLabel { color: #c82333; }</string>
+     </property>
      <property name="text">
-      <string>Fill in the employer information. Fields marked with * are required.</string>
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
      </property>
      <property name="wordWrap">
       <bool>true</bool>
@@ -243,53 +233,40 @@
            </item>
           </layout>
          </item>
-        </layout>
-       </item>
-       <item>
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Orientation::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
+         <item row="8" column="1">
+          <widget class="QLabel" name="avatarPreviewLabel">
+         <property name="minimumSize">
           <size>
-           <width>20</width>
-           <height>40</height>
+           <width>180</width>
+           <height>180</height>
           </size>
          </property>
-        </spacer>
+         <property name="maximumSize">
+          <size>
+           <width>180</width>
+           <height>180</height>
+          </size>
+         </property>
+           <property name="styleSheet">
+            <string notr="true">QLabel { border: 2px solid #ccc; border-radius: 0px; background-color: #f5f5f5; }</string>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::Shape::StyledPanel</enum>
+           </property>
+           <property name="text">
+            <string>No preview</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+        </layout>
        </item>
       </layout>
      </item>
      <item>
       <layout class="QVBoxLayout" name="avatarLayout_2">
-       <item>
-        <widget class="QLabel" name="avatarPreviewLabel">
-         <property name="minimumSize">
-          <size>
-           <width>280</width>
-           <height>280</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>280</width>
-           <height>280</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">QLabel { border: 2px solid #ccc; border-radius: 0px; background-color: #f5f5f5; }</string>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::Shape::StyledPanel</enum>
-         </property>
-         <property name="text">
-          <string>No preview</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignmentFlag::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
        <item>
         <widget class="QLabel" name="resourceLabel">
          <property name="text">
@@ -298,14 +275,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="resourceListWidget">
-         <property name="minimumSize">
-          <size>
-           <width>280</width>
-           <height>80</height>
-          </size>
-         </property>
-        </widget>
+   <widget class="QListWidget" name="resourceListWidget">
+    <property name="minimumSize">
+     <size>
+      <width>220</width>
+      <height>90</height>
+     </size>
+    </property>
+   </widget>
        </item>
        <item>
         <layout class="QHBoxLayout" name="resourceButtonLayout">
@@ -333,14 +310,14 @@
         </widget>
        </item>
        <item>
-        <widget class="QListWidget" name="projectListWidget">
-         <property name="minimumSize">
-          <size>
-           <width>280</width>
-           <height>80</height>
-          </size>
-         </property>
-        </widget>
+   <widget class="QListWidget" name="projectListWidget">
+    <property name="minimumSize">
+     <size>
+      <width>220</width>
+      <height>90</height>
+     </size>
+    </property>
+   </widget>
        </item>
        <item>
         <layout class="QHBoxLayout" name="projectButtonLayout">
@@ -373,6 +350,32 @@
       <set>QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
      </property>
     </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer_3">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item>
+    <spacer name="verticalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Orientation::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>

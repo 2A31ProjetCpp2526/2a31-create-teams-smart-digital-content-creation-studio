@@ -1028,10 +1028,22 @@ void EmployerUIHelper::populateTable(QTableWidget *table, const QVector<Employer
             const QPixmap pixmap(rec.avatarPath);
             if (!pixmap.isNull())
             {
-                avatarItem->setIcon(QIcon(pixmap.scaled(130, 130, Qt::KeepAspectRatio, Qt::SmoothTransformation)));
+                // Crop to square then scale to small in-cell thumbnail (48x48)
+                int minDim = qMin(pixmap.width(), pixmap.height());
+                QPixmap croppedPixmap = pixmap.copy((pixmap.width() - minDim) / 2,
+                                                     (pixmap.height() - minDim) / 2,
+                                                     minDim, minDim);
+                QPixmap thumb = croppedPixmap.scaled(48, 48, Qt::IgnoreAspectRatio, Qt::SmoothTransformation);
+                avatarItem->setIcon(QIcon(thumb));
+                avatarItem->setSizeHint(QSize(48, 48));
+
+                // Provide a larger preview in the tooltip (HTML img) so users can see full avatar without expanding row
+                QString imgPath = QDir::toNativeSeparators(rec.avatarPath);
+                QString imgHtml = QString("<img src=\"file:///%1\" width=\"200\" height=\"200\"/>")
+                                  .arg(imgPath);
+                avatarItem->setToolTip(imgHtml);
             }
         }
-        avatarItem->setToolTip(rec.avatarPath);
         table->setItem(row, 1, avatarItem);
 
         auto *idItem = new QTableWidgetItem(rec.employerId > 0 ? QString::number(rec.employerId) : QString());
@@ -1086,7 +1098,8 @@ void EmployerUIHelper::populateTable(QTableWidget *table, const QVector<Employer
         projectsItem->setToolTip(projectNames);  // Show full list in tooltip
         table->setItem(row, 9, projectsItem);
 
-        table->setRowHeight(row, 135);
+    // keep rows compact (48px) to show more rows; avatar shows large preview on hover
+    table->setRowHeight(row, 48);
     }
 
     table->clearSelection();
@@ -2686,26 +2699,26 @@ void MainWindow::setupEmployeeTable()
     ui->employeeTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     ui->employeeTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     
-    // Set specific column widths with better distribution - OPTIMIZED FOR LARGE DISPLAY
-    ui->employeeTable->setColumnWidth(0, 60);   // Select column
-    ui->employeeTable->setColumnWidth(1, 150);  // Avatar column - LARGE
-    ui->employeeTable->setColumnWidth(2, 100);  // ID column - INCREASED
-    ui->employeeTable->setColumnWidth(3, 250);  // Name column - INCREASED
-    ui->employeeTable->setColumnWidth(4, 300);  // Email column - INCREASED
-    ui->employeeTable->setColumnWidth(5, 180);  // Role column - INCREASED
-    ui->employeeTable->setColumnWidth(6, 200);  // Phone column - INCREASED
-    ui->employeeTable->setColumnWidth(7, 180);  // Start Date column - INCREASED
-    ui->employeeTable->setColumnWidth(8, 200);  // Resources column - KEEP REASONABLE
-    ui->employeeTable->setColumnWidth(9, 250);  // Projects column - NEW
+    // Set specific column widths - wider data columns so more text is visible
+    ui->employeeTable->setColumnWidth(0, 60);    // Select column
+    ui->employeeTable->setColumnWidth(1, 100);   // Avatar column (thumbnail)
+    ui->employeeTable->setColumnWidth(2, 60);    // ID column
+    ui->employeeTable->setColumnWidth(3, 220);   // Name column
+    ui->employeeTable->setColumnWidth(4, 300);   // Email column
+    ui->employeeTable->setColumnWidth(5, 120);   // Role column
+    ui->employeeTable->setColumnWidth(6, 120);   // Phone column
+    ui->employeeTable->setColumnWidth(7, 100);   // Start Date column
+    ui->employeeTable->setColumnWidth(8, 250);   // Resources column
+    ui->employeeTable->setColumnWidth(9, 350);   // Projects column
     
     // Stretch last column to fill remaining space
     ui->employeeTable->horizontalHeader()->setStretchLastSection(false);
     ui->employeeTable->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ui->employeeTable->horizontalHeader()->setSectionResizeMode(9, QHeaderView::Stretch); // Projects stretches
     
-    // Increase row height for better avatar and content display
-    ui->employeeTable->verticalHeader()->setDefaultSectionSize(135);
-    ui->employeeTable->verticalHeader()->setMinimumSectionSize(135);
+    // Keep rows compact so more rows fit on screen (48px). Avatars show larger preview via tooltip.
+    ui->employeeTable->verticalHeader()->setDefaultSectionSize(48);
+    ui->employeeTable->verticalHeader()->setMinimumSectionSize(48);
     
     // Enable better selection behavior
     ui->employeeTable->setSelectionBehavior(QAbstractItemView::SelectRows);

@@ -1430,16 +1430,16 @@ QTableWidget::item[column=&quot;0&quot;]:selected {
 
 /* Avatar Column Styling - New Position at Column 1 */
 QTableWidget::item[column=&quot;1&quot;] {
-    padding: 8px;
+    padding: 4px;
     text-align: center;
     background-color: rgba(255, 255, 255, 0.05);
-    border-radius: 50px;
-    border: 3px solid rgba(255, 255, 255, 0.2);
-    margin: 6px;
-    min-width: 80px;
-    min-height: 80px;
-    max-width: 80px;
-    max-height: 80px;
+    border-radius: 0px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    margin: 4px;
+    min-width: 48px;
+    min-height: 48px;
+    max-width: 48px;
+    max-height: 48px;
     font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
     font-weight: 300;
     color: #ffffff;
@@ -1447,9 +1447,9 @@ QTableWidget::item[column=&quot;1&quot;] {
 
 QTableWidget::item[column=&quot;1&quot;]:hover {
     background-color: rgba(255, 255, 255, 0.1);
-    border: 3px solid rgba(255, 255, 255, 0.4);
-    transform: scale(1.05);
-    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    transform: scale(1.02);
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.12);
 }
 
 /* Name Column Bold Styling - Updated Position */

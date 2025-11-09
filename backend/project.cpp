@@ -209,19 +209,36 @@ bool Project::addEmployerToProject(qint64 projectId, qint64 employerId)
 {
     qDebug() << "[Project::addEmployerToProject] Adding employer" << employerId << "to project" << projectId;
     
-    QSqlDatabase db = QSqlDatabase::database();
-    QSqlQuery query(db);
-    query.prepare("INSERT INTO GERER (ID_PROJECT, ID_EMP) VALUES (:projectId, :employerId)");
-    query.addBindValue(projectId);
-    query.addBindValue(employerId);
-    
-    if (!query.exec())
+    if (projectId <= 0 || employerId <= 0)
     {
-        qDebug() << "[Project::addEmployerToProject] ERROR:" << query.lastError().text();
+        qDebug() << "[Project::addEmployerToProject] ERROR: Invalid IDs - projectId:" << projectId << "employerId:" << employerId;
         return false;
     }
     
-    qDebug() << "[Project::addEmployerToProject] SUCCESS";
+    QSqlDatabase db = QSqlDatabase::database();
+    if (!db.isOpen())
+    {
+        qDebug() << "[Project::addEmployerToProject] ERROR: Database not open";
+        return false;
+    }
+    
+    // Use direct SQL string instead of bind values (QODBC compatibility)
+    QString sql = QString("INSERT INTO GERER (ID_PROJECT, ID_EMP) VALUES (%1, %2)")
+                      .arg(projectId)
+                      .arg(employerId);
+    
+    QSqlQuery query(db);
+    
+    qDebug() << "[Project::addEmployerToProject] SQL:" << sql;
+    
+    if (!query.exec(sql))
+    {
+        qDebug() << "[Project::addEmployerToProject] ERROR:" << query.lastError().text();
+        qDebug() << "[Project::addEmployerToProject] Driver error:" << query.lastError().driverText();
+        return false;
+    }
+    
+    qDebug() << "[Project::addEmployerToProject] SUCCESS - Rows affected:" << query.numRowsAffected();
     return true;
 }
 
@@ -229,19 +246,36 @@ bool Project::removeEmployerFromProject(qint64 projectId, qint64 employerId)
 {
     qDebug() << "[Project::removeEmployerFromProject] Removing employer" << employerId << "from project" << projectId;
     
-    QSqlDatabase db = QSqlDatabase::database();
-    QSqlQuery query(db);
-    query.prepare("DELETE FROM GERER WHERE ID_PROJECT = :projectId AND ID_EMP = :employerId");
-    query.addBindValue(projectId);
-    query.addBindValue(employerId);
-    
-    if (!query.exec())
+    if (projectId <= 0 || employerId <= 0)
     {
-        qDebug() << "[Project::removeEmployerFromProject] ERROR:" << query.lastError().text();
+        qDebug() << "[Project::removeEmployerFromProject] ERROR: Invalid IDs - projectId:" << projectId << "employerId:" << employerId;
         return false;
     }
     
-    qDebug() << "[Project::removeEmployerFromProject] SUCCESS";
+    QSqlDatabase db = QSqlDatabase::database();
+    if (!db.isOpen())
+    {
+        qDebug() << "[Project::removeEmployerFromProject] ERROR: Database not open";
+        return false;
+    }
+    
+    // Use direct SQL string instead of bind values (QODBC compatibility)
+    QString sql = QString("DELETE FROM GERER WHERE ID_PROJECT = %1 AND ID_EMP = %2")
+                      .arg(projectId)
+                      .arg(employerId);
+    
+    QSqlQuery query(db);
+    
+    qDebug() << "[Project::removeEmployerFromProject] SQL:" << sql;
+    
+    if (!query.exec(sql))
+    {
+        qDebug() << "[Project::removeEmployerFromProject] ERROR:" << query.lastError().text();
+        qDebug() << "[Project::removeEmployerFromProject] Driver error:" << query.lastError().driverText();
+        return false;
+    }
+    
+    qDebug() << "[Project::removeEmployerFromProject] SUCCESS - Rows affected:" << query.numRowsAffected();
     return true;
 }
 
@@ -293,18 +327,22 @@ QVector<Project> Project::getProjectsByEmployer(qint64 employerId)
         return projects;
     }
     
+    // Use direct SQL string instead of bind values (QODBC compatibility)
+    // Qualify all columns to avoid "column ambiguously defined" error
+    QString sql = QString("SELECT p.ID_PROJECT, p.ID_CLIENT, p.ID_SERVICE, p.TITLE, p.DESCRIPTION, "
+                          "p.CREATION_DATE, p.MODIFICATION_DATE, p.OWNER_ID "
+                          "FROM PROJECTS p "
+                          "INNER JOIN GERER g ON p.ID_PROJECT = g.ID_PROJECT "
+                          "WHERE g.ID_EMP = %1").arg(employerId);
+    
     QSqlQuery query(db);
     
-    query.prepare("SELECT p.ID_PROJECT, p.ID_CLIENT, p.ID_SERVICE, p.TITLE, p.DESCRIPTION, "
-                  "p.CREATION_DATE, p.MODIFICATION_DATE, p.OWNER_ID "
-                  "FROM PROJECTS p "
-                  "INNER JOIN GERER g ON p.ID_PROJECT = g.ID_PROJECT "
-                  "WHERE g.ID_EMP = :employerId");
-    query.addBindValue(employerId);
+    qDebug() << "[Project::getProjectsByEmployer] SQL:" << sql;
     
-    if (!query.exec())
+    if (!query.exec(sql))
     {
         qDebug() << "[Project::getProjectsByEmployer] ERROR:" << query.lastError().text();
+        qDebug() << "[Project::getProjectsByEmployer] Driver error:" << query.lastError().driverText();
         return projects;
     }
     
@@ -332,15 +370,30 @@ QVector<qint64> Project::getEmployersByProject(qint64 projectId)
     qDebug() << "[Project::getEmployersByProject] Fetching employers for project" << projectId;
     
     QVector<qint64> employerIds;
+    
+    if (projectId <= 0)
+    {
+        qDebug() << "[Project::getEmployersByProject] ERROR: Invalid project ID";
+        return employerIds;
+    }
+    
     QSqlDatabase db = QSqlDatabase::database();
+    if (!db.isOpen())
+    {
+        qDebug() << "[Project::getEmployersByProject] ERROR: Database not open";
+        return employerIds;
+    }
+    
+    // Use direct SQL string instead of bind values (QODBC compatibility)
+    QString sql = QString("SELECT ID_EMP FROM GERER WHERE ID_PROJECT = %1").arg(projectId);
     QSqlQuery query(db);
     
-    query.prepare("SELECT ID_EMP FROM GERER WHERE ID_PROJECT = :projectId");
-    query.addBindValue(projectId);
+    qDebug() << "[Project::getEmployersByProject] SQL:" << sql;
     
-    if (!query.exec())
+    if (!query.exec(sql))
     {
         qDebug() << "[Project::getEmployersByProject] ERROR:" << query.lastError().text();
+        qDebug() << "[Project::getEmployersByProject] Driver error:" << query.lastError().driverText();
         return employerIds;
     }
     

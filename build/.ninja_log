@@ -1,0 +1,14 @@
+# ninja log v7
+12	2396	7841691370338897	AmineTemplar_autogen/timestamp	d0948ebe991ac297
+12	2396	7841691370338897	AmineTemplar_autogen/mocs_compilation.cpp	d0948ebe991ac297
+12	2396	7841691370338897	C:/Users/user/Documents/Qt - Test/AmineTemplar/build/AmineTemplar_autogen/timestamp	d0948ebe991ac297
+12	2396	7841691370338897	C:/Users/user/Documents/Qt - Test/AmineTemplar/build/AmineTemplar_autogen/mocs_compilation.cpp	d0948ebe991ac297
+2407	2984	7841691377557782	AmineTemplar_autogen/EWIEGA46WW/qrc_resources.cpp	105558ffcbba37eb
+2407	2984	7841691377557782	C:/Users/user/Documents/Qt - Test/AmineTemplar/build/AmineTemplar_autogen/EWIEGA46WW/qrc_resources.cpp	105558ffcbba37eb
+3062	10667	7841691378609687	CMakeFiles/AmineTemplar.dir/backend/connection.cpp.obj	260842932e63d180
+3069	10835	7841691378669675	CMakeFiles/AmineTemplar.dir/backend/employer.cpp.obj	7d5348d5bc42ebc8
+3041	12013	7841691378399708	CMakeFiles/AmineTemplar.dir/ui/sponsorwidget.cpp.obj	f0b6f35d3dc7b81
+3055	12740	7841691378529684	CMakeFiles/AmineTemplar.dir/ui/projectwidget.cpp.obj	bdbcc18aa2100c19
+3028	12964	7841691378259687	CMakeFiles/AmineTemplar.dir/ui/templatewidget.cpp.obj	d4426f648adcd64c
+3048	13512	7841691378469685	CMakeFiles/AmineTemplar.dir/ui/ressourcewidget.cpp.obj	71eb3ec840729708
+3035	14146	7841691378329711	CMakeFiles/AmineTemplar.dir/ui/clientwidget.cpp.obj	404cc673222856e5

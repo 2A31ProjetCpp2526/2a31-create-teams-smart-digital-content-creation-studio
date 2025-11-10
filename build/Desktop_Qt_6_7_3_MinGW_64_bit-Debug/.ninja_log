@@ -1,27 +1,59 @@
-# ninja log v6
-838	2571	7808458885025096	CMakeFiles/untitled2.dir/main.cpp.obj	db8448c0ea3205fd
-46	174	7810610676085163	C:/Users/Windows/Documents/untitled2/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/untitled2_autogen/mocs_compilation.cpp	c8d49717e29c28ae
-46	174	7810610676085163	untitled2_autogen/timestamp	c8d49717e29c28ae
-46	174	7810610676085163	untitled2_autogen/mocs_compilation.cpp	c8d49717e29c28ae
-1590	1712	7810610691505717	untitled2.exe	7583d7fb0ba706d
-175	1589	7810610677368537	CMakeFiles/untitled2.dir/mainwindow.cpp.obj	45219f1aef4aab6d
-46	174	7810610676085163	C:/Users/Windows/Documents/untitled2/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/untitled2_autogen/timestamp	c8d49717e29c28ae
-834	2544	7808458884992336	CMakeFiles/untitled2.dir/untitled2_autogen/mocs_compilation.cpp.obj	adad233933e12eb5
-56	289	7810620144111866	untitled2_autogen/timestamp	c8d49717e29c28ae
-56	289	7810620144111866	untitled2_autogen/mocs_compilation.cpp	c8d49717e29c28ae
-56	289	7810620144111866	C:/Users/Windows/Documents/untitled2/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/untitled2_autogen/timestamp	c8d49717e29c28ae
-56	289	7810620144111866	C:/Users/Windows/Documents/untitled2/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/untitled2_autogen/mocs_compilation.cpp	c8d49717e29c28ae
-291	3348	7810620146467626	CMakeFiles/untitled2.dir/mainwindow.cpp.obj	45219f1aef4aab6d
-3348	3793	7810620177044365	untitled2.exe	7583d7fb0ba706d
-57	256	7810621610709329	untitled2_autogen/timestamp	c8d49717e29c28ae
-57	256	7810621610709329	untitled2_autogen/mocs_compilation.cpp	c8d49717e29c28ae
-57	256	7810621610709329	C:/Users/Windows/Documents/untitled2/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/untitled2_autogen/timestamp	c8d49717e29c28ae
-57	256	7810621610709329	C:/Users/Windows/Documents/untitled2/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/untitled2_autogen/mocs_compilation.cpp	c8d49717e29c28ae
-257	2700	7810621612714664	CMakeFiles/untitled2.dir/mainwindow.cpp.obj	45219f1aef4aab6d
-2700	2960	7810621637128723	untitled2.exe	7583d7fb0ba706d
-57	250	7810628724560839	untitled2_autogen/timestamp	c8d49717e29c28ae
-57	250	7810628724560839	untitled2_autogen/mocs_compilation.cpp	c8d49717e29c28ae
-57	250	7810628724560839	C:/Users/Windows/Documents/untitled2/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/untitled2_autogen/timestamp	c8d49717e29c28ae
-57	250	7810628724560839	C:/Users/Windows/Documents/untitled2/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/untitled2_autogen/mocs_compilation.cpp	c8d49717e29c28ae
-251	2643	7810628726513410	CMakeFiles/untitled2.dir/mainwindow.cpp.obj	45219f1aef4aab6d
-2643	2944	7810628750436652	untitled2.exe	7583d7fb0ba706d
+# ninja log v7
+20	2874	7841682990370834	AmineTemplar_autogen/timestamp	f8a8db93af02dfca
+20	2874	7841682990370834	AmineTemplar_autogen/mocs_compilation.cpp	f8a8db93af02dfca
+20	2874	7841682990370834	C:/Users/user/Documents/Qt - Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/timestamp	f8a8db93af02dfca
+20	2874	7841682990370834	C:/Users/user/Documents/Qt - Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/mocs_compilation.cpp	f8a8db93af02dfca
+2887	3710	7841683000330568	AmineTemplar_autogen/EWIEGA46WW/qrc_resources.cpp	a3b76ff51ecf8822
+2887	3710	7841683000330568	C:/Users/user/Documents/Qt - Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/EWIEGA46WW/qrc_resources.cpp	a3b76ff51ecf8822
+3776	10938	7841683001255755	CMakeFiles/AmineTemplar.dir/backend/connection.cpp.obj	7eb4fc18bf65a385
+3782	12289	7841683001316153	CMakeFiles/AmineTemplar.dir/backend/employer.cpp.obj	daa02154dbaa5172
+3711	14015	7841683000611772	CMakeFiles/AmineTemplar.dir/AmineTemplar_autogen/mocs_compilation.cpp.obj	92577d871c2887e6
+3731	14513	7841683000812901	CMakeFiles/AmineTemplar.dir/ui/templatewidget.cpp.obj	256c3618ee0b89f8
+3747	15128	7841683000974025	CMakeFiles/AmineTemplar.dir/ui/sponsorwidget.cpp.obj	7bbd47c9d123afb4
+3718	16299	7841683000681918	CMakeFiles/AmineTemplar.dir/main.cpp.obj	2b044d96fcee07b9
+3760	17089	7841683001094809	CMakeFiles/AmineTemplar.dir/ui/projectwidget.cpp.obj	b7789087323f8764
+3740	17441	7841683000893420	CMakeFiles/AmineTemplar.dir/ui/clientwidget.cpp.obj	1c001fc392308384
+3754	18058	7841683001034375	CMakeFiles/AmineTemplar.dir/ui/ressourcewidget.cpp.obj	f6a10ab195cec9f8
+10939	18506	7841683072886341	CMakeFiles/AmineTemplar.dir/backend/client.cpp.obj	8c55f6fd2a813a8b
+12289	19825	7841683086398031	CMakeFiles/AmineTemplar.dir/backend/ressource.cpp.obj	44d91197d0e1b967
+3725	21518	7841683000751927	CMakeFiles/AmineTemplar.dir/mainwindow.cpp.obj	31a147937d887890
+14015	41803	7841683103657185	CMakeFiles/AmineTemplar.dir/AmineTemplar_autogen/EWIEGA46WW/qrc_resources.cpp.obj	da9a5f7b410fe829
+41803	43728	7841683381535983	bin/AmineTemplar.exe	a6a7a736b3aa95ec
+36	1000	7841690845623890	AmineTemplar_autogen/timestamp	f8a8db93af02dfca
+36	1000	7841690845623890	AmineTemplar_autogen/mocs_compilation.cpp	f8a8db93af02dfca
+36	1000	7841690845623890	C:/Users/user/Documents/Qt - Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/timestamp	f8a8db93af02dfca
+36	1000	7841690845623890	C:/Users/user/Documents/Qt - Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/mocs_compilation.cpp	f8a8db93af02dfca
+1030	4887	7841690847242441	CMakeFiles/AmineTemplar.dir/backend/ressource.cpp.obj	44d91197d0e1b967
+1024	6743	7841690847182072	CMakeFiles/AmineTemplar.dir/ui/ressourcewidget.cpp.obj	f6a10ab195cec9f8
+18	1035	7841692219914844	AmineTemplar_autogen/timestamp	f8a8db93af02dfca
+18	1035	7841692219914844	AmineTemplar_autogen/mocs_compilation.cpp	f8a8db93af02dfca
+18	1035	7841692219914844	C:/Users/user/Documents/Qt - Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/timestamp	f8a8db93af02dfca
+18	1035	7841692219914844	C:/Users/user/Documents/Qt - Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/mocs_compilation.cpp	f8a8db93af02dfca
+1036	4688	7841692221202199	CMakeFiles/AmineTemplar.dir/AmineTemplar_autogen/mocs_compilation.cpp.obj	92577d871c2887e6
+1042	5075	7841692221262396	CMakeFiles/AmineTemplar.dir/main.cpp.obj	2b044d96fcee07b9
+1049	8030	7841692221315112	CMakeFiles/AmineTemplar.dir/mainwindow.cpp.obj	31a147937d887890
+8031	9701	7841692291153164	bin/AmineTemplar.exe	a6a7a736b3aa95ec
+16	1285	7841697450335816	AmineTemplar_autogen/timestamp	f8a8db93af02dfca
+16	1285	7841697450335816	AmineTemplar_autogen/mocs_compilation.cpp	f8a8db93af02dfca
+16	1285	7841697450335816	C:/Users/user/Documents/Qt - Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/timestamp	f8a8db93af02dfca
+16	1285	7841697450335816	C:/Users/user/Documents/Qt - Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/mocs_compilation.cpp	f8a8db93af02dfca
+1287	5636	7841697451657751	CMakeFiles/AmineTemplar.dir/AmineTemplar_autogen/mocs_compilation.cpp.obj	92577d871c2887e6
+1292	6272	7841697451717764	CMakeFiles/AmineTemplar.dir/main.cpp.obj	2b044d96fcee07b9
+44	457	7841698293267433	AmineTemplar_autogen/timestamp	f8a8db93af02dfca
+44	457	7841698293267433	AmineTemplar_autogen/mocs_compilation.cpp	f8a8db93af02dfca
+44	457	7841698293267433	C:/Users/user/Documents/Qt - Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/timestamp	f8a8db93af02dfca
+44	457	7841698293267433	C:/Users/user/Documents/Qt - Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/mocs_compilation.cpp	f8a8db93af02dfca
+459	6199	7841698297418153	CMakeFiles/AmineTemplar.dir/mainwindow.cpp.obj	31a147937d887890
+6199	7644	7841698354827944	bin/AmineTemplar.exe	a6a7a736b3aa95ec
+38	295	7841702338761915	AmineTemplar_autogen/timestamp	f8a8db93af02dfca
+38	295	7841702338761915	AmineTemplar_autogen/mocs_compilation.cpp	f8a8db93af02dfca
+38	295	7841702338761915	C:/Users/user/Documents/Qt - Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/timestamp	f8a8db93af02dfca
+38	295	7841702338761915	C:/Users/user/Documents/Qt - Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/mocs_compilation.cpp	f8a8db93af02dfca
+296	5194	7841702341301300	CMakeFiles/AmineTemplar.dir/mainwindow.cpp.obj	31a147937d887890
+5194	6535	7841702390306760	bin/AmineTemplar.exe	a6a7a736b3aa95ec
+34	265	7841706136100225	AmineTemplar_autogen/timestamp	f8a8db93af02dfca
+34	265	7841706136100225	AmineTemplar_autogen/mocs_compilation.cpp	f8a8db93af02dfca
+34	265	7841706136100225	C:/Users/user/Documents/Qt - Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/timestamp	f8a8db93af02dfca
+34	265	7841706136100225	C:/Users/user/Documents/Qt - Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/mocs_compilation.cpp	f8a8db93af02dfca
+266	4952	7841706138419820	CMakeFiles/AmineTemplar.dir/mainwindow.cpp.obj	31a147937d887890
+4952	6128	7841706185280770	bin/AmineTemplar.exe	a6a7a736b3aa95ec

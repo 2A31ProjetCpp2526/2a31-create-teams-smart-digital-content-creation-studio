@@ -1,0 +1,33 @@
+.venv/
+.venv/*
+.env
+.vscode/
+build/
+debug/
+release/
+python_server/
+python-server/
+dataset/
+md/
+ui/
+CMakeLists.txt
+*.user
+*.qmake.stash
+*.pro.user
+*~
+
+# Qt build artifacts
+*.o
+*.obj
+*.moc
+*.moc.cpp
+*RCC*/
+
+# Python artifacts
+__pycache__/
+*.pyc
+*.pyo
+
+# Editors
+*.swp
+.DS_Store

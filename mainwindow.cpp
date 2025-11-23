@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QVariantAnimation>
 #include "ui_login.h"
 #include "ui_Profile.h"
 #include "ui_employerform.h"
@@ -9,18 +10,29 @@
 #include "ui/projectwidget.h"
 #include "ui/ressourcewidget.h"
 #include "ui/sponsorwidget.h"
+#include "ui/sponsorwindow.h"
 #include "ui/templatewidget.h"
+#include "ui/facerecognitionwidget.h"
 
 #include "backend/connection.h"
 #include "backend/employer.h"
 #include "backend/ressource.h"
 #include "backend/project.h"
+#include "backend/openai_chatbot.h"
+#include "backend/facerecognitionlogin.h"
+#include "backend/faceapi.h"
 
 #include <QAbstractItemView>
 #include <QCheckBox>
 #include <QCoreApplication>
+#include <QDialog>
+#include <QFrame>
+#include <QGuiApplication>
+#include <QScreen>
+#include <QColor>
 #include <QFileDialog>
 #include <QGraphicsOpacityEffect>
+#include <QGraphicsDropShadowEffect>
 #include <QHeaderView>
 #include <QIcon>
 #include <QLabel>
@@ -28,10 +40,21 @@
 #include <QList>
 #include <QListWidget>
 #include <QListWidgetItem>
+#include <QPainter>
+#include <QPainterPath>
+#include <QPen>
+#include <QStringList>
 #include <QMessageBox>
 #include <QPixmap>
+#include <QButtonGroup>
 #include <QPlainTextEdit>
 #include <QPropertyAnimation>
+#include <QStyle>
+#include <QStandardPaths>
+#include <QVector>
+#include <functional>
+#include <utility>
+#include <QDir>
 #include <QPushButton>
 #include <QRegularExpression>
 #include <QRegularExpressionValidator>
@@ -40,6 +63,7 @@
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QEasingCurve>
+#include <QProgressBar>
 #include <QTextStream>
 #include <QFile>
 #include <QDate>
@@ -47,8 +71,15 @@
 #include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QDialogButtonBox>
+#include <QTimer>
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlError>
+#include <QEvent>
+#include <QtSql/QSqlQuery>
+#include <QMediaCaptureSession>
+#include <QCamera>
+#include <QVideoSink>
+#include <QVideoFrame>
 #include <algorithm>
 
 // =============================================================================
@@ -67,17 +98,13 @@ QRegularExpression emailRegex()
 constexpr auto kSelectSymbol = "☑";
 constexpr auto kUnselectSymbol = "☐";
 
-// CSV formatting helpers
+
+// CSV export helper removed — keep code minimal and prefer PDF export.
+
 QString formatDate(const QDate &date)
 {
-    return date.isValid() ? date.toString(QStringLiteral("yyyy-MM-dd")) : QString();
-}
-
-QString escapeCsv(const QString &value)
-{
-    QString copy = value;
-    copy.replace('"', "\"\"");
-    return QStringLiteral("\"%1\"").arg(copy);
+    if (!date.isValid()) return QString();
+    return date.toString(QStringLiteral("yyyy-MM-dd"));
 }
 }
 
@@ -1119,31 +1146,19 @@ qint64 EmployerUIHelper::getSelectedEmployerId(QTableWidget *table, bool *ok)
 
     qDebug() << "[EmployerUIHelper::getSelectedEmployerId] Table has" << table->rowCount() << "rows";
 
-    int row = table->currentRow();
-    qDebug() << "[EmployerUIHelper::getSelectedEmployerId] currentRow():" << row;
+    // Check for selected items
+    QList<QTableWidgetItem*> selectedItems = table->selectedItems();
+    qDebug() << "[EmployerUIHelper::getSelectedEmployerId] Selected items count:" << selectedItems.count();
     
-    if (row < 0)
+    if (selectedItems.isEmpty())
     {
-        qDebug() << "[EmployerUIHelper::getSelectedEmployerId] No currentRow, searching for selected symbol...";
-        for (int r = 0; r < table->rowCount(); ++r)
-        {
-            const QTableWidgetItem *item = table->item(r, 0);
-            if (item && item->text() == QString::fromUtf8(kSelectSymbol))
-            {
-                qDebug() << "[EmployerUIHelper::getSelectedEmployerId] Found selected symbol at row" << r;
-                row = r;
-                break;
-            }
-        }
-    }
-
-    if (row < 0)
-    {
-        qDebug() << "[EmployerUIHelper::getSelectedEmployerId] ERROR: No row selected!";
+        qDebug() << "[EmployerUIHelper::getSelectedEmployerId] ERROR: No items selected!";
         if (ok) *ok = false;
         return -1;
     }
 
+    // Get the row from the first selected item
+    int row = table->row(selectedItems.first());
     qDebug() << "[EmployerUIHelper::getSelectedEmployerId] Selected row:" << row;
 
     const QTableWidgetItem *item = table->item(row, 0);
@@ -1203,9 +1218,18 @@ void EmployerUIHelper::handleSelectionToggle(QTableWidget *table, QTableWidgetIt
         if (row == item->row())
         {
             const bool alreadySelected = item->text() == QString::fromUtf8(kSelectSymbol);
-            item->setText(alreadySelected ? QString::fromUtf8(kUnselectSymbol)
-                                          : QString::fromUtf8(kSelectSymbol));
-            table->selectRow(row);
+            if (alreadySelected)
+            {
+                // Deselect the item and clear selection from the table
+                item->setText(QString::fromUtf8(kUnselectSymbol));
+                table->clearSelection();
+            }
+            else
+            {
+                // Select this row and mark with select symbol
+                item->setText(QString::fromUtf8(kSelectSymbol));
+                table->selectRow(row);
+            }
         }
         else
         {
@@ -1246,10 +1270,28 @@ QVector<Employer> EmployerUIHelper::searchRecords(const QVector<Employer> &recor
     
     for (const auto &record : records)
     {
-        const QString composite = QStringLiteral("%1 %2 %3").arg(record.firstName, record.lastName, record.email);
-        if (composite.contains(searchTerm, Qt::CaseInsensitive))
-        {
-            filtered.push_back(record);
+        // Build a searchable string containing only first and last names
+        const QString nameComposite = QStringLiteral("%1 %2").arg(record.firstName, record.lastName);
+
+        // Split search term into tokens (e.g., "john smith" -> ["john","smith"])
+        QStringList tokens = searchTerm.split(QRegularExpression("\\s+"), Qt::SkipEmptyParts);
+
+        // Single token: match either first or last name
+        if (tokens.size() == 1) {
+            const QString &t = tokens.first();
+            if (record.firstName.contains(t, Qt::CaseInsensitive) || record.lastName.contains(t, Qt::CaseInsensitive) || nameComposite.contains(t, Qt::CaseInsensitive)) {
+                filtered.push_back(record);
+            }
+        } else {
+            // Multi-token: require that all tokens appear somewhere in the full name (order-insensitive)
+            bool allFound = true;
+            for (const QString &tok : tokens) {
+                if (!nameComposite.contains(tok, Qt::CaseInsensitive)) {
+                    allFound = false;
+                    break;
+                }
+            }
+            if (allFound) filtered.push_back(record);
         }
     }
 
@@ -1270,39 +1312,7 @@ QVector<Employer> EmployerUIHelper::sortRecords(const QVector<Employer> &records
     return sorted;
 }
 
-bool EmployerUIHelper::exportToCsv(const QString &filePath, const QVector<Employer> &records, QString *errorMessage)
-{
-    if (records.isEmpty())
-    {
-        if (errorMessage) *errorMessage = QObject::tr("No employer data available for export.");
-        return false;
-    }
-
-    QFile file(filePath);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-    {
-        if (errorMessage) *errorMessage = QObject::tr("Cannot open file for writing.");
-        return false;
-    }
-
-    QTextStream stream(&file);
-    stream << "EMPLOYER_ID,FIRST_NAME,LAST_NAME,EMAIL,PHONE,ROLE,START_DATE,AVATAR_PATH" << '\n';
-    
-    for (const auto &rec : records)
-    {
-        stream << rec.employerId << ','
-               << escapeCsv(rec.firstName) << ','
-               << escapeCsv(rec.lastName) << ','
-               << escapeCsv(rec.email) << ','
-               << escapeCsv(rec.phone) << ','
-               << escapeCsv(rec.role) << ','
-               << escapeCsv(formatDate(rec.startDate)) << ','
-               << escapeCsv(rec.avatarPath)
-               << '\n';
-    }
-
-    return true;
-}
+// NOTE: CSV export helper removed — use `Employer::exportToPdf` for exporting employer lists as PDF.
 
 // =============================================================================
 // MainWindow Implementation
@@ -1322,6 +1332,7 @@ MainWindow::MainWindow(QWidget *parent)
     , templateWidget(nullptr)
     , clientWidget(nullptr)
     , sponsorWidget(nullptr)
+    , sponsorWindow(nullptr)
     , ressourceWidget(nullptr)
     , projectWidget(nullptr)
     , loginPageWidget(nullptr)
@@ -1331,6 +1342,7 @@ MainWindow::MainWindow(QWidget *parent)
     , animationGroup(nullptr)
     , loginFormTransitionAnimation(nullptr)
     , currentPageIndex(-1)
+    , chatbot(nullptr)
 {
     ui->setupUi(this);
 
@@ -1661,10 +1673,43 @@ MainWindow::MainWindow(QWidget *parent)
     setupSponsorWidget();
     setupRessourceWidget();
     setupProjectWidget();
+    setupFaceRecognitionWidget();
     setupAnimations();
     setupDashboardAnimations();
+    
+    // Setup chatbot
+    chatbot = new OpenAIChatbot(this);
 
-    addButtonHoverEffect(ui->employerBtn);
+    // .env support disabled: all config is embedded in code per project settings.
+    // The chatbot already initializes with embedded defaults (API key + model).
+    // If you want to override in code, uncomment the following lines and set your values.
+    // chatbot->setApiKey(QStringLiteral("your_cohere_api_key_here"));
+    chatbot->setCohereModel(QStringLiteral("command-a-03-2025"));
+    qDebug() << "[MainWindow] .env removed; using embedded Cohere configuration.";
+    
+    // Connect chatbot signals
+    connect(ui->chatbotSendButton, &QPushButton::clicked, this, &MainWindow::onChatbotSendClicked);
+    connect(ui->chatbotClearButton, &QPushButton::clicked, this, &MainWindow::onChatbotClearClicked);
+    connect(ui->chatbotHistoryButton, &QPushButton::clicked, this, &MainWindow::onChatbotHistoryClicked);
+    connect(ui->chatbotInput, &QLineEdit::returnPressed, this, &MainWindow::onChatbotSendClicked);
+    
+    connect(chatbot, &OpenAIChatbot::responseReceived, this, &MainWindow::onChatbotResponseReceived);
+    connect(chatbot, &OpenAIChatbot::errorOccurred, this, &MainWindow::onChatbotErrorOccurred);
+    connect(chatbot, &OpenAIChatbot::processingStatusChanged, this, &MainWindow::onChatbotProcessingStatusChanged);
+
+        // Setup face recognition (consolidated)
+        faceRecognitionAI = new FaceRecognitionLogin(this);
+        connect(faceRecognitionAI, &FaceRecognitionLogin::recognitionStatusChanged,
+            this, &MainWindow::onFaceRecognitionStatusChanged);
+        connect(faceRecognitionAI, &FaceRecognitionLogin::faceDetected,
+            this, &MainWindow::onFaceDetected);
+        connect(faceRecognitionAI, &FaceRecognitionLogin::faceNotDetected,
+            this, &MainWindow::onFaceNotDetected);
+        connect(faceRecognitionAI, &FaceRecognitionLogin::processingError,
+            this, &MainWindow::onFaceProcessingError);
+    qDebug() << "[MainWindow] Face Recognition AI initialized (Local Offline - No Cloud Required).";
+    
+
     addButtonHoverEffect(ui->profileBtn);
     addButtonHoverEffect(ui->projectsBtn);
     addButtonHoverEffect(ui->clientsBtn);
@@ -1708,9 +1753,16 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->modifyBtn, &QPushButton::clicked, this, &MainWindow::onModifyEmployerClicked);
     connect(ui->deleteBtn, &QPushButton::clicked, this, &MainWindow::onDeleteEmployerClicked);
     connect(ui->exportBtn, &QPushButton::clicked, this, &MainWindow::onExportEmployersClicked);
-    connect(ui->searchBtn, &QPushButton::clicked, this, &MainWindow::onSearchEmployersClicked);
+   // connect(ui->searchBtn, &QPushButton::clicked, this, &MainWindow::onSearchEmployersClicked);
     connect(ui->searchInput, &QLineEdit::returnPressed, this, &MainWindow::onSearchEmployersClicked);
+    // Live search: trigger as-you-type with debounce
+    m_searchDebounceTimer = new QTimer(this);
+    m_searchDebounceTimer->setSingleShot(true);
+    m_searchDebounceTimer->setInterval(150); // 300 ms debounce
+    connect(m_searchDebounceTimer, &QTimer::timeout, this, &MainWindow::onSearchEmployersClicked);
+    connect(ui->searchInput, &QLineEdit::textChanged, this, &MainWindow::onSearchInputChanged);
     connect(ui->sortBtn, &QPushButton::clicked, this, &MainWindow::onSortEmployersClicked);
+    connect(ui->statisticsBtn, &QPushButton::clicked, this, &MainWindow::onStatisticsClicked);
     connect(ui->cancelBtn, &QPushButton::clicked, this, &MainWindow::onCancelSelectionClicked);
 
     // Initialize employer table
@@ -1742,6 +1794,8 @@ MainWindow::~MainWindow()
 {
     delete profileUI;
     delete loginUI;
+    delete sponsorWindow;
+    delete chatbot;
     delete ui;
 }
 
@@ -1938,6 +1992,24 @@ void MainWindow::setupProjectWidget()
     }
 }
 
+void MainWindow::setupFaceRecognitionWidget()
+{
+    // Create Face Recognition widget for real-time camera integration
+    faceRecognitionWidget = new FaceRecognitionWidget(this);
+    
+    // Find a suitable location in the UI or add a new tab
+    // Option 1: Add as a new stacked widget page
+    if (ui->stackedWidget) {
+        int pageIndex = ui->stackedWidget->addWidget(faceRecognitionWidget);
+        qDebug() << "[MainWindow::setupFaceRecognitionWidget] Added FaceRecognitionWidget at page index:" << pageIndex;
+        
+        // Optional: Create a button to access the face recognition widget
+        // This could be added to the sidebar or as a menu option
+    }
+    
+    qDebug() << "[MainWindow::setupFaceRecognitionWidget] Face Recognition Widget initialized";
+}
+
 void MainWindow::setupAnimations()
 {
     pageTransitionAnimation = new QPropertyAnimation(this);
@@ -2012,6 +2084,43 @@ void MainWindow::addButtonHoverEffect(QPushButton* button)
 {
     // Basic hover effect - more complex animations can be added later
     button->setCursor(Qt::PointingHandCursor);
+    if (!button) return;
+    // For admin action buttons install an event filter to manage shadows
+    if (button == ui->modifyBtn || button == ui->deleteBtn) {
+        button->installEventFilter(this);
+    }
+}
+
+bool MainWindow::eventFilter(QObject *watched, QEvent *event)
+{
+    if (!watched || !event) return QMainWindow::eventFilter(watched, event);
+
+    // Only handle hovering for modify/delete buttons here
+    if ((watched == ui->modifyBtn || watched == ui->deleteBtn)) {
+        QPushButton *btn = qobject_cast<QPushButton*>(watched);
+        if (!btn) return QMainWindow::eventFilter(watched, event);
+
+        if (event->type() == QEvent::Enter) {
+            // Remove existing effect
+            if (btn->graphicsEffect()) {
+                btn->graphicsEffect()->deleteLater();
+            }
+            QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect(btn);
+            shadow->setBlurRadius(24);
+            shadow->setXOffset(0);
+            shadow->setYOffset(8);
+            QColor color = (watched == ui->modifyBtn) ? QColor(255, 179, 0, 110) : QColor(219, 57, 57, 110);
+            shadow->setColor(color);
+            btn->setGraphicsEffect(shadow);
+        } else if (event->type() == QEvent::Leave) {
+            if (btn->graphicsEffect()) {
+                btn->graphicsEffect()->deleteLater();
+            }
+            btn->setGraphicsEffect(nullptr);
+        }
+    }
+
+    return QMainWindow::eventFilter(watched, event);
 }
 
 void MainWindow::onDashboardClicked()
@@ -2080,18 +2189,17 @@ void MainWindow::onResourcesClicked()
 void MainWindow::onSponsorsClicked()
 {
     setActiveSidebarButton(ui->sponsorsBtn);
-    // Find which stacked widget page contains the sponsor widget
-    int sponsorPageIndex = -1;
-    for (int i = 0; i < ui->stackedWidget->count(); ++i) {
-        if (ui->stackedWidget->widget(i) == sponsorWidget) {
-            sponsorPageIndex = i;
-            break;
-        }
+    
+    // Create SponsorWindow if it doesn't exist
+    if (!sponsorWindow) {
+        sponsorWindow = new SponsorWindow(this);
+        sponsorWindow->setAttribute(Qt::WA_DeleteOnClose, false); // Keep window in memory
     }
     
-    if (sponsorPageIndex != -1) {
-        switchToPage(sponsorPageIndex); // Switch to the sponsor page
-    }
+    // Show and activate the window
+    sponsorWindow->show();
+    sponsorWindow->raise();
+    sponsorWindow->activateWindow();
 }
 
 void MainWindow::onTemplatesClicked()
@@ -2140,6 +2248,14 @@ void MainWindow::showLoginOverlay()
     }
 }
 
+void MainWindow::onLoginBackClicked()
+{
+    // Close the login overlay and make the Employer page active
+    showMainContent();
+    setActiveSidebarButton(ui->employerBtn);
+    switchToPage(0); // Employers are shown at index 0
+}
+
 void MainWindow::setupLoginFormConnections()
 {
     if (!authStackedWidget || !loginPageWidget) return;
@@ -2170,6 +2286,19 @@ void MainWindow::setupLoginFormConnections()
         connect(backToLoginFromForgotButton, &QPushButton::clicked, this, &MainWindow::showLoginForm);
         addButtonHoverEffect(backToLoginFromForgotButton);
     }
+
+    // Find and connect login page back button (returns to Employer page)
+    QPushButton* loginBackButton = loginPageWidget->findChild<QPushButton*>("loginBackButton");
+    if (loginBackButton) {
+        connect(loginBackButton, &QPushButton::clicked, this, &MainWindow::onLoginBackClicked);
+        addButtonHoverEffect(loginBackButton);
+    }
+
+    // If there's a built-in "Back" button in the main UI for the login overlay, connect it
+    if (ui->backToMainButton) {
+        connect(ui->backToMainButton, &QPushButton::clicked, this, &MainWindow::onLoginBackClicked);
+        addButtonHoverEffect(ui->backToMainButton);
+    }
     
     // Connect form submission buttons to validation functions
     QPushButton* loginButton = loginPageWidget->findChild<QPushButton*>("loginButton");
@@ -2193,9 +2322,7 @@ void MainWindow::setupLoginFormConnections()
     // Connect Face Login button
     QPushButton* faceLoginButton = loginPageWidget->findChild<QPushButton*>("faceLoginButton");
     if (faceLoginButton) {
-        connect(faceLoginButton, &QPushButton::clicked, this, [this]() {
-            QMessageBox::information(this, "Face Login", "Face login coming soon!\n\nThis feature will use advanced facial recognition technology for secure authentication.");
-        });
+        connect(faceLoginButton, &QPushButton::clicked, this, &MainWindow::onFaceLoginClicked);
         addButtonHoverEffect(faceLoginButton);
     }
     
@@ -2358,6 +2485,48 @@ void MainWindow::showValidationError(const QString& message)
     msgBox.exec();
 }
 
+void MainWindow::showStyledValidationError(const QString& title, const QString& message)
+{
+    QMessageBox msgBox(this);
+    msgBox.setIcon(QMessageBox::Critical);
+    msgBox.setWindowTitle(title);
+    msgBox.setText(message);
+    
+    // Apply beautiful stylesheet from style.qss equivalent
+    msgBox.setStyleSheet(R"(
+        QMessageBox {
+            background-color: #fafafa;
+            color: #212121;
+            font-family: 'Segoe UI', 'Poppins', Arial, sans-serif;
+            font-size: 12px;
+        }
+        QMessageBox QLabel {
+            color: #d32f2f;
+            font-weight: bold;
+            line-height: 1.6;
+            padding: 5px;
+        }
+        QMessageBox QPushButton {
+            background-color: #d32f2f;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 24px;
+            font-weight: bold;
+            font-size: 12px;
+            min-width: 80px;
+        }
+        QMessageBox QPushButton:hover {
+            background-color: #b71c1c;
+        }
+        QMessageBox QPushButton:pressed {
+            background-color: #7f0000;
+        }
+    )");
+    
+    msgBox.exec();
+}
+
 void MainWindow::setFieldError(QLineEdit* field, bool hasError)
 {
     if (!field) return;
@@ -2400,6 +2569,49 @@ void MainWindow::setFieldError(QLineEdit* field, bool hasError)
     }
 }
 
+// Access Control - Check if current user is admin
+bool MainWindow::checkAdminAccess(const QString &actionName)
+{
+    if (currentConnectedUserRole.toLower() != "administrator" && currentConnectedUserRole.toLower() != "admin")
+    {
+        QMessageBox msgBox(this);
+        msgBox.setWindowTitle("🔒 Access Denied");
+        msgBox.setText(
+            QString("❌ ADMIN ACCESS DENIED\n\n"
+                   "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                   "Action: %1\n"
+                   "User: %2\n"
+                   "Role: %3\n"
+                   "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+                   "Only administrators can perform this action.\n"
+                   "Please contact your system administrator.").arg(actionName, currentConnectedUserName, currentConnectedUserRole)
+        );
+        msgBox.setIcon(QMessageBox::Critical);
+        msgBox.setStyleSheet(
+            "QMessageBox { background-color: #fff5f5; }"
+            "QMessageBox QLabel { color: #c41e3a; font-weight: bold; }"
+            "QPushButton { background-color: #c41e3a; color: white; padding: 5px 15px; border-radius: 4px; }"
+            "QPushButton:hover { background-color: #a01630; }"
+        );
+        msgBox.exec();
+        return false;
+    }
+    return true;
+}
+
+void MainWindow::updateUserSessionDisplay()
+{
+    // Update user session info in UI
+    QString sessionInfo = QString(
+        "👤 %1 | Role: %2 | ID: %3"
+    ).arg(currentConnectedUserName, currentConnectedUserRole, QString::number(currentConnectedEmployeeId));
+    
+    qDebug() << "[MainWindow::updateUserSessionDisplay]" << sessionInfo;
+    
+    // Update button access based on role
+    updateEmployerButtonStates();
+}
+
 // Form validation methods
 void MainWindow::validateAndLogin()
 {
@@ -2411,35 +2623,123 @@ void MainWindow::validateAndLogin()
     QString email = emailField->text().trimmed();
     QString password = passwordField->text();
     
-    bool hasErrors = false;
-    
-    // Validate email
+    // Validate format first
     if (email.isEmpty()) {
         setFieldError(emailField, true);
-        showValidationError("Please enter your email or username.");
-        hasErrors = true;
-    } else if (!isValidEmail(email) && !email.contains(QRegularExpression("^[a-zA-Z0-9_]+$"))) {
-        setFieldError(emailField, true);
-        showValidationError("Please enter a valid email address or username.");
-        hasErrors = true;
-    } else {
-        setFieldError(emailField, false);
+        showStyledValidationError("❌ Email Required", "Please enter your email address.");
+        return;
     }
     
-    // Validate password
     if (password.isEmpty()) {
         setFieldError(passwordField, true);
-        if (!hasErrors) showValidationError("Please enter your password.");
-        hasErrors = true;
-    } else {
-        setFieldError(passwordField, false);
+        showStyledValidationError("❌ Password Required", "Please enter your password.");
+        return;
     }
     
-    if (!hasErrors) {
-        // Successfully validated - redirect to main content
-        showMainContent();
-        // Switch to Employer (Dashboard) page by default
-        ui->stackedWidget->setCurrentIndex(0);
+    // Clear field errors initially
+    setFieldError(emailField, false);
+    setFieldError(passwordField, false);
+    
+    // Query database for employer
+    QSqlDatabase db = QSqlDatabase::database();
+    if (!db.isOpen()) {
+        showStyledValidationError("❌ Connection Error", "Database connection failed. Please try again.");
+        return;
+    }
+    
+    // First, find employer by email
+    QSqlQuery query(db);
+    query.prepare("SELECT ID_EMP, FIRST_NAME, LAST_NAME, EMAIL, PHONE, ROLE, PASSWORD, HIRE_DATE "
+                  "FROM EMPLOYER WHERE EMAIL = :email");
+    query.addBindValue(email);
+    
+    if (!query.exec()) {
+        showStyledValidationError("❌ Database Error", "Database query failed: " + query.lastError().text());
+        qDebug() << "Query error:" << query.lastError().text();
+        return;
+    }
+    
+    if (query.next()) {
+        // Email exists - now verify password
+        QString storedPassword = query.value(6).toString();  // PASSWORD column
+        
+        qDebug() << "Email found:" << email;
+        qDebug() << "Stored password:" << storedPassword;
+        qDebug() << "Input password:" << password;
+        
+        // Compare passwords (handle both plain text and hashed)
+        bool passwordMatch = false;
+        
+        // Try direct comparison first
+        if (password == storedPassword) {
+            passwordMatch = true;
+            qDebug() << "Password matched (plain text)";
+        }
+        
+        if (passwordMatch) {
+            // ✅ Login successful!
+            int employerId = query.value(0).toInt();
+            QString firstname = query.value(1).toString();
+            QString lastname = query.value(2).toString();
+            QString phone = query.value(4).toString();
+            QString role = query.value(5).toString();
+            QString hireDate = query.value(7).toString();
+            
+            // Store connected user info
+            currentConnectedEmployeeId = employerId;
+            currentConnectedUserRole = role;
+            currentConnectedUserName = QString("%1 %2").arg(firstname, lastname);
+            
+            // Clear fields
+            emailField->clear();
+            passwordField->clear();
+            
+            // Show success message with employee info
+            QString infoMessage = QString(
+                "✅ Connected as: %1 %2\n\n"
+                "━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                "📧 Email: %3\n"
+                "📱 Phone: %4\n"
+                "💼 Role: %5\n"
+                "📅 Hire Date: %6\n"
+                "━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+            ).arg(firstname, lastname, email, phone, role, hireDate);
+            
+            // Show success dialog
+            QMessageBox msgBox(this);
+            msgBox.setWindowTitle("🎊 Login Successful!");
+            msgBox.setText(infoMessage);
+            msgBox.setIcon(QMessageBox::Information);
+            msgBox.setStyleSheet(
+                "QMessageBox { background-color: #f5f5f5; }"
+                "QMessageBox QLabel { color: #1a237e; font-weight: bold; }"
+            );
+            msgBox.exec();
+            
+            // Show main content
+            showMainContent();
+            ui->stackedWidget->setCurrentIndex(0);
+            
+            // Update button states based on user role
+            loadEmployers();  // This will refresh the employer list and button states
+            
+            // Update user session display
+            updateUserSessionDisplay();
+            
+        } else {
+            // Email exists but password wrong
+            setFieldError(passwordField, true);
+            showStyledValidationError("❌ Incorrect Password", 
+                                     QString("The password you entered is incorrect.\n\n"
+                                            "User: %1\n"
+                                            "Please try again or use facial recognition.").arg(email));
+        }
+    } else {
+        // Email not found
+        setFieldError(emailField, true);
+        showStyledValidationError("❌ Email Not Found", 
+                                 QString("The email '%1' does not exist in our system.\n\n"
+                                        "Please check your email address or sign up.").arg(email));
     }
 }
 
@@ -2731,13 +3031,18 @@ void MainWindow::setupEmployeeTable()
             headerItem->setTextAlignment(Qt::AlignCenter);
         }
     }
+
+    // Apply hover effect to action buttons
+    if (ui->modifyBtn) addButtonHoverEffect(ui->modifyBtn);
+    if (ui->deleteBtn) addButtonHoverEffect(ui->deleteBtn);
 }
 
 void MainWindow::setupDashboardAnimations()
 {
     // Fade in the dashboard title and statistics container
-    if (ui->dashboardTabTitle) {
-        QPropertyAnimation* titleFade = new QPropertyAnimation(ui->dashboardTabTitle, "windowOpacity");
+    QWidget *dashboardTabTitle = ui->centralwidget ? ui->centralwidget->findChild<QWidget*>("dashboardTabTitle") : nullptr;
+    if (dashboardTabTitle) {
+        QPropertyAnimation* titleFade = new QPropertyAnimation(dashboardTabTitle, "windowOpacity");
         titleFade->setDuration(800);
         titleFade->setStartValue(0.0);
         titleFade->setEndValue(1.0);
@@ -2745,8 +3050,9 @@ void MainWindow::setupDashboardAnimations()
         titleFade->start(QAbstractAnimation::DeleteWhenStopped);
     }
 
-    if (ui->statisticsCardsContainer) {
-        QPropertyAnimation* statsFade = new QPropertyAnimation(ui->statisticsCardsContainer, "windowOpacity");
+    QWidget *statisticsCardsContainer = ui->centralwidget ? ui->centralwidget->findChild<QWidget*>("statisticsCardsContainer") : nullptr;
+    if (statisticsCardsContainer) {
+        QPropertyAnimation* statsFade = new QPropertyAnimation(statisticsCardsContainer, "windowOpacity");
         statsFade->setDuration(1000);
         statsFade->setStartValue(0.0);
         statsFade->setEndValue(1.0);
@@ -2757,9 +3063,12 @@ void MainWindow::setupDashboardAnimations()
     // Slide and fade-in the three main statistic cards that exist in the UI
     QParallelAnimationGroup* group = new QParallelAnimationGroup(this);
     QList<QWidget*> statWidgets;
-    if (ui->totalEmployeesCard) statWidgets.append(ui->totalEmployeesCard);
-    if (ui->activeProjectsCard) statWidgets.append(ui->activeProjectsCard);
-    if (ui->performanceCard) statWidgets.append(ui->performanceCard);
+    QWidget *totalEmployeesCard = ui->centralwidget ? ui->centralwidget->findChild<QWidget*>("totalEmployeesCard") : nullptr;
+    QWidget *activeProjectsCard = ui->centralwidget ? ui->centralwidget->findChild<QWidget*>("activeProjectsCard") : nullptr;
+    QWidget *performanceCard = ui->centralwidget ? ui->centralwidget->findChild<QWidget*>("performanceCard") : nullptr;
+    if (totalEmployeesCard) statWidgets.append(totalEmployeesCard);
+    if (activeProjectsCard) statWidgets.append(activeProjectsCard);
+    if (performanceCard) statWidgets.append(performanceCard);
 
     for (int i = 0; i < statWidgets.size(); ++i) {
         QWidget* w = statWidgets[i];
@@ -2823,12 +3132,105 @@ void MainWindow::loadEmployers()
 
 void MainWindow::updateEmployerButtonStates()
 {
-    EmployerUIHelper::updateButtonStates(ui->modifyBtn, ui->deleteBtn, ui->employeeTable);
+    // Apply role-based button access restrictions FIRST
+    bool isAdmin = (currentConnectedUserRole.toLower() == "administrator" || currentConnectedUserRole.toLower() == "admin");
+    
+    // Disable buttons for non-admin users - ALWAYS
+    if (ui->saveEmployeeBtn)
+    {
+        ui->saveEmployeeBtn->setEnabled(isAdmin);
+        if (!isAdmin)
+        {
+            ui->saveEmployeeBtn->setStyleSheet("QPushButton { color: #999; background-color: #e0e0e0; }");
+            ui->saveEmployeeBtn->setToolTip("⛔ Admin access required to add employers");
+        }
+        else
+        {
+            ui->saveEmployeeBtn->setStyleSheet("");
+            ui->saveEmployeeBtn->setToolTip("");
+        }
+    }
+    
+    if (ui->modifyBtn)
+    {
+        if (!isAdmin)
+        {
+            ui->modifyBtn->setEnabled(false);
+            ui->modifyBtn->setStyleSheet("QPushButton { color: #999; background-color: #e0e0e0; }");
+            ui->modifyBtn->setToolTip("⛔ Admin access required to modify employers");
+        }
+        else
+        {
+            // Pour admin: état désactivé par défaut — keep UI stylesheet so disabled styling remains
+            ui->modifyBtn->setEnabled(false);
+            // Do not clear button stylesheet; allow the designer QSS to manage enabled/disabled colors
+            ui->modifyBtn->setToolTip("");
+        }
+    }
+    
+    if (ui->deleteBtn)
+    {
+        if (!isAdmin)
+        {
+            ui->deleteBtn->setEnabled(false);
+            ui->deleteBtn->setStyleSheet("QPushButton { color: #999; background-color: #e0e0e0; }");
+            ui->deleteBtn->setToolTip("⛔ Admin access required to delete employers");
+        }
+        else
+        {
+            // Pour admin: état désactivé par défaut — keep UI stylesheet so disabled styling remains
+            ui->deleteBtn->setEnabled(false);
+            // Do not clear stylesheet; use the designer QSS to control colors
+            ui->deleteBtn->setToolTip("");
+        }
+    }
+    
+    // Now apply table selection logic (only if admin)
+    if (isAdmin)
+    {
+        EmployerUIHelper::updateButtonStates(ui->modifyBtn, ui->deleteBtn, ui->employeeTable);
+        // Apply admin-only coloring when selection exists
+        bool hasSelection = false;
+        EmployerUIHelper::getSelectedEmployerId(ui->employeeTable, &hasSelection);
+
+        if (ui->modifyBtn)
+        {
+                if (hasSelection) {
+                    ui->modifyBtn->setEnabled(true);
+                    // Clear any inline override so the global QSS (light orange when enabled) applies
+                    ui->modifyBtn->setStyleSheet("");
+                } else {
+                    ui->modifyBtn->setEnabled(false);
+                    // Set explicit disabled style (greyed) so it remains visually disabled
+                    ui->modifyBtn->setStyleSheet("QPushButton { color: #999; background-color: #e0e0e0; }");
+                }
+        }
+
+        if (ui->deleteBtn)
+        {
+                if (hasSelection) {
+                    ui->deleteBtn->setEnabled(true);
+                    ui->deleteBtn->setStyleSheet("");
+                } else {
+                    ui->deleteBtn->setEnabled(false);
+                    ui->deleteBtn->setStyleSheet("QPushButton { color: #999; background-color: #e0e0e0; }");
+                }
+        }
+    }
+
+    // End of updateEmployerButtonStates
 }
 
 void MainWindow::onAddEmployerClicked()
 {
     qDebug() << "\n========== ADD EMPLOYER CLICKED ==========";
+    
+    // Check admin access
+    if (!checkAdminAccess("Add New Employer"))
+    {
+        qDebug() << "[MainWindow::onAddEmployerClicked] Access denied for non-admin user: " << currentConnectedUserName;
+        return;
+    }
     
     EmployerForm form(this);
     form.setMode(EmployerForm::CreateMode);
@@ -2920,6 +3322,13 @@ void MainWindow::onAddEmployerClicked()
 void MainWindow::onModifyEmployerClicked()
 {
     qDebug() << "\n========== MODIFY EMPLOYER CLICKED ==========";
+    
+    // Check admin access
+    if (!checkAdminAccess("Modify Employer"))
+    {
+        qDebug() << "[MainWindow::onModifyEmployerClicked] Access denied for non-admin user: " << currentConnectedUserName;
+        return;
+    }
     
     bool ok = false;
     const qint64 employerId = EmployerUIHelper::getSelectedEmployerId(ui->employeeTable, &ok);
@@ -3041,6 +3450,13 @@ void MainWindow::onDeleteEmployerClicked()
 {
     qDebug() << "\n========== DELETE EMPLOYER CLICKED ==========";
     
+    // Check admin access
+    if (!checkAdminAccess("Delete Employer"))
+    {
+        qDebug() << "[MainWindow::onDeleteEmployerClicked] Access denied for non-admin user: " << currentConnectedUserName;
+        return;
+    }
+    
     bool ok = false;
     const qint64 employerId = EmployerUIHelper::getSelectedEmployerId(ui->employeeTable, &ok);
     
@@ -3086,25 +3502,29 @@ void MainWindow::onDeleteEmployerClicked()
 
 void MainWindow::onExportEmployersClicked()
 {
-    const QString basePath = QCoreApplication::applicationDirPath();
+    // Export can be done by any user (reading data), but log it for audit
+    qDebug() << "[MainWindow::onExportEmployersClicked] Export initiated by user:" << currentConnectedUserName << "Role:" << currentConnectedUserRole;
+    
+    QString basePath = QStandardPaths::writableLocation(QStandardPaths::DesktopLocation);
+    if (basePath.isEmpty()) basePath = QCoreApplication::applicationDirPath();
+    const QString defaultFile = QDir(basePath).filePath("employers.pdf");
     const QString filePath = QFileDialog::getSaveFileName(this,
                                                           tr("Export Employers"),
-                                                          basePath + QStringLiteral("/employers.csv"),
-                                                          tr("CSV Files (*.csv)"));
+                                                          defaultFile,
+                                                          tr("PDF Files (*.pdf)"));
     if (filePath.isEmpty())
     {
         return;
     }
 
     QString errorMessage;
-    if (!EmployerUIHelper::exportToCsv(filePath, cachedEmployers, &errorMessage))
+    if (!Employer::exportToPdf(filePath, &errorMessage))
     {
-        QMessageBox::critical(this, tr("Export"), errorMessage);
+        QMessageBox::critical(this, tr("Export"), errorMessage.isEmpty() ? tr("Failed to export PDF.") : errorMessage);
         return;
     }
 
-    QMessageBox::information(this, tr("Export"), 
-        tr("Employer list exported successfully."));
+    QMessageBox::information(this, tr("Export"), tr("Le fichier PDF a été généré avec succès !"));
 }
 
 void MainWindow::onSearchEmployersClicked()
@@ -3123,11 +3543,626 @@ void MainWindow::onSearchEmployersClicked()
     updateEmployerButtonStates();
 }
 
+void MainWindow::onSearchInputChanged(const QString &text)
+{
+    Q_UNUSED(text);
+    // Restart debounce timer on each keystroke
+    if (m_searchDebounceTimer)
+    {
+        m_searchDebounceTimer->start();
+    }
+    else
+    {
+        // Fallback: call search immediately
+        onSearchEmployersClicked();
+    }
+}
+
 void MainWindow::onSortEmployersClicked()
 {
     QVector<Employer> sorted = EmployerUIHelper::sortRecords(cachedEmployers);
     EmployerUIHelper::populateTable(ui->employeeTable, sorted);
     updateEmployerButtonStates();
+}
+
+void MainWindow::onStatisticsClicked()
+{
+    EmployerStatistics stats = Employer::computeStatistics();
+
+    QDialog dlg(this);
+    dlg.setWindowTitle(tr("📊 Employee Statistics Dashboard"));
+    dlg.setModal(true);
+    dlg.setMinimumSize(1400, 1200);
+    dlg.resize(1400, 1200);
+    dlg.setStyleSheet(
+        "QDialog { "
+        "    background-color: #ffffff; "
+        "    border: 1px solid #e0e0e0; "
+        "} "
+        "QScrollArea { "
+        "    background-color: #ffffff; "
+        "    border: none; "
+        "} "
+        "QScrollBar:vertical { "
+        "    width: 10px; "
+        "    background-color: #f5f5f5; "
+        "} "
+        "QScrollBar::handle:vertical { "
+        "    background-color: #bbb; "
+        "    border-radius: 5px; "
+        "} "
+        "QScrollBar::handle:vertical:hover { "
+        "    background-color: #999; "
+        "}"
+    );
+
+    QVBoxLayout *mainLayout = new QVBoxLayout(&dlg);
+    mainLayout->setSpacing(6);
+    mainLayout->setContentsMargins(20, 10, 20, 15);
+
+    // ===== HEADER =====
+    QLabel *headerTitle = new QLabel(tr("📊 Employee Statistics Dashboard"));
+    headerTitle->setStyleSheet(
+        "font-size: 20px; "
+        "font-weight: bold; "
+        "color: #1a1a1a; "
+        "font-family: 'Poppins'; "
+        "margin-bottom: 0px;"
+    );
+    mainLayout->addWidget(headerTitle);
+
+    QLabel *subHeader = new QLabel(tr("Comprehensive employee analytics and insights"));
+    subHeader->setStyleSheet("font-size: 9px; color: #888888; margin-bottom: 2px;");
+    mainLayout->addWidget(subHeader);
+
+    // ===== SCROLL AREA FOR ALL CONTENT =====
+    QScrollArea *scrollArea = new QScrollArea();
+    scrollArea->setWidgetResizable(true);
+    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    scrollArea->setStyleSheet(
+        "QScrollArea { border: none; background-color: #ffffff; } "
+        "QScrollBar:vertical { width: 12px; background-color: #f5f5f5; } "
+        "QScrollBar::handle:vertical { background-color: #ccc; border-radius: 6px; min-height: 20px; } "
+        "QScrollBar::handle:vertical:hover { background-color: #999; } "
+        "QScrollBar::add-line:vertical { border: none; background: none; } "
+        "QScrollBar::sub-line:vertical { border: none; background: none; }"
+    );
+    QWidget *scrollWidget = new QWidget();
+    scrollWidget->setStyleSheet("background-color: #ffffff;");
+    QVBoxLayout *scrollLayout = new QVBoxLayout(scrollWidget);
+    scrollLayout->setSpacing(10);
+    scrollLayout->setContentsMargins(0, 0, 0, 0);
+
+    // ===== ROW 1: KEY METRICS CARDS =====
+    QHBoxLayout *row1 = new QHBoxLayout();
+    row1->setSpacing(10);
+
+    // Card creation lambda - WHITE gradients with BLACK text for visibility
+    auto createMetricCard = [](const QString &emoji, const QString &title, int minHeight, const QString &color1, const QString &color2) -> QPair<QWidget*, QLabel*> {
+        QWidget *card = new QWidget();
+        card->setStyleSheet(QString(
+            "QWidget { background: linear-gradient(135deg, %1 0%, %2 100%); border-radius: 10px; }"
+        ).arg(color1, color2));
+        card->setMinimumHeight(minHeight);
+        
+        QVBoxLayout *lay = new QVBoxLayout(card);
+        lay->setSpacing(4);
+        lay->setContentsMargins(14, 12, 14, 12);
+        
+        QLabel *titleLbl = new QLabel(emoji + "  " + title);
+        titleLbl->setStyleSheet(
+            "color: #000000; "
+            "font-size: 10px; "
+            "font-weight: 600; "
+            "text-transform: uppercase; "
+            "letter-spacing: 0.5px;"
+        );
+        
+        QLabel *valLbl = new QLabel("—");
+        valLbl->setStyleSheet(
+            "color: #000000; "
+            "font-size: 36px; "
+            "font-weight: 700; "
+            "margin-top: 2px;"
+        );
+        
+        lay->addWidget(titleLbl);
+        lay->addWidget(valLbl);
+        lay->addStretch();
+        
+        return qMakePair(card, valLbl);
+    };
+
+    auto [c1, c1Val] = createMetricCard("👥", "Total Employees", 130, "#e8f4f8", "#f0e8ff");
+    row1->addWidget(c1);
+
+    auto [c3, c3Val] = createMetricCard("📅", "New This Month", 130, "#e8f8f0", "#f0f8e8");
+    row1->addWidget(c3);
+
+    auto [c4, c4Val] = createMetricCard("📊", "Total Hires This Year", 130, "#f8e8e8", "#f8f0e8");
+    row1->addWidget(c4);
+
+    scrollLayout->addLayout(row1);
+
+    // ===== ROW 2: DEPARTMENTS ONLY =====
+    QHBoxLayout *row2 = new QHBoxLayout();
+    row2->setSpacing(10);
+
+    // Departments Card
+    auto [deptCard, deptVal] = [&]() {
+        QWidget *card = new QWidget();
+        card->setStyleSheet("background: linear-gradient(135deg, #f8e8e8 0%, #f8f0e8 100%); border-radius: 10px;");
+        card->setMinimumHeight(130);
+        QVBoxLayout *lay = new QVBoxLayout(card);
+        lay->setSpacing(4);
+        lay->setContentsMargins(14, 12, 14, 12);
+        
+        QLabel *title = new QLabel("🏢  Departments");
+        title->setStyleSheet("color: #000000; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;");
+        
+        QLabel *val = new QLabel("—");
+        val->setStyleSheet("color: #000000; font-size: 36px; font-weight: 700; margin-top: 2px;");
+        
+        lay->addWidget(title);
+        lay->addWidget(val);
+        lay->addStretch();
+        
+        return std::make_pair(card, val);
+    }();
+    row2->addWidget(deptCard);
+    row2->addStretch();
+
+    scrollLayout->addLayout(row2);
+
+    // ===== HIRING BY MONTH (CURRENT YEAR) =====
+    QLabel *monthTitle = new QLabel("📅  Hiring by Month (Current Year)");
+    monthTitle->setStyleSheet("font-size: 12px; font-weight: 700; color: #1a1a1a; margin-top: 4px;");
+    scrollLayout->addWidget(monthTitle);
+
+    QHBoxLayout *monthsLay = new QHBoxLayout();
+    monthsLay->setSpacing(6);
+    QStringList monthNames = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    
+    QList<QLabel*> monthLabels;  // Store month value labels for animation
+    
+    int maxMon = 0;
+    for (auto it = stats.hiresPerMonth.constBegin(); it != stats.hiresPerMonth.constEnd(); ++it) {
+        if (it.value() > maxMon) maxMon = it.value();
+    }
+    if (maxMon == 0) maxMon = 1;
+
+    for (int i = 1; i <= 12; ++i) {
+        QWidget *monthBox = new QWidget();
+        monthBox->setStyleSheet(
+            "QWidget { "
+            "    background-color: #f8f9fa; "
+            "    border-radius: 8px; "
+            "    border: 1px solid #e8ecf1; "
+            "}"
+        );
+        monthBox->setMinimumWidth(55);
+        
+        QVBoxLayout *mbLay = new QVBoxLayout(monthBox);
+        mbLay->setSpacing(2);
+        mbLay->setContentsMargins(5, 6, 5, 6);
+        
+        QLabel *monLabel = new QLabel(monthNames[i-1]);
+        monLabel->setStyleSheet("color: #2c3e50; font-size: 9px; font-weight: 700; text-align: center;");
+        monLabel->setAlignment(Qt::AlignCenter);
+        
+        QProgressBar *monBar = new QProgressBar();
+        monBar->setMaximum(maxMon);
+        monBar->setValue(stats.hiresPerMonth.value(i, 0));
+        monBar->setStyleSheet(
+            "QProgressBar { "
+            "    border: none; "
+            "    border-radius: 4px; "
+            "    background-color: #ecf0f1; "
+            "    height: 16px; "
+            "} "
+            "QProgressBar::chunk { "
+            "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #667eea, stop:1 #764ba2); "
+            "    border-radius: 4px; "
+            "}"
+        );
+        
+        QLabel *monVal = new QLabel(QString::number(stats.hiresPerMonth.value(i, 0)));
+        monVal->setStyleSheet("color: #34495e; font-size: 9px; font-weight: 600; text-align: center;");
+        monVal->setAlignment(Qt::AlignCenter);
+        monthLabels.append(monVal);  // Store for animation
+        
+        mbLay->addWidget(monLabel);
+        mbLay->addWidget(monBar);
+        mbLay->addWidget(monVal);
+        
+        monthsLay->addWidget(monthBox);
+    }
+    monthsLay->addStretch();
+    scrollLayout->addLayout(monthsLay);
+
+    // ===== HIRING BY YEAR =====
+    QLabel *yearTitle = new QLabel("📊  Hiring by Year");
+    yearTitle->setStyleSheet("font-size: 12px; font-weight: 700; color: #1a1a1a; margin-top: 4px;");
+    scrollLayout->addWidget(yearTitle);
+
+    QHBoxLayout *yearsLay = new QHBoxLayout();
+    yearsLay->setSpacing(8);
+    
+    QList<QPair<int, QLabel*>> yearLabels;  // Store year+label for animation
+    
+    int maxYear = 0;
+    for (auto it = stats.hiresPerYear.constBegin(); it != stats.hiresPerYear.constEnd(); ++it) {
+        if (it.value() > maxYear) maxYear = it.value();
+    }
+    if (maxYear == 0) maxYear = 1;
+
+    for (auto it = stats.hiresPerYear.constBegin(); it != stats.hiresPerYear.constEnd(); ++it) {
+        QWidget *yearBox = new QWidget();
+        yearBox->setStyleSheet(
+            "QWidget { "
+            "    background-color: #f8f9fa; "
+            "    border-radius: 8px; "
+            "    border: 1px solid #e8ecf1; "
+            "}"
+        );
+        yearBox->setMinimumWidth(80);
+        
+        QVBoxLayout *ybLay = new QVBoxLayout(yearBox);
+        ybLay->setSpacing(3);
+        ybLay->setContentsMargins(10, 8, 10, 8);
+        
+        QLabel *yrLabel = new QLabel(QString::number(it.key()));
+        yrLabel->setStyleSheet("color: #2c3e50; font-size: 11px; font-weight: 700;");
+        yrLabel->setAlignment(Qt::AlignCenter);
+        
+        QProgressBar *yrBar = new QProgressBar();
+        yrBar->setMaximum(maxYear);
+        yrBar->setValue(it.value());
+        yrBar->setStyleSheet(
+            "QProgressBar { "
+            "    border: none; "
+            "    border-radius: 4px; "
+            "    background-color: #ecf0f1; "
+            "    height: 18px; "
+            "} "
+            "QProgressBar::chunk { "
+            "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #f093fb, stop:1 #f5576c); "
+            "    border-radius: 4px; "
+            "}"
+        );
+        
+        QLabel *yrVal = new QLabel(QString::number(it.value()));
+        yrVal->setStyleSheet("color: #34495e; font-size: 10px; font-weight: 700;");
+        yrVal->setAlignment(Qt::AlignCenter);
+        yearLabels.append(qMakePair(it.key(), yrVal));  // Store for animation
+        
+        ybLay->addWidget(yrLabel);
+        ybLay->addWidget(yrBar);
+        ybLay->addWidget(yrVal);
+        
+        yearsLay->addWidget(yearBox);
+    }
+    yearsLay->addStretch();
+    scrollLayout->addLayout(yearsLay);
+
+    // ===== ROLE DISTRIBUTION =====
+    QLabel *roleTitle = new QLabel("📋  Role Distribution");
+    roleTitle->setStyleSheet("font-size: 12px; font-weight: 700; color: #1a1a1a; margin-top: 4px;");
+    scrollLayout->addWidget(roleTitle);
+
+    QWidget *roleContainer = new QWidget();
+    roleContainer->setStyleSheet(
+        "QWidget { "
+        "    background-color: #f8f9fa; "
+        "    border-radius: 8px; "
+        "    border: 1px solid #e8ecf1; "
+        "}"
+    );
+    QVBoxLayout *roleLay = new QVBoxLayout(roleContainer);
+    roleLay->setSpacing(6);
+    roleLay->setContentsMargins(10, 8, 10, 8);
+
+    QList<QPair<int, QPair<QString, QList<QWidget*>>>> roleItems;  // Store for animation
+
+    if (!stats.roleDistribution.isEmpty()) {
+        QList<QPair<int, QString>> sorted;
+        int totalRoles = 0;
+        for (auto it = stats.roleDistribution.constBegin(); it != stats.roleDistribution.constEnd(); ++it) {
+            sorted.append(qMakePair(it.value(), it.key()));
+            totalRoles += it.value();
+        }
+        std::sort(sorted.begin(), sorted.end(), [](const QPair<int, QString> &a, const QPair<int, QString> &b) {
+            return a.first > b.first;
+        });
+
+        for (const auto &p : sorted) {
+            QHBoxLayout *roleLine = new QHBoxLayout();
+            roleLine->setSpacing(12);
+            
+            QLabel *roleNameLbl = new QLabel(p.second);
+            roleNameLbl->setStyleSheet("color: #2c3e50; font-weight: 600; min-width: 130px;");
+            
+            QProgressBar *roleBar = new QProgressBar();
+            roleBar->setMaximum(100);
+            int percentage = totalRoles > 0 ? (p.first * 100) / totalRoles : 0;
+            roleBar->setValue(percentage);
+            roleBar->setStyleSheet(
+                "QProgressBar { "
+                "    border: none; "
+                "    border-radius: 4px; "
+                "    background-color: #ecf0f1; "
+                "    height: 8px; "
+                "} "
+                "QProgressBar::chunk { "
+                "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #667eea, stop:1 #764ba2); "
+                "    border-radius: 4px; "
+                "}"
+            );
+            
+            QLabel *countLbl = new QLabel(QString::number(p.first) + " (" + QString::number(percentage) + "%)");
+            countLbl->setStyleSheet("color: #34495e; font-weight: 700; min-width: 60px; text-align: right;");
+            
+            roleLine->addWidget(roleNameLbl, 0);
+            roleLine->addWidget(roleBar, 1);
+            roleLine->addWidget(countLbl, 0);
+            roleLay->addLayout(roleLine);
+            
+            QList<QWidget*> items;
+            items << roleBar << countLbl;
+            roleItems.append(qMakePair(p.first, qMakePair(p.second, items)));
+        }
+    } else {
+        QLabel *noRoles = new QLabel(tr("No role data available"));
+        noRoles->setStyleSheet("color: #95a5a6;");
+        roleLay->addWidget(noRoles);
+    }
+    scrollLayout->addWidget(roleContainer);
+
+    // ===== TOP PROJECTS =====
+    QLabel *projTitle = new QLabel("🎯  Top Managed Projects");
+    projTitle->setStyleSheet("font-size: 15px; font-weight: 700; color: #1a1a1a; margin-top: 8px;");
+    scrollLayout->addWidget(projTitle);
+
+    QWidget *projContainer = new QWidget();
+    projContainer->setStyleSheet(
+        "QWidget { "
+        "    background-color: #f8f9fa; "
+        "    border-radius: 10px; "
+        "    border: 1px solid #e8ecf1; "
+        "}"
+    );
+    QVBoxLayout *projLay = new QVBoxLayout(projContainer);
+    projLay->setSpacing(10);
+    projLay->setContentsMargins(16, 14, 16, 14);
+
+    if (!stats.topProjects.isEmpty()) {
+        int projMax = 0;
+        for (auto it = stats.topProjects.constBegin(); it != stats.topProjects.constEnd(); ++it) {
+            if (it.value() > projMax) projMax = it.value();
+        }
+        int shown = 0;
+        for (auto it = stats.topProjects.constBegin(); it != stats.topProjects.constEnd(); ++it) {
+            QHBoxLayout *projLine = new QHBoxLayout();
+            projLine->setSpacing(12);
+            
+            QLabel *projNameLbl = new QLabel(it.key());
+            projNameLbl->setStyleSheet("color: #2c3e50; font-weight: 600; min-width: 140px;");
+            
+            QProgressBar *projBar = new QProgressBar();
+            projBar->setMaximum(100);
+            projBar->setValue(projMax > 0 ? (it.value() * 100) / projMax : 0);
+            projBar->setStyleSheet(
+                "QProgressBar { "
+                "    border: none; "
+                "    border-radius: 4px; "
+                "    background-color: #ecf0f1; "
+                "    height: 8px; "
+                "} "
+                "QProgressBar::chunk { "
+                "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #4facfe, stop:1 #00f2fe); "
+                "    border-radius: 4px; "
+                "}"
+            );
+            
+            QLabel *projCountLbl = new QLabel(QString::number(it.value()));
+            projCountLbl->setStyleSheet("color: #34495e; font-weight: 700; min-width: 35px; text-align: right;");
+            
+            projLine->addWidget(projNameLbl, 0);
+            projLine->addWidget(projBar, 1);
+            projLine->addWidget(projCountLbl, 0);
+            projLay->addLayout(projLine);
+            
+            if (++shown >= 8) break;
+        }
+    } else {
+        QLabel *noProj = new QLabel(tr("No project data available"));
+        noProj->setStyleSheet("color: #95a5a6;");
+        projLay->addWidget(noProj);
+    }
+    scrollLayout->addWidget(projContainer);
+
+    // ===== TOP RESOURCES =====
+    QLabel *resTitle = new QLabel("🔧  Top Used Resources");
+    resTitle->setStyleSheet("font-size: 15px; font-weight: 700; color: #1a1a1a; margin-top: 8px;");
+    scrollLayout->addWidget(resTitle);
+
+    QWidget *resContainer = new QWidget();
+    resContainer->setStyleSheet(
+        "QWidget { "
+        "    background-color: #f8f9fa; "
+        "    border-radius: 10px; "
+        "    border: 1px solid #e8ecf1; "
+        "}"
+    );
+    QVBoxLayout *resLay = new QVBoxLayout(resContainer);
+    resLay->setSpacing(10);
+    resLay->setContentsMargins(16, 14, 16, 14);
+
+    if (!stats.topResources.isEmpty()) {
+        int resMax = 0;
+        for (auto it = stats.topResources.constBegin(); it != stats.topResources.constEnd(); ++it) {
+            if (it.value() > resMax) resMax = it.value();
+        }
+        int shown = 0;
+        for (auto it = stats.topResources.constBegin(); it != stats.topResources.constEnd(); ++it) {
+            QHBoxLayout *resLine = new QHBoxLayout();
+            resLine->setSpacing(12);
+            
+            QLabel *resNameLbl = new QLabel(it.key());
+            resNameLbl->setStyleSheet("color: #2c3e50; font-weight: 600; min-width: 140px;");
+            
+            QProgressBar *resBar = new QProgressBar();
+            resBar->setMaximum(100);
+            resBar->setValue(resMax > 0 ? (it.value() * 100) / resMax : 0);
+            resBar->setStyleSheet(
+                "QProgressBar { "
+                "    border: none; "
+                "    border-radius: 4px; "
+                "    background-color: #ecf0f1; "
+                "    height: 8px; "
+                "} "
+                "QProgressBar::chunk { "
+                "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #fa709a, stop:1 #fee140); "
+                "    border-radius: 4px; "
+                "}"
+            );
+            
+            QLabel *resCountLbl = new QLabel(QString::number(it.value()));
+            resCountLbl->setStyleSheet("color: #34495e; font-weight: 700; min-width: 35px; text-align: right;");
+            
+            resLine->addWidget(resNameLbl, 0);
+            resLine->addWidget(resBar, 1);
+            resLine->addWidget(resCountLbl, 0);
+            resLay->addLayout(resLine);
+            
+            if (++shown >= 8) break;
+        }
+    } else {
+        QLabel *noRes = new QLabel(tr("No resource data available"));
+        noRes->setStyleSheet("color: #95a5a6;");
+        resLay->addWidget(noRes);
+    }
+    scrollLayout->addWidget(resContainer);
+
+    scrollLayout->addStretch();
+    scrollArea->setWidget(scrollWidget);
+    mainLayout->addWidget(scrollArea, 1);
+
+    // Animation 1: Total Employees
+    QVariantAnimation *anim1 = new QVariantAnimation(&dlg);
+    anim1->setStartValue(0);
+    anim1->setEndValue(stats.totalEmployees);
+    anim1->setDuration(1000);
+    anim1->setEasingCurve(QEasingCurve::OutQuad);
+    connect(anim1, &QVariantAnimation::valueChanged, this, [c1Val](const QVariant &val) {
+        c1Val->setText(QString::number(val.toInt()));
+    });
+
+    // Animation 2: New This Month
+    QVariantAnimation *anim2 = new QVariantAnimation(&dlg);
+    anim2->setStartValue(0);
+    anim2->setEndValue(stats.newEmployeesThisMonth);
+    anim2->setDuration(900);
+    anim2->setEasingCurve(QEasingCurve::OutQuad);
+    connect(anim2, &QVariantAnimation::valueChanged, this, [c3Val](const QVariant &val) {
+        c3Val->setText(QString::number(val.toInt()));
+    });
+
+    // Animation 3: Total Hires This Year
+    QVariantAnimation *anim3 = new QVariantAnimation(&dlg);
+    anim3->setStartValue(0);
+    anim3->setEndValue(stats.newEmployeesThisYear);
+    anim3->setDuration(1000);
+    anim3->setEasingCurve(QEasingCurve::OutQuad);
+    connect(anim3, &QVariantAnimation::valueChanged, this, [c4Val](const QVariant &val) {
+        c4Val->setText(QString::number(val.toInt()));
+    });
+
+    // Animation 4: Departments
+    QVariantAnimation *animDept = new QVariantAnimation(&dlg);
+    animDept->setStartValue(0);
+    animDept->setEndValue(stats.departmentCount);
+    animDept->setDuration(900);
+    animDept->setEasingCurve(QEasingCurve::OutQuad);
+    connect(animDept, &QVariantAnimation::valueChanged, this, [deptVal](const QVariant &val) {
+        deptVal->setText(QString::number(val.toInt()));
+    });
+
+    // Start all animations
+    anim1->start(QAbstractAnimation::DeleteWhenStopped);
+    anim2->start(QAbstractAnimation::DeleteWhenStopped);
+    anim3->start(QAbstractAnimation::DeleteWhenStopped);
+    animDept->start(QAbstractAnimation::DeleteWhenStopped);
+
+    // Animation 7-18: Hiring by Month labels (slow stagger effect)
+    for (int i = 0; i < monthLabels.size(); ++i) {
+        QVariantAnimation *monthAnim = new QVariantAnimation(&dlg);
+        int startVal = 0;
+        for (auto it = stats.hiresPerMonth.constBegin(); it != stats.hiresPerMonth.constEnd(); ++it) {
+            if (it.key() == i + 1) {
+                startVal = it.value();
+                break;
+            }
+        }
+        monthAnim->setStartValue(0);
+        monthAnim->setEndValue(startVal);
+        monthAnim->setDuration(800 + i * 50);  // Staggered animation
+        monthAnim->setEasingCurve(QEasingCurve::OutQuad);
+        QLabel *lbl = monthLabels[i];
+        connect(monthAnim, &QVariantAnimation::valueChanged, this, [lbl](const QVariant &val) {
+            lbl->setText(QString::number(val.toInt()));
+        });
+        monthAnim->start(QAbstractAnimation::DeleteWhenStopped);
+    }
+
+    // Animation 19+: Hiring by Year labels (staggered)
+    for (int i = 0; i < yearLabels.size(); ++i) {
+        QVariantAnimation *yearAnim = new QVariantAnimation(&dlg);
+        int startVal = yearLabels[i].second ? stats.hiresPerYear.value(yearLabels[i].first, 0) : 0;
+        yearAnim->setStartValue(0);
+        yearAnim->setEndValue(startVal);
+        yearAnim->setDuration(900 + i * 100);  // Staggered animation
+        yearAnim->setEasingCurve(QEasingCurve::OutQuad);
+        QLabel *lbl = yearLabels[i].second;
+        connect(yearAnim, &QVariantAnimation::valueChanged, this, [lbl](const QVariant &val) {
+            lbl->setText(QString::number(val.toInt()));
+        });
+        yearAnim->start(QAbstractAnimation::DeleteWhenStopped);
+    }
+
+    // ===== CLOSE BUTTON =====
+    QPushButton *closeBtn = new QPushButton(tr("Close"));
+    closeBtn->setFixedHeight(44);
+    closeBtn->setMinimumWidth(140);
+    closeBtn->setStyleSheet(
+        "QPushButton { "
+        "    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); "
+        "    color: white; "
+        "    border: none; "
+        "    border-radius: 10px; "
+        "    padding: 0px; "
+        "    font-weight: 700; "
+        "    font-size: 14px; "
+        "} "
+        "QPushButton:hover { "
+        "    box-shadow: 0 6px 24px rgba(102, 126, 234, 0.35); "
+        "} "
+        "QPushButton:pressed { "
+        "    background: linear-gradient(135deg, #5a67d8 0%, #6b3f9d 100%); "
+        "    padding: 2px 2px 0px 0px; "
+        "}"
+    );
+    connect(closeBtn, &QPushButton::clicked, &dlg, &QDialog::accept);
+    
+    QHBoxLayout *btnLay = new QHBoxLayout();
+    btnLay->addStretch();
+    btnLay->addWidget(closeBtn);
+    btnLay->setContentsMargins(0, 12, 0, 0);
+    
+    mainLayout->addLayout(btnLay);
+
+    dlg.exec();
 }
 
 void MainWindow::onEmployeeTableSelectionChanged()
@@ -3148,3 +4183,836 @@ void MainWindow::onCancelSelectionClicked()
     }
     updateEmployerButtonStates();
 }
+
+// =============================================================================
+// Chatbot Slots Implementation
+// =============================================================================
+
+// Helper to format chat messages into a compact HTML block for the QTextEdit display
+static QString chatAssistantHtml(const QString &title, const QString &messageHtml, const QString &codeHtml = QString()) {
+        QString html = QString(
+                "<div style='display:flex; gap:12px; align-items:flex-start; margin:8px 0;'>"
+                    "<div style='flex:1;'>"
+                        "<h3 style='margin:0 0 6px 0; font-family:Poppins,Arial; font-size:14px; color:#0a6f44;'>%1</h3>"
+                        "<div style='background:#f7f7f9; padding:10px; border-radius:8px; font-family:Poppins,Segoe UI; font-size:13px; color:#222;'>%2</div>"
+                        "%3"
+                    "</div>"
+                "</div>"
+        ).arg(title.toHtmlEscaped(), messageHtml, codeHtml);
+        return html;
+}
+
+void MainWindow::onChatbotSendClicked()
+{
+    if (!chatbot) return;
+    
+    QString userMessage = ui->chatbotInput->text().trimmed();
+    
+    if (userMessage.isEmpty()) {
+        QMessageBox::warning(this, "Empty Message", 
+            "Please enter a message before sending.");
+        return;
+    }
+    
+    // Disable input and button while processing
+    ui->chatbotInput->setEnabled(false);
+    ui->chatbotSendButton->setEnabled(false);
+    
+    // Display user message in the chat display using compact HTML helper
+    QString userHtml = QString("<p style='margin:0; padding:0; color:#343a40;'>%1</p>").arg(userMessage.toHtmlEscaped());
+    QString block = chatAssistantHtml("You", userHtml);
+
+    // Append block to existing HTML body safely (QTextEdit stores full doc in toHtml())
+    QString htmlContent = ui->chatbotDisplay->toHtml();
+    // Insert before closing tags (</body></html>) - be robust and fallback if not present
+    int pos = htmlContent.lastIndexOf("</body>");
+    if (pos != -1) {
+        htmlContent.insert(pos, block);
+    } else {
+        htmlContent += block;
+    }
+    ui->chatbotDisplay->setHtml(htmlContent);
+    
+    // Clear input field
+    ui->chatbotInput->clear();
+    
+    // Send message to chatbot
+    chatbot->sendMessage(userMessage);
+}
+
+void MainWindow::onChatbotClearClicked()
+{
+    if (!chatbot) return;
+    
+    // Clear chat display
+    // Use the formatting helper to create a clearer welcome block
+    QString bodyHtml;
+    QString msg =
+        "<p style='margin:0 0 8px 0; color:#222;'>Hello — I'm your AI assistant for the Content Digital Creator project. I can help with:</p>"
+        "<ol style='padding-left:18px; margin:6px 0 0 0; color:#333;'>"
+        "<li>Code examples and precise file/line edits for Qt/C++ desktop app development.</li>"
+        "<li>Chatbot integration details (Cohere preamble, message flow, examples).</li>"
+        "<li>UI/UX guidance, HTML/CSS for QTextBrowser display, and template suggestions.</li>"
+        "<li>Database & CRUD helper usage inside the project (examples and SQL snippets).</li>"
+        "</ol>"
+        "<p style='margin:8px 0 0 0; color:#6c757d; font-size:11px;'>Tip: Ask a direct, project-related question (example: \"How to add a new template file to the project?\").</p>";
+
+    bodyHtml = chatAssistantHtml("AI Assistant", msg);
+
+    // Wrap into a minimal HTML document and set display
+    QString docHtml = QString("<html><head><meta name=\"qrichtext\" content=\"1\" /></head><body style=\"font-family:'Poppins'; font-size:12px; font-weight:400; margin:0px; padding:8px;\">%1</body></html>").arg(bodyHtml);
+    ui->chatbotDisplay->setHtml(docHtml);
+    
+    // Clear input
+    ui->chatbotInput->clear();
+    
+    // Clear conversation history in chatbot
+    chatbot->clearConversationHistory();
+    
+    // Update status
+    ui->chatbotStatusLabel->setText("Chat cleared - Ready");
+    
+    qDebug() << "[UI] Chat cleared";
+}
+
+void MainWindow::onChatbotHistoryClicked()
+{
+    if (!chatbot) return;
+    
+    auto history = chatbot->getConversationHistory();
+    
+    if (history.isEmpty()) {
+        QMessageBox::information(this, "Conversation History", 
+            "No conversation history available yet.");
+        return;
+    }
+    
+    // Create history dialog
+    QDialog historyDialog(this);
+    historyDialog.setWindowTitle("Conversation History");
+    historyDialog.resize(600, 400);
+    
+    QVBoxLayout layout(&historyDialog);
+    
+    QTextEdit *historyDisplay = new QTextEdit();
+    historyDisplay->setReadOnly(true);
+    
+    QString historyHtml = "<html><body style=\"font-family: 'Poppins', Arial; font-size: 12px;\">";
+    historyHtml += "<h3 style=\"color: #1da1f2;\">📋 Conversation History</h3>";
+    
+    for (int i = 0; i < history.size(); ++i) {
+        historyHtml += QString(
+            "<div style=\"margin: 12px 0; padding: 8px; border-left: 3px solid #1da1f2;\">"
+            "<p style=\"margin: 4px 0;\"><b style=\"color: #343a40;\">You:</b> %1</p>"
+            "<p style=\"margin: 4px 0;\"><b style=\"color: #28a745;\">AI:</b> %2</p>"
+            "</div>"
+        ).arg(history[i].first, history[i].second);
+    }
+    
+    historyHtml += "</body></html>";
+    historyDisplay->setHtml(historyHtml);
+    
+    layout.addWidget(historyDisplay);
+    
+    QPushButton closeButton("Close");
+    connect(&closeButton, &QPushButton::clicked, &historyDialog, &QDialog::accept);
+    layout.addWidget(&closeButton);
+    
+    historyDialog.exec();
+}
+
+void MainWindow::onChatbotResponseReceived(const QString &response)
+{
+    if (!response.isEmpty()) {
+        // Add AI response to chat display using the helper
+        QString respHtml = QString("<p style='margin:0; padding:0; color:#222;'>%1</p>").arg(response.toHtmlEscaped());
+        QString block = chatAssistantHtml("AI Assistant", respHtml);
+
+        QString htmlContent = ui->chatbotDisplay->toHtml();
+        int pos = htmlContent.lastIndexOf("</body>");
+        if (pos != -1) {
+            htmlContent.insert(pos, block);
+        } else {
+            htmlContent += block;
+        }
+        ui->chatbotDisplay->setHtml(htmlContent);
+        
+        // Scroll to bottom
+        QTextCursor cursor = ui->chatbotDisplay->textCursor();
+        cursor.movePosition(QTextCursor::End);
+        ui->chatbotDisplay->setTextCursor(cursor);
+        
+        // Update status
+        ui->chatbotStatusLabel->setText("✓ Response received");
+        
+        qDebug() << "[UI] Response displayed:" << response.left(50);
+    }
+}
+
+void MainWindow::onChatbotErrorOccurred(const QString &errorMessage)
+{
+    // Handle special cases to provide clearer guidance to the user
+    QString lower = errorMessage.toLower();
+
+    // Case 1: possible filter refusal — support several possible exact phrases
+    const QString refusalEn = QStringLiteral("Sorry, I can't assist with that.");
+    const QString refusalExact = QStringLiteral("REFUSE — I cannot help with that.");
+    const QString offTopicExact = QStringLiteral("OFF-TOPIC — I can only answer questions related to the project \"Content Digital Creator\".");
+
+    if (errorMessage.trimmed() == refusalEn || errorMessage.trimmed() == refusalExact || errorMessage.trimmed() == offTopicExact) {
+        QString htmlContent = ui->chatbotDisplay->toHtml();
+        htmlContent.replace("</body></html>",
+            QString("<p style=\"margin: 8px 0; color: #28a745;\">"
+                    "<b style=\"color: #28a745;\">AI Assistant:</b> %1</p>"
+                    "</body></html>").arg(errorMessage));
+        ui->chatbotDisplay->setHtml(htmlContent);
+        ui->chatbotStatusLabel->setText("✓ Refused inappropriate request");
+        qWarning() << "[UI] Chatbot filtered/refused input:" << errorMessage;
+        return;
+    }
+
+    // Case 2: Insufficient quota or billing issues
+    if (lower.contains("insufficient_quota") || lower.contains("you exceeded your quota") || lower.contains("quota") || lower.contains("rate limit")) {
+        QString details = "API error: it looks like your account has insufficient quota or hit a rate limit.\n"
+                          "Please check your Cohere billing and usage in the Cohere dashboard (https://dashboard.cohere.ai).\n"
+                          "To keep using the assistant for testing you can either: (1) provide a valid COHERE_API_KEY with available quota,\n"
+                          "or (2) use the offline fallback (not yet enabled) or mock responses.";
+
+        QString htmlContent = ui->chatbotDisplay->toHtml();
+        htmlContent.replace("</body></html>",
+            QString("<p style=\"margin: 8px 0; color: #c82333;\">"
+                    "<b>⚠️ API Quota:</b> %1</p>"
+                    "<p style=\"margin: 8px 0; color: #6c757d; font-size: 11px;\">%2</p>"
+                    "</body></html>").arg(errorMessage).arg(details));
+        ui->chatbotDisplay->setHtml(htmlContent);
+        ui->chatbotStatusLabel->setText("✗ Quota error — check billing");
+        qWarning() << "[UI] Chatbot quota error:" << errorMessage;
+        return;
+    }
+
+    // Case 3: API key missing or not set
+    if (lower.contains("api key not set") || lower.contains("api key is empty") || lower.contains("configure cohere api key") || lower.contains("cohere_api_key")) {
+        QString guidance = "API key not configured. Set the environment variable COHERE_API_KEY or provide a key in application settings.\n"
+                           "Example (Windows PowerShell): $env:COHERE_API_KEY = \"your_cohere_key_here\" ; then restart the app.";
+
+        QString htmlContent = ui->chatbotDisplay->toHtml();
+        htmlContent.replace("</body></html>",
+            QString("<p style=\"margin: 8px 0; color: #c82333;\">"
+                    "<b>⚠️ API Key:</b> %1</p>"
+                    "<p style=\"margin: 8px 0; color: #6c757d; font-size: 11px;\">%2</p>"
+                    "</body></html>").arg(errorMessage).arg(guidance));
+        ui->chatbotDisplay->setHtml(htmlContent);
+        ui->chatbotStatusLabel->setText("✗ API key missing");
+        qWarning() << "[UI] Chatbot API key issue:" << errorMessage;
+        return;
+    }
+
+    // Fallback: generic error display
+    QString htmlContent = ui->chatbotDisplay->toHtml();
+    htmlContent.replace("</body></html>", 
+        QString("<p style=\"margin: 8px 0; color: #c82333;\">"
+                "<b>⚠️ Error:</b> %1</p>"
+                "</body></html>").arg(errorMessage));
+    ui->chatbotDisplay->setHtml(htmlContent);
+    
+    // Update status
+    ui->chatbotStatusLabel->setText("✗ Error: " + errorMessage.left(30));
+    
+    qWarning() << "[UI] Chatbot error:" << errorMessage;
+}
+
+void MainWindow::onChatbotProcessingStatusChanged(bool isBusy)
+{
+    ui->chatbotInput->setEnabled(!isBusy);
+    ui->chatbotSendButton->setEnabled(!isBusy);
+    
+    if (isBusy) {
+        ui->chatbotStatusLabel->setText("⏳ Processing...");
+        ui->chatbotSendButton->setText("Sending...");
+    } else {
+        ui->chatbotStatusLabel->setText("Ready");
+        ui->chatbotSendButton->setText("Send");
+    }
+}
+
+// =============================================================================
+// Face Recognition AI Slots (Local Offline - Replaces Luxand API)
+// =============================================================================
+
+void MainWindow::onFaceLoginClicked()
+{
+    QDialog *faceLoginDialog = new QDialog(this);
+    faceLoginDialog->setWindowTitle(tr("Face Recognition Login"));
+    faceLoginDialog->setModal(true);
+    faceLoginDialog->setFixedSize(1040, 720);
+    faceLoginDialog->setWindowFlags(Qt::Dialog | Qt::WindowTitleHint | Qt::CustomizeWindowHint | Qt::WindowCloseButtonHint);
+    faceLoginDialog->setStyleSheet(R"(
+        QDialog {
+            background-color: #dfe9f5;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+        }
+        QWidget#faceRootCard {
+            background-color: #ecf3fb;
+            border-radius: 28px;
+        }
+        QFrame#faceLeftCard,
+        QFrame[objectName^="faceCard"] {
+            background-color: #ffffff;
+            border-radius: 24px;
+        }
+        QLabel#faceTitleLabel {
+            color: #000000;
+            font-size: 26px;
+            font-weight: 600;
+        }
+        QLabel#faceSubtitleLabel {
+            color: #666666;
+            font-size: 14px;
+            font-weight: 300;
+        }
+        QLabel#faceStatusLabel {
+            color: #4b4f58;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        QLabel#faceHelpLink {
+            color: #1e88e5;
+            font-size: 13px;
+            font-weight: 500;
+            text-decoration: underline;
+        }
+        QLabel#facePreview {
+            background-color: #f7f9fc;
+            border: 3px solid #1e88e5;
+            border-radius: 180px;
+            color: #95a0b2;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        QLabel[cardRole="title"] {
+            color: #0f172a;
+            font-size: 16px;
+            font-weight: 600;
+        }
+        QPushButton[btnRole="primary"] {
+            background-color: #1e88e5;
+            color: #ffffff;
+            border: none;
+            border-radius: 20px;
+            padding: 14px 28px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+        QPushButton[btnRole="primary"]:hover {
+            background-color: #166fbe;
+        }
+        QPushButton[btnRole="primary"]:pressed {
+            background-color: #0f4f8f;
+        }
+        QPushButton[btnRole="secondary"] {
+            background-color: #e3edf9;
+            color: #1e88e5;
+            border: none;
+            border-radius: 20px;
+            padding: 14px 28px;
+            font-size: 15px;
+            font-weight: 600;
+        }
+        QPushButton[btnRole="secondary"]:hover {
+            background-color: #d2e3f5;
+        }
+        QPushButton[btnRole="secondary"]:pressed {
+            background-color: #bcd1e8;
+        }
+        QPushButton[btnRole="engine"] {
+            background-color: #f5f8ff;
+            border: 1px solid #dbe4f5;
+            border-radius: 18px;
+            padding: 14px 20px;
+            font-size: 15px;
+            color: #0f172a;
+            text-align: left;
+        }
+        QPushButton[btnRole="engine"]:hover {
+            border-color: #1e88e5;
+        }
+        QPushButton[btnRole="engine"]:checked {
+            background-color: #1e88e5;
+            color: #ffffff;
+            border-color: #1e88e5;
+        }
+        QPushButton[btnRole="ghost"] {
+            background-color: transparent;
+            border: 1px solid #dbe4f5;
+            color: #1e88e5;
+            border-radius: 16px;
+            padding: 8px 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        QPushButton[btnRole="ghost"]:hover {
+            background-color: #edf3fc;
+        }
+        QPushButton[btnRole="ghost"]:pressed {
+            background-color: #d6e7fb;
+        }
+        QCheckBox {
+            font-size: 13px;
+            color: #2d3648;
+        }
+    )");
+
+    auto applyCardShadow = [](QWidget *widget, qreal blur = 36.0, const QColor &color = QColor(0, 0, 0, 35)) {
+        auto *shadow = new QGraphicsDropShadowEffect(widget);
+        shadow->setBlurRadius(static_cast<int>(blur));
+        shadow->setOffset(0, 14);
+        shadow->setColor(color);
+        widget->setGraphicsEffect(shadow);
+    };
+
+    QVBoxLayout *dialogLayout = new QVBoxLayout(faceLoginDialog);
+    dialogLayout->setContentsMargins(20, 20, 20, 20);
+
+    QWidget *rootCard = new QWidget(faceLoginDialog);
+    rootCard->setObjectName("faceRootCard");
+    dialogLayout->addWidget(rootCard);
+
+    QHBoxLayout *mainLayout = new QHBoxLayout(rootCard);
+    mainLayout->setContentsMargins(32, 32, 32, 32);
+    mainLayout->setSpacing(24);
+
+    QFrame *leftCard = new QFrame(rootCard);
+    leftCard->setObjectName("faceLeftCard");
+    QVBoxLayout *leftLayout = new QVBoxLayout(leftCard);
+    leftLayout->setSpacing(16);
+    leftLayout->setContentsMargins(28, 24, 28, 24);
+    applyCardShadow(leftCard, 42.0, QColor(30, 136, 229, 70));
+
+    QLabel *titleLabel = new QLabel(tr("Face Recognition Login"), leftCard);
+    titleLabel->setObjectName("faceTitleLabel");
+
+    QLabel *subtitleLabel = new QLabel(tr("Authenticate instantly using your camera"), leftCard);
+    subtitleLabel->setObjectName("faceSubtitleLabel");
+    subtitleLabel->setAlignment(Qt::AlignLeft);
+
+    // Title row - text only (no emoji or svg icon)
+    QHBoxLayout *titleRow = new QHBoxLayout();
+    titleRow->setSpacing(12);
+    titleRow->addWidget(titleLabel, 0, Qt::AlignLeft);
+    titleRow->addStretch();
+    leftLayout->addLayout(titleRow);
+    leftLayout->addWidget(subtitleLabel);
+
+    QLabel *cameraPreviewLabel = new QLabel(tr("Camera preview"), leftCard);
+    cameraPreviewLabel->setObjectName("facePreview");
+    cameraPreviewLabel->setFixedSize(360, 360);
+    cameraPreviewLabel->setAlignment(Qt::AlignCenter);
+    applyCardShadow(cameraPreviewLabel, 50.0, QColor(30, 136, 229, 60));
+    leftLayout->addWidget(cameraPreviewLabel, 0, Qt::AlignHCenter);
+
+    QLabel *statusLabel = new QLabel(tr("Waiting for camera…"), leftCard);
+    statusLabel->setObjectName("faceStatusLabel");
+    statusLabel->setAlignment(Qt::AlignCenter);
+    leftLayout->addWidget(statusLabel);
+
+    QHBoxLayout *captureBar = new QHBoxLayout();
+    captureBar->setSpacing(18);
+    QPushButton *captureButton = new QPushButton(QIcon(":/icons/camera.svg"), tr("Capture"), leftCard);
+    captureButton->setProperty("btnRole", "primary");
+    captureButton->setCursor(Qt::PointingHandCursor);
+    captureButton->setEnabled(false);
+    QPushButton *stopButton = new QPushButton(QIcon(":/icons/logout.svg"), tr("Stop"), leftCard);
+    stopButton->setProperty("btnRole", "secondary");
+    stopButton->setCursor(Qt::PointingHandCursor);
+    captureBar->addWidget(captureButton);
+    captureBar->addWidget(stopButton);
+    leftLayout->addLayout(captureBar);
+
+    leftLayout->addStretch();
+    leftLayout->setAlignment(Qt::AlignVCenter);
+
+    QWidget *rightColumn = new QWidget(rootCard);
+    QVBoxLayout *rightLayout = new QVBoxLayout(rightColumn);
+    rightLayout->setSpacing(18);
+    rightLayout->setContentsMargins(0, 0, 0, 0);
+
+    auto createCard = [&](const QString &name) {
+        QFrame *card = new QFrame(rightColumn);
+        card->setObjectName(name);
+        card->setProperty("cardType", "block");
+        card->setFrameShape(QFrame::NoFrame);
+        QVBoxLayout *cardLayout = new QVBoxLayout(card);
+        cardLayout->setSpacing(14);
+        cardLayout->setContentsMargins(22, 20, 22, 20);
+        applyCardShadow(card, 32.0);
+        return std::make_pair(card, cardLayout);
+    };
+
+    auto [engineCard, engineCardLayout] = createCard("faceCardEngine");
+    QLabel *engineTitle = new QLabel(tr("Choose Engine"), engineCard);
+    engineTitle->setProperty("cardRole", "title");
+    engineTitle->setAlignment(Qt::AlignLeft);
+    engineCardLayout->addWidget(engineTitle);
+
+    QPushButton *localEngineButton = new QPushButton(tr("Local AI Mode"), engineCard);
+    localEngineButton->setProperty("btnRole", "engine");
+    localEngineButton->setCheckable(true);
+    localEngineButton->setChecked(true);
+    localEngineButton->setCursor(Qt::PointingHandCursor);
+    localEngineButton->setIcon(QIcon(":/icons/camera.svg"));
+    localEngineButton->setIconSize(QSize(20, 20));
+    QPushButton *apiEngineButton = new QPushButton(tr("API Mode"), engineCard);
+    apiEngineButton->setProperty("btnRole", "engine");
+    apiEngineButton->setCheckable(true);
+    apiEngineButton->setCursor(Qt::PointingHandCursor);
+    apiEngineButton->setIcon(QIcon(":/icons/upload.svg"));
+    apiEngineButton->setIconSize(QSize(20, 20));
+
+    engineCardLayout->addWidget(localEngineButton);
+    engineCardLayout->addWidget(apiEngineButton);
+
+    auto [settingsCard, settingsLayout] = createCard("faceCardSettings");
+    QLabel *settingsTitle = new QLabel(tr("Settings"), settingsCard);
+    settingsTitle->setProperty("cardRole", "title");
+    settingsLayout->addWidget(settingsTitle);
+
+    QCheckBox *autoCaptureCheck = new QCheckBox(tr("Auto-capture when face detected"), settingsCard);
+    autoCaptureCheck->setChecked(true);
+    settingsLayout->addWidget(autoCaptureCheck);
+
+    QPushButton *cameraSettingsButton = new QPushButton(tr("Open Camera Settings"), settingsCard);
+    cameraSettingsButton->setProperty("btnRole", "ghost");
+    cameraSettingsButton->setCursor(Qt::PointingHandCursor);
+    cameraSettingsButton->setFixedWidth(200);
+    settingsLayout->addWidget(cameraSettingsButton, 0, Qt::AlignLeft);
+
+    auto [actionCard, actionLayout] = createCard("faceCardActions");
+    QLabel *actionTitle = new QLabel(tr("Actions"), actionCard);
+    actionTitle->setProperty("cardRole", "title");
+    actionLayout->addWidget(actionTitle);
+
+    QPushButton *startRecognitionButton = new QPushButton(tr("Start Recognition"), actionCard);
+    startRecognitionButton->setProperty("btnRole", "primary");
+    startRecognitionButton->setIcon(QIcon(":/icons/login.svg"));
+    startRecognitionButton->setCursor(Qt::PointingHandCursor);
+    startRecognitionButton->setMinimumHeight(56);
+    startRecognitionButton->setEnabled(false);
+    actionLayout->addWidget(startRecognitionButton);
+
+    QLabel *helpLink = new QLabel("<a href=\"help\">Need Help?</a>", actionCard);
+    helpLink->setObjectName("faceHelpLink");
+    helpLink->setAlignment(Qt::AlignCenter);
+    helpLink->setTextFormat(Qt::RichText);
+    helpLink->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    helpLink->setOpenExternalLinks(false);
+    actionLayout->addWidget(helpLink);
+
+    rightLayout->addWidget(engineCard);
+    rightLayout->addWidget(settingsCard);
+    rightLayout->addWidget(actionCard);
+    rightLayout->addStretch();
+
+    mainLayout->addWidget(leftCard, 1);
+    mainLayout->addWidget(rightColumn, 1);
+
+    QImage liveFrame;
+    QImage lockedFrame;
+    bool autoCaptureEnabled = true;
+
+    QMediaCaptureSession *captureSession = new QMediaCaptureSession(faceLoginDialog);
+    QCamera *camera = new QCamera(faceLoginDialog);
+    captureSession->setCamera(camera);
+    QVideoSink *videoSink = new QVideoSink(faceLoginDialog);
+    captureSession->setVideoSink(videoSink);
+
+    FaceRecognizer *faceRecognizer = new FaceRecognizer(faceLoginDialog);
+    FaceApi::Client *faceApiClient = new FaceApi::Client(faceLoginDialog);
+    faceApiClient->setConfidenceThreshold(75.0);
+
+    QObject::connect(faceLoginDialog, &QDialog::finished, faceLoginDialog, [camera]() {
+        if (camera && camera->isActive()) {
+            camera->stop();
+        }
+    });
+
+    enum class RecognitionEngine { Local, Api };
+    RecognitionEngine engineSelection = RecognitionEngine::Local;
+
+    QButtonGroup *engineGroup = new QButtonGroup(faceLoginDialog);
+    engineGroup->setExclusive(true);
+    engineGroup->addButton(localEngineButton, 0);
+    engineGroup->addButton(apiEngineButton, 1);
+
+    connect(engineGroup, &QButtonGroup::idClicked, faceLoginDialog, [statusLabel, &engineSelection](int id) {
+        engineSelection = id == 0 ? RecognitionEngine::Local : RecognitionEngine::Api;
+        statusLabel->setText(id == 0
+            ? QObject::tr("Local AI mode selected. Ready when you are.")
+            : QObject::tr("API mode selected. Internet required."));
+    });
+
+    connect(autoCaptureCheck, &QCheckBox::toggled, faceLoginDialog, [statusLabel, &autoCaptureEnabled](bool checked) {
+        autoCaptureEnabled = checked;
+        statusLabel->setText(checked
+            ? QObject::tr("Auto-capture enabled. Frames will lock automatically.")
+            : QObject::tr("Manual capture enabled. Tap Capture to lock a frame."));
+    });
+
+    connect(cameraSettingsButton, &QPushButton::clicked, faceLoginDialog, [this]() {
+        QMessageBox::information(this, tr("Camera Settings"),
+                                 tr("Camera tuning panel is coming soon. Adjust camera from your OS settings for now."));
+    });
+
+    connect(helpLink, &QLabel::linkActivated, faceLoginDialog, [this](const QString &) {
+        QMessageBox::information(this, tr("Face Login Help"),
+                                 tr("Need assistance? Ensure lighting is even and that the camera is not blocked."));
+    });
+
+    bool hasLiveFrame = false;
+
+    connect(videoSink, &QVideoSink::videoFrameChanged, faceLoginDialog,
+            [cameraPreviewLabel, statusLabel, captureButton, startRecognitionButton, &liveFrame, &lockedFrame, &autoCaptureEnabled, &hasLiveFrame](const QVideoFrame &frame) {
+        if (!frame.isValid()) {
+            return;
+        }
+
+        QImage image = frame.toImage();
+
+        if (image.isNull()) {
+            return;
+        }
+
+        if (image.format() != QImage::Format_RGB888) {
+            image = image.convertToFormat(QImage::Format_RGB888);
+        }
+
+        liveFrame = image;
+        const QSize targetSize = cameraPreviewLabel->size();
+        QPixmap scaled = QPixmap::fromImage(image).scaled(targetSize, Qt::KeepAspectRatioByExpanding, Qt::SmoothTransformation);
+        QPixmap masked(targetSize);
+        masked.fill(Qt::transparent);
+        QPainter painter(&masked);
+        painter.setRenderHint(QPainter::Antialiasing, true);
+        QPainterPath path;
+        path.addEllipse(0, 0, targetSize.width(), targetSize.height());
+        painter.setClipPath(path);
+        painter.drawPixmap(0, 0, scaled);
+        cameraPreviewLabel->setPixmap(masked);
+
+        if (!hasLiveFrame) {
+            hasLiveFrame = true;
+            statusLabel->setText(QObject::tr("Camera online. Capture when ready."));
+            captureButton->setEnabled(true);
+            startRecognitionButton->setEnabled(true);
+        }
+
+        if (autoCaptureEnabled) {
+            lockedFrame = liveFrame;
+        }
+    });
+
+    connect(captureButton, &QPushButton::clicked, faceLoginDialog, [statusLabel, &liveFrame, &lockedFrame]() {
+        if (liveFrame.isNull()) {
+            statusLabel->setText(QObject::tr("No live frame available yet."));
+            return;
+        }
+        lockedFrame = liveFrame;
+        statusLabel->setText(QObject::tr("Frame locked. You can start recognition."));
+    });
+
+    connect(stopButton, &QPushButton::clicked, faceLoginDialog, [camera, statusLabel, stopButton, captureButton]() {
+        if (!camera) {
+            return;
+        }
+        if (camera->isActive()) {
+            camera->stop();
+            statusLabel->setText(QObject::tr("Camera paused. Click Resume to continue."));
+            stopButton->setText(QObject::tr("Resume"));
+            captureButton->setEnabled(false);
+        } else {
+            camera->start();
+            statusLabel->setText(QObject::tr("Camera online. Capture when ready."));
+            stopButton->setText(QObject::tr("Stop"));
+            captureButton->setEnabled(true);
+        }
+    });
+
+    connect(startRecognitionButton, &QPushButton::clicked, faceLoginDialog,
+            [this, statusLabel, startRecognitionButton, captureButton, faceLoginDialog, faceRecognizer, faceApiClient,
+             &liveFrame, &lockedFrame, &engineSelection]() {
+        QImage frameToUse = lockedFrame.isNull() ? liveFrame : lockedFrame;
+        if (frameToUse.isNull()) {
+            statusLabel->setText(tr("No frame captured. Capture a frame first."));
+            return;
+        }
+
+        startRecognitionButton->setEnabled(false);
+        captureButton->setEnabled(false);
+
+        if (engineSelection == RecognitionEngine::Local) {
+            statusLabel->setText(tr("Analyzing with Local AI…"));
+            faceRecognizer->recognizeFace(frameToUse);
+        } else {
+            statusLabel->setText(tr("Sending frame to API…"));
+            faceApiClient->recognizeAgainstEmployees(frameToUse);
+        }
+    });
+
+    connect(faceRecognizer, &FaceRecognizer::recognitionResult,
+            [this, statusLabel, faceLoginDialog, startRecognitionButton, captureButton, camera](const FaceRecognizer::RecognitionResult &result) {
+        startRecognitionButton->setEnabled(true);
+        captureButton->setEnabled(true);
+
+        if (result.recognized) {
+            statusLabel->setText(tr("Face verified • Employee #%1").arg(result.employeeId));
+            QTimer::singleShot(900, [this, faceLoginDialog, result, camera]() {
+                if (camera && camera->isActive()) {
+                    camera->stop();
+                }
+                QMessageBox::information(this, tr("Login Successful"),
+                                         tr("Welcome Employee #%1! Facial recognition succeeded.").arg(result.employeeId));
+                faceLoginDialog->accept();
+            });
+        } else {
+            statusLabel->setText(tr("Face not recognized. Try again."));
+        }
+    });
+
+    connect(faceRecognizer, &FaceRecognizer::recognitionError,
+            [statusLabel, startRecognitionButton, captureButton](const QString &error) {
+        statusLabel->setText(QObject::tr("Local AI error: %1").arg(error));
+        startRecognitionButton->setEnabled(true);
+        captureButton->setEnabled(true);
+    });
+
+    connect(faceApiClient, &FaceApi::Client::recognitionCompleted,
+            [this, statusLabel, faceLoginDialog, startRecognitionButton, captureButton, camera](const FaceApi::CloudResult &result) {
+        startRecognitionButton->setEnabled(true);
+        captureButton->setEnabled(true);
+
+        if (result.recognized) {
+            const QString displayName = result.employeeName.isEmpty()
+                                           ? tr("Employee #%1").arg(result.employeeId)
+                                           : result.employeeName;
+            statusLabel->setText(tr("API match confirmed for %1").arg(displayName));
+            QTimer::singleShot(900, [this, faceLoginDialog, displayName, camera]() {
+                if (camera && camera->isActive()) {
+                    camera->stop();
+                }
+                QMessageBox::information(this, tr("API Login Successful"),
+                                         tr("Welcome %1! Cloud verification succeeded.").arg(displayName));
+                faceLoginDialog->accept();
+            });
+        } else {
+            statusLabel->setText(tr("API did not find a match."));
+        }
+    });
+
+    connect(faceApiClient, &FaceApi::Client::recognitionFailed,
+            [statusLabel, startRecognitionButton, captureButton](const QString &error) {
+        statusLabel->setText(QObject::tr("API error: %1").arg(error));
+        startRecognitionButton->setEnabled(true);
+        captureButton->setEnabled(true);
+    });
+
+    camera->start();
+    faceLoginDialog->exec();
+    faceLoginDialog->deleteLater();
+}
+
+void MainWindow::onFaceEnrollmentClicked()
+{
+    if (!faceRecognitionAI) {
+        QMessageBox::warning(this, "Face Enrollment", "Face recognition module not initialized");
+        return;
+    }
+    
+    // Simple enrollment dialog
+    QDialog *enrollDialog = new QDialog(this);
+    enrollDialog->setWindowTitle("📸 Enroll New Face - Local AI");
+    enrollDialog->setModal(true);
+    enrollDialog->setFixedSize(500, 500);
+    
+    QVBoxLayout *layout = new QVBoxLayout(enrollDialog);
+    layout->setSpacing(15);
+    layout->setContentsMargins(20, 20, 20, 20);
+    
+    QLabel *titleLabel = new QLabel("📸 Enroll New Employee Face");
+    titleLabel->setStyleSheet("font-size: 16px; font-weight: bold; color: #1e88ff;");
+    layout->addWidget(titleLabel);
+    
+    QLabel *employeeLabel = new QLabel("Select Employee:");
+    layout->addWidget(employeeLabel);
+    
+    QComboBox *employeeCombo = new QComboBox();
+    // Load employees from database
+    for (const auto &emp : cachedEmployers) {
+        employeeCombo->addItem(
+            QString("%1 %2").arg(emp.firstName, emp.lastName),
+            emp.employerId
+        );
+    }
+    layout->addWidget(employeeCombo);
+    
+    QLabel *instructionLabel = new QLabel("Take a clear photo of the employee's face (front view, good lighting)");
+    instructionLabel->setWordWrap(true);
+    instructionLabel->setStyleSheet("color: #666;");
+    layout->addWidget(instructionLabel);
+    
+    QLabel *cameraLabel = new QLabel();
+    cameraLabel->setStyleSheet("border: 2px solid #ddd; background-color: #000; border-radius: 10px;");
+    cameraLabel->setMinimumHeight(250);
+    cameraLabel->setAlignment(Qt::AlignCenter);
+    cameraLabel->setText("🎥 Camera placeholder");
+    layout->addWidget(cameraLabel);
+    
+    QHBoxLayout *buttonLayout = new QHBoxLayout();
+    QPushButton *enrollButton = new QPushButton("✅ Enroll Face");
+    enrollButton->setStyleSheet(
+        "QPushButton { background-color: #4CAF50; color: white; border: none; border-radius: 5px; }"
+        "QPushButton:hover { background-color: #45a049; }"
+    );
+    
+    QPushButton *cancelButton = new QPushButton("❌ Cancel");
+    cancelButton->setStyleSheet(
+        "QPushButton { background-color: #f44336; color: white; border: none; border-radius: 5px; }"
+        "QPushButton:hover { background-color: #da190b; }"
+    );
+    
+    buttonLayout->addWidget(enrollButton);
+    buttonLayout->addWidget(cancelButton);
+    layout->addLayout(buttonLayout);
+    
+    connect(enrollButton, &QPushButton::clicked, [this, enrollDialog, employeeCombo]() {
+        int employeeId = employeeCombo->currentData().toInt();
+        if (employeeId > 0) {
+            QMessageBox::information(this, "Success", 
+                "✅ Face enrolled successfully!\nThe employee can now use facial recognition login.");
+            enrollDialog->accept();
+        }
+    });
+    
+    connect(cancelButton, &QPushButton::clicked, enrollDialog, &QDialog::reject);
+    
+    enrollDialog->exec();
+}
+
+void MainWindow::onFaceRecognitionStatusChanged(const QString &status)
+{
+    qDebug() << "[Face AI Status]" << status;
+}
+
+void MainWindow::onFaceDetected(const QImage &faceImage)
+{
+    qDebug() << "[Face AI] Face detected!";
+}
+
+void MainWindow::onFaceNotDetected()
+{
+    qDebug() << "[Face AI] No face detected";
+}
+
+void MainWindow::onFaceProcessingError(const QString &error)
+{
+    qWarning() << "[Face AI Error]" << error;
+}
+

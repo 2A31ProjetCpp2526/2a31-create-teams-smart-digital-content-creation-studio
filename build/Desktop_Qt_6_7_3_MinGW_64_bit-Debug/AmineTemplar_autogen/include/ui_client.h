@@ -504,7 +504,7 @@ public:
 "", nullptr));
         headerTitle->setText(QCoreApplication::translate("ClientWidget", "Client Management", nullptr));
         searchServices->setPlaceholderText(QCoreApplication::translate("ClientWidget", "Search client...", nullptr));
-        exportCsvBtn->setText(QCoreApplication::translate("ClientWidget", "Export CSV", nullptr));
+        exportCsvBtn->setText(QCoreApplication::translate("ClientWidget", "Exporter", nullptr));
         btnSortByName->setText(QCoreApplication::translate("ClientWidget", "Sort by Name", nullptr));
         QTableWidgetItem *___qtablewidgetitem = clientsTable->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QCoreApplication::translate("ClientWidget", "ID Client", nullptr));

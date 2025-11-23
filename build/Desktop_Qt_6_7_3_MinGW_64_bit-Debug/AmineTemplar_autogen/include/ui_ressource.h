@@ -514,7 +514,7 @@ public:
 "", nullptr));
         headerTitle->setText(QCoreApplication::translate("RessourceWidget", "Resources Management", nullptr));
         searchServices->setPlaceholderText(QCoreApplication::translate("RessourceWidget", "Search resources...", nullptr));
-        exportCsvBtn->setText(QCoreApplication::translate("RessourceWidget", "Export CSV", nullptr));
+        exportCsvBtn->setText(QCoreApplication::translate("RessourceWidget", "Exporter", nullptr));
         btnSortByName->setText(QCoreApplication::translate("RessourceWidget", "Sort by Name", nullptr));
         QTableWidgetItem *___qtablewidgetitem = clientsTable->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QCoreApplication::translate("RessourceWidget", "ID", nullptr));

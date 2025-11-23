@@ -159,6 +159,51 @@ QPushButton:disabled {
     color: #a4b0be;
 }
 
+/* Specific overrides for admin action buttons (Modify / Delete) so global blue is not applied */
+QPushButton#modifyBtn {
+    background-color: #ffb74d; /* Light orange */
+    color: #1f2937;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-weight: 600;
+}
+QPushButton#modifyBtn:hover {
+    background-color: #ff9e40; /* Hover deeper orange */
+    box-shadow: 0 4px 14px rgba(255,183,77,0.45);
+    transform: translateY(-2px);
+}
+QPushButton#modifyBtn:pressed {
+    background-color: #fb8c00;
+}
+
+/* Disabled state should be grey to indicate no selection */
+QPushButton#modifyBtn:disabled {
+    background-color: #ced6e0; /* match global disabled color */
+    color: #a4b0be;
+}
+
+QPushButton#deleteBtn {
+    background-color: #ff4d4f; /* Bright red */
+    color: white;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-weight: 600;
+}
+QPushButton#deleteBtn:hover {
+    background-color: #e53935; /* Darker red */
+    box-shadow: 0 4px 14px rgba(229,57,53,0.45);
+    transform: translateY(-2px);
+}
+QPushButton#deleteBtn:pressed {
+    background-color: #c62828;
+}
+
+/* Disabled state should be grey to indicate no selection */
+QPushButton#deleteBtn:disabled {
+    background-color: #ced6e0; /* match global disabled color */
+    color: #a4b0be;
+}
+
 /* Secondary Buttons - Clean Flat Design */
 QPushButton[class="secondary"] {
     background-color: #57606f;

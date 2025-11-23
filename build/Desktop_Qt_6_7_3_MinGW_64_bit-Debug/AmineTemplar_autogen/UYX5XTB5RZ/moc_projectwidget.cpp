@@ -35,7 +35,14 @@ namespace {
 #ifdef QT_MOC_HAS_STRINGDATA
 struct qt_meta_stringdata_CLASSProjectWidgetENDCLASS_t {};
 constexpr auto qt_meta_stringdata_CLASSProjectWidgetENDCLASS = QtMocHelpers::stringData(
-    "ProjectWidget"
+    "ProjectWidget",
+    "onRefreshProjectsClicked",
+    "",
+    "onAddProjectClicked",
+    "onUpdateProjectClicked",
+    "projectId",
+    "onEditFromTableClicked",
+    "onDeleteFromTableClicked"
 );
 #else  // !QT_MOC_HAS_STRINGDATA
 #error "qtmochelpers.h not found or too old."
@@ -48,12 +55,26 @@ Q_CONSTINIT static const uint qt_meta_data_CLASSProjectWidgetENDCLASS[] = {
       12,       // revision
        0,       // classname
        0,    0, // classinfo
-       0,    0, // methods
+       5,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
        0,       // flags
        0,       // signalCount
+
+ // slots: name, argc, parameters, tag, flags, initial metatype offsets
+       1,    0,   44,    2, 0x08,    1 /* Private */,
+       3,    0,   45,    2, 0x08,    2 /* Private */,
+       4,    1,   46,    2, 0x08,    3 /* Private */,
+       6,    0,   49,    2, 0x08,    5 /* Private */,
+       7,    0,   50,    2, 0x08,    6 /* Private */,
+
+ // slots: parameters
+    QMetaType::Void,
+    QMetaType::Void,
+    QMetaType::Void, QMetaType::LongLong,    5,
+    QMetaType::Void,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -66,17 +87,36 @@ Q_CONSTINIT const QMetaObject ProjectWidget::staticMetaObject = { {
     nullptr,
     qt_incomplete_metaTypeArray<qt_meta_stringdata_CLASSProjectWidgetENDCLASS_t,
         // Q_OBJECT / Q_GADGET
-        QtPrivate::TypeAndForceComplete<ProjectWidget, std::true_type>
+        QtPrivate::TypeAndForceComplete<ProjectWidget, std::true_type>,
+        // method 'onRefreshProjectsClicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'onAddProjectClicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'onUpdateProjectClicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        QtPrivate::TypeAndForceComplete<qint64, std::false_type>,
+        // method 'onEditFromTableClicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>,
+        // method 'onDeleteFromTableClicked'
+        QtPrivate::TypeAndForceComplete<void, std::false_type>
     >,
     nullptr
 } };
 
 void ProjectWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
 {
-    (void)_o;
-    (void)_id;
-    (void)_c;
-    (void)_a;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        auto *_t = static_cast<ProjectWidget *>(_o);
+        (void)_t;
+        switch (_id) {
+        case 0: _t->onRefreshProjectsClicked(); break;
+        case 1: _t->onAddProjectClicked(); break;
+        case 2: _t->onUpdateProjectClicked((*reinterpret_cast< std::add_pointer_t<qint64>>(_a[1]))); break;
+        case 3: _t->onEditFromTableClicked(); break;
+        case 4: _t->onDeleteFromTableClicked(); break;
+        default: ;
+        }
+    }
 }
 
 const QMetaObject *ProjectWidget::metaObject() const
@@ -95,6 +135,17 @@ void *ProjectWidget::qt_metacast(const char *_clname)
 int ProjectWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
 {
     _id = QWidget::qt_metacall(_c, _id, _a);
+    if (_id < 0)
+        return _id;
+    if (_c == QMetaObject::InvokeMetaMethod) {
+        if (_id < 5)
+            qt_static_metacall(this, _c, _id, _a);
+        _id -= 5;
+    } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
+        if (_id < 5)
+            *reinterpret_cast<QMetaType *>(_a[0]) = QMetaType();
+        _id -= 5;
+    }
     return _id;
 }
 QT_WARNING_POP

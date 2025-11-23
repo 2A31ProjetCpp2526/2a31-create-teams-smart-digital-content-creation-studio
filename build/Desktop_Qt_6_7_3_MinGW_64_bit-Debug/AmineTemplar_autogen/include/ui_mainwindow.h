@@ -23,6 +23,7 @@
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTableWidget>
+#include <QtWidgets/QTextEdit>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -65,12 +66,12 @@ public:
     QWidget *searchAndActionsWidget;
     QHBoxLayout *searchAndActionsLayout;
     QLineEdit *searchInput;
+    QSpacerItem *horizontalSpacer_4;
     QWidget *actionButtonsWidget;
     QHBoxLayout *actionButtonsLayout;
-    QPushButton *searchBtn;
     QPushButton *sortBtn;
     QPushButton *exportBtn;
-    QSpacerItem *horizontalSpacer_2;
+    QPushButton *statisticsBtn;
     QTableWidget *employeeTable;
     QWidget *tableActionsWidget;
     QHBoxLayout *tableActionsLayout;
@@ -89,72 +90,18 @@ public:
     QPushButton *cancelBtn;
     QPushButton *saveEmployeeBtn;
     QSpacerItem *addSpacer;
-    QWidget *dashboardTab;
-    QVBoxLayout *dashboardTabLayout;
-    QLabel *dashboardTabTitle;
-    QWidget *statisticsCardsContainer;
-    QHBoxLayout *statisticsCardsLayout;
-    QWidget *totalEmployeesCard;
-    QVBoxLayout *totalEmployeesCardLayout;
-    QLabel *totalEmployeesTitle;
-    QLabel *totalEmployeesNumber;
-    QLabel *totalEmployeesGrowth;
-    QWidget *activeProjectsCard;
-    QVBoxLayout *activeProjectsCardLayout;
-    QLabel *activeProjectsTitle;
-    QLabel *activeProjectsNumber;
-    QLabel *activeProjectsStatus;
-    QWidget *performanceCard;
-    QVBoxLayout *performanceCardLayout;
-    QLabel *performanceTitle;
-    QLabel *performanceNumber;
-    QLabel *performanceStatus;
-    QWidget *chartsContainer;
-    QHBoxLayout *chartsLayout;
-    QWidget *progressCirclesWidget;
-    QVBoxLayout *progressCirclesLayout;
-    QLabel *progressCirclesTitle;
-    QWidget *circlesRow;
-    QHBoxLayout *circlesRowLayout;
-    QWidget *developmentCircle;
-    QWidget *designCircle;
-    QWidget *managementCircle;
-    QWidget *circlesLabels;
-    QHBoxLayout *circlesLabelsLayout;
-    QLabel *developmentLabel;
-    QLabel *designLabel;
-    QLabel *managementLabel;
-    QWidget *chartWidget;
-    QVBoxLayout *chartLayout;
-    QLabel *chartTitle;
-    QWidget *chartBars;
-    QHBoxLayout *chartBarsLayout;
-    QWidget *bar1Container;
-    QVBoxLayout *bar1Layout;
-    QSpacerItem *bar1Spacer;
-    QWidget *bar1;
-    QLabel *bar1Label;
-    QWidget *bar2Container;
-    QVBoxLayout *bar2Layout;
-    QSpacerItem *bar2Spacer;
-    QWidget *bar2;
-    QLabel *bar2Label;
-    QWidget *bar3Container;
-    QVBoxLayout *bar3Layout;
-    QSpacerItem *bar3Spacer;
-    QWidget *bar3;
-    QLabel *bar3Label;
-    QWidget *bar4Container;
-    QVBoxLayout *bar4Layout;
-    QSpacerItem *bar4Spacer;
-    QWidget *bar4;
-    QLabel *bar4Label;
-    QSpacerItem *dashboardTabSpacer;
     QWidget *chatbotTab;
     QVBoxLayout *chatbotLayout;
     QLabel *chatbotTitle;
-    QLabel *chatbotPlaceholder;
-    QSpacerItem *chatbotSpacer;
+    QTextEdit *chatbotDisplay;
+    QHBoxLayout *chatbotInputLayout;
+    QLineEdit *chatbotInput;
+    QPushButton *chatbotSendButton;
+    QHBoxLayout *chatbotButtonLayout;
+    QPushButton *chatbotClearButton;
+    QPushButton *chatbotHistoryButton;
+    QSpacerItem *horizontalSpacer_6;
+    QLabel *chatbotStatusLabel;
     QWidget *profilePage;
     QVBoxLayout *profileLayout;
     QTabWidget *profileTabWidget;
@@ -885,7 +832,12 @@ public:
         searchAndActionsLayout->setContentsMargins(0, 0, 0, 0);
         searchInput = new QLineEdit(searchAndActionsWidget);
         searchInput->setObjectName("searchInput");
-        searchInput->setMinimumSize(QSize(300, 40));
+        QSizePolicy sizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Maximum);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(searchInput->sizePolicy().hasHeightForWidth());
+        searchInput->setSizePolicy(sizePolicy);
+        searchInput->setMinimumSize(QSize(0, 40));
         searchInput->setMaximumSize(QSize(500, 40));
         QFont font3;
         font3.setFamilies({QString::fromUtf8("Poppins")});
@@ -894,29 +846,38 @@ public:
         searchInput->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
 "    background-color: #ffffff;\n"
 "    border: 1px solid #e1e8ed;\n"
-"    border-radius: 20px;\n"
+"    border-radius: 20px;            /* Arrondi original */\n"
 "    padding: 10px 20px;\n"
 "    font-size: 14px;\n"
 "    color: #495057;\n"
 "    font-weight: 300;\n"
 "    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;\n"
 "    letter-spacing: 0.2px;\n"
+"    transition: all 0.3s ease-in-out;\n"
+"    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05); /* Ombre l\303\251g\303\250re par d\303\251faut */\n"
+"}\n"
+"\n"
+"QLineEdit:hover {\n"
+"    border-color: #adb5bd;\n"
+"    box-shadow: 0 6px 18px rgba(0,0,0,0.1); /* Hover plus prononc\303\251 */\n"
+"    transform: translateY(-1px);             /* Effet flottant l\303\251ger */\n"
 "}\n"
 "\n"
 "QLineEdit:focus {\n"
 "    border-color: #1da1f2;\n"
 "    background-color: #fafbfc;\n"
-"    box-shadow: 0 0 0 3px rgba(29, 161, 242, 0.1);\n"
+"    box-shadow: 0 0 12px rgba(29, 161, 242, 0.5), /* Glow n\303\251on bleu */\n"
+"                0 0 20px rgba(29, 161, 242, 0.3);\n"
 "    outline: none;\n"
 "}\n"
-"\n"
-"QLineEdit:hover {\n"
-"    border-color: #adb5bd;\n"
-"    box-shadow: 0 2px 4px rgba(0,0,0,0.05);\n"
-"}"));
+""));
         searchInput->setAlignment(Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter);
 
         searchAndActionsLayout->addWidget(searchInput);
+
+        horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        searchAndActionsLayout->addItem(horizontalSpacer_4);
 
         actionButtonsWidget = new QWidget(searchAndActionsWidget);
         actionButtonsWidget->setObjectName("actionButtonsWidget");
@@ -924,53 +885,15 @@ public:
         actionButtonsLayout->setSpacing(12);
         actionButtonsLayout->setObjectName("actionButtonsLayout");
         actionButtonsLayout->setContentsMargins(0, 0, 0, 0);
-        searchBtn = new QPushButton(actionButtonsWidget);
-        searchBtn->setObjectName("searchBtn");
-        searchBtn->setMinimumSize(QSize(80, 40));
-        searchBtn->setMaximumSize(QSize(80, 40));
-        QFont font4;
-        font4.setFamilies({QString::fromUtf8("Poppins")});
-        font4.setPointSize(9);
-        font4.setWeight(QFont::Medium);
-        searchBtn->setFont(font4);
-        searchBtn->setStyleSheet(QString::fromUtf8("QPushButton {\n"
-"    background-color: #1da1f2;\n"
-"    color: white;\n"
-"    border: none;\n"
-"    border-radius: 8px;\n"
-"    padding: 0px;\n"
-"    font-weight: 500;\n"
-"    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;\n"
-"    letter-spacing: 0.2px;\n"
-"    transition: all 0.2s ease-in-out;\n"
-"}\n"
-"\n"
-"QPushButton:hover {\n"
-"    background-color: #0056b3;\n"
-"    transform: translateY(-1px);\n"
-"    box-shadow: 0 0 20px rgba(29, 161, 242, 0.4), 0 2px 6px rgba(29, 161, 242, 0.3);\n"
-"}\n"
-"\n"
-"QPushButton:pressed {\n"
-"    background-color: #004085;\n"
-"    transform: translateY(0px);\n"
-"    box-shadow: 0 0 10px rgba(29, 161, 242, 0.3), 0 1px 3px rgba(29, 161, 242, 0.2);\n"
-"}"));
-        QIcon icon8;
-        icon8.addFile(QString::fromUtf8(":/resources/icons/search.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        searchBtn->setIcon(icon8);
-
-        actionButtonsLayout->addWidget(searchBtn);
-
         sortBtn = new QPushButton(actionButtonsWidget);
         sortBtn->setObjectName("sortBtn");
         sortBtn->setMinimumSize(QSize(120, 40));
         sortBtn->setMaximumSize(QSize(120, 40));
-        QFont font5;
-        font5.setFamilies({QString::fromUtf8("Poppins")});
-        font5.setPointSize(9);
-        font5.setWeight(QFont::DemiBold);
-        sortBtn->setFont(font5);
+        QFont font4;
+        font4.setFamilies({QString::fromUtf8("Poppins")});
+        font4.setPointSize(9);
+        font4.setWeight(QFont::DemiBold);
+        sortBtn->setFont(font4);
         sortBtn->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: #17a2b8;\n"
 "    color: white;\n"
@@ -994,9 +917,9 @@ public:
 "    transform: translateY(0px);\n"
 "    box-shadow: 0 0 15px rgba(23, 162, 184, 0.4), 0 2px 6px rgba(23, 162, 184, 0.3);\n"
 "}"));
-        QIcon icon9;
-        icon9.addFile(QString::fromUtf8(":/resources/icons/sort.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        sortBtn->setIcon(icon9);
+        QIcon icon8;
+        icon8.addFile(QString::fromUtf8(":/resources/icons/sort.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        sortBtn->setIcon(icon8);
 
         actionButtonsLayout->addWidget(sortBtn);
 
@@ -1004,7 +927,7 @@ public:
         exportBtn->setObjectName("exportBtn");
         exportBtn->setMinimumSize(QSize(120, 40));
         exportBtn->setMaximumSize(QSize(120, 40));
-        exportBtn->setFont(font5);
+        exportBtn->setFont(font4);
         exportBtn->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: #28a745;\n"
 "    color: white;\n"
@@ -1028,25 +951,55 @@ public:
 "    transform: translateY(0px);\n"
 "    box-shadow: 0 0 15px rgba(40, 167, 69, 0.4), 0 2px 6px rgba(40, 167, 69, 0.3);\n"
 "}"));
-        QIcon icon10;
-        icon10.addFile(QString::fromUtf8(":/resources/icons/export.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        exportBtn->setIcon(icon10);
+        QIcon icon9;
+        icon9.addFile(QString::fromUtf8(":/resources/icons/export.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        exportBtn->setIcon(icon9);
 
         actionButtonsLayout->addWidget(exportBtn);
 
+        statisticsBtn = new QPushButton(actionButtonsWidget);
+        statisticsBtn->setObjectName("statisticsBtn");
+        statisticsBtn->setMinimumSize(QSize(120, 40));
+        statisticsBtn->setMaximumSize(QSize(120, 40));
+        statisticsBtn->setFont(font4);
+        statisticsBtn->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: #ff69b4;\n"
+"    color: white;\n"
+"    border: none;\n"
+"    border-radius: 8px;\n"
+"    padding: 0px;\n"
+"    font-weight: 600;\n"
+"    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;\n"
+"    letter-spacing: 0.3px;\n"
+"    transition: all 0.3s ease-in-out;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #ff1493;\n"
+"    transform: translateY(-2px);\n"
+"    box-shadow: 0 0 25px rgba(255, 105, 180, 0.6), 0 4px 12px rgba(255, 105, 180, 0.4);\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #db0070;\n"
+"    transform: translateY(0px);\n"
+"    box-shadow: 0 0 15px rgba(255, 105, 180, 0.4), 0 2px 6px rgba(255, 105, 180, 0.3);\n"
+"}"));
+        QIcon icon10;
+        icon10.addFile(QString::fromUtf8(":/resources/icons/dashboard.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        statisticsBtn->setIcon(icon10);
+
+        actionButtonsLayout->addWidget(statisticsBtn);
+
 
         searchAndActionsLayout->addWidget(actionButtonsWidget);
-
-        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
-
-        searchAndActionsLayout->addItem(horizontalSpacer_2);
 
 
         displayLayout->addWidget(searchAndActionsWidget);
 
         employeeTable = new QTableWidget(displayTab);
-        if (employeeTable->columnCount() < 9)
-            employeeTable->setColumnCount(9);
+        if (employeeTable->columnCount() < 10)
+            employeeTable->setColumnCount(10);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
         employeeTable->setHorizontalHeaderItem(0, __qtablewidgetitem);
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
@@ -1065,36 +1018,38 @@ public:
         employeeTable->setHorizontalHeaderItem(7, __qtablewidgetitem7);
         QTableWidgetItem *__qtablewidgetitem8 = new QTableWidgetItem();
         employeeTable->setHorizontalHeaderItem(8, __qtablewidgetitem8);
+        QTableWidgetItem *__qtablewidgetitem9 = new QTableWidgetItem();
+        employeeTable->setHorizontalHeaderItem(9, __qtablewidgetitem9);
         if (employeeTable->rowCount() < 1)
             employeeTable->setRowCount(1);
         QBrush brush(QColor(0, 0, 0, 255));
         brush.setStyle(Qt::NoBrush);
-        QFont font6;
-        font6.setPointSize(16);
-        font6.setBold(true);
-        QTableWidgetItem *__qtablewidgetitem9 = new QTableWidgetItem();
-        __qtablewidgetitem9->setTextAlignment(Qt::AlignCenter);
-        __qtablewidgetitem9->setFont(font6);
-        __qtablewidgetitem9->setForeground(brush);
-        employeeTable->setItem(0, 0, __qtablewidgetitem9);
+        QFont font5;
+        font5.setPointSize(16);
+        font5.setBold(true);
         QTableWidgetItem *__qtablewidgetitem10 = new QTableWidgetItem();
         __qtablewidgetitem10->setTextAlignment(Qt::AlignCenter);
-        __qtablewidgetitem10->setIcon(icon1);
-        employeeTable->setItem(0, 1, __qtablewidgetitem10);
+        __qtablewidgetitem10->setFont(font5);
+        __qtablewidgetitem10->setForeground(brush);
+        employeeTable->setItem(0, 0, __qtablewidgetitem10);
         QTableWidgetItem *__qtablewidgetitem11 = new QTableWidgetItem();
-        employeeTable->setItem(0, 2, __qtablewidgetitem11);
-        QFont font7;
-        font7.setPointSize(11);
-        font7.setWeight(QFont::DemiBold);
+        __qtablewidgetitem11->setTextAlignment(Qt::AlignCenter);
+        __qtablewidgetitem11->setIcon(icon1);
+        employeeTable->setItem(0, 1, __qtablewidgetitem11);
         QTableWidgetItem *__qtablewidgetitem12 = new QTableWidgetItem();
-        __qtablewidgetitem12->setFont(font7);
-        employeeTable->setItem(0, 3, __qtablewidgetitem12);
+        employeeTable->setItem(0, 2, __qtablewidgetitem12);
+        QFont font6;
+        font6.setPointSize(11);
+        font6.setWeight(QFont::DemiBold);
         QTableWidgetItem *__qtablewidgetitem13 = new QTableWidgetItem();
-        employeeTable->setItem(0, 4, __qtablewidgetitem13);
+        __qtablewidgetitem13->setFont(font6);
+        employeeTable->setItem(0, 3, __qtablewidgetitem13);
         QTableWidgetItem *__qtablewidgetitem14 = new QTableWidgetItem();
-        employeeTable->setItem(0, 5, __qtablewidgetitem14);
+        employeeTable->setItem(0, 4, __qtablewidgetitem14);
         QTableWidgetItem *__qtablewidgetitem15 = new QTableWidgetItem();
-        employeeTable->setItem(0, 6, __qtablewidgetitem15);
+        employeeTable->setItem(0, 5, __qtablewidgetitem15);
+        QTableWidgetItem *__qtablewidgetitem16 = new QTableWidgetItem();
+        employeeTable->setItem(0, 6, __qtablewidgetitem16);
         employeeTable->setObjectName("employeeTable");
         employeeTable->setMinimumSize(QSize(1200, 200));
         employeeTable->setStyleSheet(QString::fromUtf8("QTableWidget {\n"
@@ -1224,27 +1179,27 @@ public:
 "\n"
 "/* Avatar Column Styling - New Position at Column 1 */\n"
 "QTableWidget::item[column=\"1\"] {\n"
-"    padding: 8px;\n"
+"    padding: 4px;\n"
 "    text-align: center;\n"
 "    background-color: rgba(255, 255, 255, 0.05);\n"
-"    border-radius: 50px;\n"
-"    border: 3px solid rgba(255, 255, 255, 0.2);\n"
-"    margin: 6px;\n"
-"    min-width: 80px;\n"
-"    min-height: 80px;\n"
-"    max-width: 80px;\n"
-"    max-height: 80px;\n"
+"    border-radius: 0px;\n"
+"    border: 2px solid rgba(255, 255, 255, 0.2);\n"
+"    margin: 4px;\n"
+"    min-width: 48px;\n"
+"    min-height: 48px;\n"
+"    max-width: 48px;\n"
+"    max-height: 48px;\n"
 "    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;\n"
 "    font-weight: 300;\n"
-" "
-                        "   color: #ffffff;\n"
+"  "
+                        "  color: #ffffff;\n"
 "}\n"
 "\n"
 "QTableWidget::item[column=\"1\"]:hover {\n"
 "    background-color: rgba(255, 255, 255, 0.1);\n"
-"    border: 3px solid rgba(255, 255, 255, 0.4);\n"
-"    transform: scale(1.05);\n"
-"    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);\n"
+"    border: 2px solid rgba(255, 255, 255, 0.4);\n"
+"    transform: scale(1.02);\n"
+"    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.12);\n"
 "}\n"
 "\n"
 "/* Name Column Bold Styling - Updated Position */\n"
@@ -1270,8 +1225,8 @@ public:
 "/* Email Column Styling - Updated Position */\n"
 "QTableWidget::item[column=\"4\"] {\n"
 "    color: #ffffff;\n"
-"    font-"
-                        "style: normal;\n"
+"    font-st"
+                        "yle: normal;\n"
 "    font-size: 14px;\n"
 "    font-weight: 300;\n"
 "    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;\n"
@@ -1309,8 +1264,8 @@ public:
 "\n"
 "QScrollBar::handle:vertical {\n"
 "    background: #1da1f2;\n"
-"    bo"
-                        "rder-radius: 6px;\n"
+"    bord"
+                        "er-radius: 6px;\n"
 "    min-height: 20px;\n"
 "}\n"
 "\n"
@@ -1357,7 +1312,7 @@ public:
         employeeTable->setWordWrap(false);
         employeeTable->setCornerButtonEnabled(false);
         employeeTable->setRowCount(1);
-        employeeTable->setColumnCount(9);
+        employeeTable->setColumnCount(10);
         employeeTable->horizontalHeader()->setVisible(true);
         employeeTable->horizontalHeader()->setMinimumSectionSize(80);
         employeeTable->horizontalHeader()->setDefaultSectionSize(120);
@@ -1381,11 +1336,11 @@ public:
         modifyBtn->setObjectName("modifyBtn");
         modifyBtn->setEnabled(false);
         modifyBtn->setMinimumSize(QSize(100, 36));
-        QFont font8;
-        font8.setFamilies({QString::fromUtf8("Poppins")});
-        font8.setPointSize(10);
-        font8.setWeight(QFont::Medium);
-        modifyBtn->setFont(font8);
+        QFont font7;
+        font7.setFamilies({QString::fromUtf8("Poppins")});
+        font7.setPointSize(10);
+        font7.setWeight(QFont::Medium);
+        modifyBtn->setFont(font7);
         modifyBtn->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: #6c757d;\n"
 "    color: #adb5bd;\n"
@@ -1397,21 +1352,21 @@ public:
 "}\n"
 "\n"
 "QPushButton:enabled {\n"
-"    background-color: #ffc107;\n"
-"    color: #212529;\n"
-"    transition: all 0.3s ease-in-out;\n"
+"    background-color: #ffb74d; /* Light orange base */\n"
+"    color: #1f2937;\n"
+"    transition: all 0.2s ease-in-out;\n"
 "}\n"
 "\n"
 "QPushButton:enabled:hover {\n"
-"    background-color: #e0a800;\n"
+"    background-color: #ff9e40; /* Deeper orange on hover */\n"
 "    transform: translateY(-2px);\n"
-"    box-shadow: 0 0 25px rgba(255, 193, 7, 0.6), 0 4px 12px rgba(255, 193, 7, 0.4);\n"
+"    box-shadow: 0 4px 14px rgba(255, 183, 77, 0.45);\n"
 "}\n"
 "\n"
 "QPushButton:enabled:pressed {\n"
-"    background-color: #d39e00;\n"
+"    background-color: #fb8c00; /* Pressed orange */\n"
 "    transform: translateY(0px);\n"
-"    box-shadow: 0 0 15px rgba(255, 193, 7, 0.4), 0 2px 6px rgba(255, 193, 7, 0.3);\n"
+"    box-shadow: 0 2px 6px rgba(255, 183, 77, 0.30);\n"
 "}\n"
 "\n"
 "QPushButton:disabled {\n"
@@ -1429,7 +1384,7 @@ public:
         deleteBtn->setObjectName("deleteBtn");
         deleteBtn->setEnabled(false);
         deleteBtn->setMinimumSize(QSize(100, 36));
-        deleteBtn->setFont(font8);
+        deleteBtn->setFont(font7);
         deleteBtn->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: #6c757d;\n"
 "    color: #adb5bd;\n"
@@ -1441,21 +1396,21 @@ public:
 "}\n"
 "\n"
 "QPushButton:enabled {\n"
-"    background-color: #dc3545;\n"
+"    background-color: #ff4d4f; /* Bright red */\n"
 "    color: white;\n"
-"    transition: all 0.3s ease-in-out;\n"
+"    transition: all 0.2s ease-in-out;\n"
 "}\n"
 "\n"
 "QPushButton:enabled:hover {\n"
-"    background-color: #c82333;\n"
+"    background-color: #e53935; /* Darker red */\n"
 "    transform: translateY(-2px);\n"
-"    box-shadow: 0 0 25px rgba(220, 53, 69, 0.6), 0 4px 12px rgba(220, 53, 69, 0.4);\n"
+"    box-shadow: 0 4px 14px rgba(229, 57, 53, 0.45);\n"
 "}\n"
 "\n"
 "QPushButton:enabled:pressed {\n"
-"    background-color: #bd2130;\n"
+"    background-color: #c62828; /* Pressed red */\n"
 "    transform: translateY(0px);\n"
-"    box-shadow: 0 0 15px rgba(220, 53, 69, 0.4), 0 2px 6px rgba(220, 53, 69, 0.3);\n"
+"    box-shadow: 0 2px 6px rgba(229, 57, 53, 0.30);\n"
 "}\n"
 "\n"
 "QPushButton:disabled {\n"
@@ -1513,10 +1468,10 @@ public:
         addEmployeeMainLayout->setContentsMargins(24, 24, 24, 24);
         addFormTitle = new QLabel(addEmployeeContainer);
         addFormTitle->setObjectName("addFormTitle");
-        QFont font9;
-        font9.setFamilies({QString::fromUtf8("Poppins")});
-        font9.setWeight(QFont::Medium);
-        addFormTitle->setFont(font9);
+        QFont font8;
+        font8.setFamilies({QString::fromUtf8("Poppins")});
+        font8.setWeight(QFont::Medium);
+        addFormTitle->setFont(font8);
         addFormTitle->setStyleSheet(QString::fromUtf8("QLabel {\n"
 "    color: #343a40;\n"
 "    font-weight: 500;\n"
@@ -1540,10 +1495,10 @@ public:
         cancelBtn->setObjectName("cancelBtn");
         cancelBtn->setMinimumSize(QSize(120, 44));
         cancelBtn->setMaximumSize(QSize(16777215, 44));
-        QFont font10;
-        font10.setPointSize(12);
-        font10.setWeight(QFont::Medium);
-        cancelBtn->setFont(font10);
+        QFont font9;
+        font9.setPointSize(12);
+        font9.setWeight(QFont::Medium);
+        cancelBtn->setFont(font9);
         cancelBtn->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: #6c757d;\n"
 "    color: white;\n"
@@ -1568,7 +1523,7 @@ public:
         saveEmployeeBtn->setObjectName("saveEmployeeBtn");
         saveEmployeeBtn->setMinimumSize(QSize(140, 44));
         saveEmployeeBtn->setMaximumSize(QSize(16777215, 44));
-        saveEmployeeBtn->setFont(font10);
+        saveEmployeeBtn->setFont(font9);
         saveEmployeeBtn->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: #007bff;\n"
 "    color: white;\n"
@@ -1602,534 +1557,6 @@ public:
         QIcon icon13;
         icon13.addFile(QString::fromUtf8(":/resources/icons/add.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
         employerTabWidget->addTab(addTab, icon13, QString());
-        dashboardTab = new QWidget();
-        dashboardTab->setObjectName("dashboardTab");
-        dashboardTabLayout = new QVBoxLayout(dashboardTab);
-        dashboardTabLayout->setObjectName("dashboardTabLayout");
-        dashboardTabLayout->setContentsMargins(24, 24, 24, 24);
-        dashboardTabTitle = new QLabel(dashboardTab);
-        dashboardTabTitle->setObjectName("dashboardTabTitle");
-        dashboardTabTitle->setFont(font9);
-        dashboardTabTitle->setStyleSheet(QString::fromUtf8("QLabel {\n"
-"    color: #343a40;\n"
-"    font-weight: 500;\n"
-"    letter-spacing: 0.5px;\n"
-"    font-size: 24px;\n"
-"    margin-bottom: 20px;\n"
-"}"));
-
-        dashboardTabLayout->addWidget(dashboardTabTitle);
-
-        statisticsCardsContainer = new QWidget(dashboardTab);
-        statisticsCardsContainer->setObjectName("statisticsCardsContainer");
-        statisticsCardsContainer->setStyleSheet(QString::fromUtf8("QWidget#statisticsCardsContainer {\n"
-"    background: transparent;\n"
-"}"));
-        statisticsCardsLayout = new QHBoxLayout(statisticsCardsContainer);
-        statisticsCardsLayout->setSpacing(20);
-        statisticsCardsLayout->setObjectName("statisticsCardsLayout");
-        statisticsCardsLayout->setContentsMargins(0, 0, 0, 0);
-        totalEmployeesCard = new QWidget(statisticsCardsContainer);
-        totalEmployeesCard->setObjectName("totalEmployeesCard");
-        totalEmployeesCard->setMinimumSize(QSize(250, 120));
-        totalEmployeesCard->setStyleSheet(QString::fromUtf8("QWidget#totalEmployeesCard {\n"
-"    background-color: #ffffff;\n"
-"    border: 1px solid #e9ecef;\n"
-"    border-radius: 12px;\n"
-"    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);\n"
-"}\n"
-"\n"
-"QWidget#totalEmployeesCard:hover {\n"
-"    transform: translateY(-2px);\n"
-"    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);\n"
-"}"));
-        totalEmployeesCardLayout = new QVBoxLayout(totalEmployeesCard);
-        totalEmployeesCardLayout->setSpacing(8);
-        totalEmployeesCardLayout->setObjectName("totalEmployeesCardLayout");
-        totalEmployeesCardLayout->setContentsMargins(20, 20, 20, 20);
-        totalEmployeesTitle = new QLabel(totalEmployeesCard);
-        totalEmployeesTitle->setObjectName("totalEmployeesTitle");
-        totalEmployeesTitle->setFont(font3);
-        totalEmployeesTitle->setStyleSheet(QString::fromUtf8("QLabel {\n"
-"    color: #6c757d;\n"
-"    font-weight: 300;\n"
-"    letter-spacing: 0.5px;\n"
-"}"));
-
-        totalEmployeesCardLayout->addWidget(totalEmployeesTitle);
-
-        totalEmployeesNumber = new QLabel(totalEmployeesCard);
-        totalEmployeesNumber->setObjectName("totalEmployeesNumber");
-        QFont font11;
-        font11.setFamilies({QString::fromUtf8("Poppins")});
-        font11.setPointSize(28);
-        font11.setWeight(QFont::DemiBold);
-        totalEmployeesNumber->setFont(font11);
-        totalEmployeesNumber->setStyleSheet(QString::fromUtf8("QLabel {\n"
-"    color: #007bff;\n"
-"    font-weight: 600;\n"
-"    letter-spacing: 0.8px;\n"
-"}"));
-
-        totalEmployeesCardLayout->addWidget(totalEmployeesNumber);
-
-        totalEmployeesGrowth = new QLabel(totalEmployeesCard);
-        totalEmployeesGrowth->setObjectName("totalEmployeesGrowth");
-        QFont font12;
-        font12.setFamilies({QString::fromUtf8("Poppins")});
-        font12.setPointSize(10);
-        font12.setWeight(QFont::Light);
-        totalEmployeesGrowth->setFont(font12);
-        totalEmployeesGrowth->setStyleSheet(QString::fromUtf8("QLabel {\n"
-"    color: #28a745;\n"
-"    font-weight: 300;\n"
-"    letter-spacing: 0.3px;\n"
-"}"));
-
-        totalEmployeesCardLayout->addWidget(totalEmployeesGrowth);
-
-
-        statisticsCardsLayout->addWidget(totalEmployeesCard);
-
-        activeProjectsCard = new QWidget(statisticsCardsContainer);
-        activeProjectsCard->setObjectName("activeProjectsCard");
-        activeProjectsCard->setMinimumSize(QSize(250, 120));
-        activeProjectsCard->setStyleSheet(QString::fromUtf8("QWidget#activeProjectsCard {\n"
-"    background-color: #ffffff;\n"
-"    border: 1px solid #e9ecef;\n"
-"    border-radius: 12px;\n"
-"    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);\n"
-"}\n"
-"\n"
-"QWidget#activeProjectsCard:hover {\n"
-"    transform: translateY(-2px);\n"
-"    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);\n"
-"}"));
-        activeProjectsCardLayout = new QVBoxLayout(activeProjectsCard);
-        activeProjectsCardLayout->setSpacing(8);
-        activeProjectsCardLayout->setObjectName("activeProjectsCardLayout");
-        activeProjectsCardLayout->setContentsMargins(20, 20, 20, 20);
-        activeProjectsTitle = new QLabel(activeProjectsCard);
-        activeProjectsTitle->setObjectName("activeProjectsTitle");
-        activeProjectsTitle->setFont(font3);
-        activeProjectsTitle->setStyleSheet(QString::fromUtf8("QLabel {\n"
-"    color: #6c757d;\n"
-"    font-weight: 300;\n"
-"    letter-spacing: 0.5px;\n"
-"}"));
-
-        activeProjectsCardLayout->addWidget(activeProjectsTitle);
-
-        activeProjectsNumber = new QLabel(activeProjectsCard);
-        activeProjectsNumber->setObjectName("activeProjectsNumber");
-        activeProjectsNumber->setFont(font11);
-        activeProjectsNumber->setStyleSheet(QString::fromUtf8("QLabel {\n"
-"    color: #17a2b8;\n"
-"    font-weight: 600;\n"
-"    letter-spacing: 0.8px;\n"
-"}"));
-
-        activeProjectsCardLayout->addWidget(activeProjectsNumber);
-
-        activeProjectsStatus = new QLabel(activeProjectsCard);
-        activeProjectsStatus->setObjectName("activeProjectsStatus");
-        activeProjectsStatus->setFont(font12);
-        activeProjectsStatus->setStyleSheet(QString::fromUtf8("QLabel {\n"
-"    color: #ffc107;\n"
-"    font-weight: 300;\n"
-"    letter-spacing: 0.3px;\n"
-"}"));
-
-        activeProjectsCardLayout->addWidget(activeProjectsStatus);
-
-
-        statisticsCardsLayout->addWidget(activeProjectsCard);
-
-        performanceCard = new QWidget(statisticsCardsContainer);
-        performanceCard->setObjectName("performanceCard");
-        performanceCard->setMinimumSize(QSize(250, 120));
-        performanceCard->setStyleSheet(QString::fromUtf8("QWidget#performanceCard {\n"
-"    background-color: #ffffff;\n"
-"    border: 1px solid #e9ecef;\n"
-"    border-radius: 12px;\n"
-"    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);\n"
-"}\n"
-"\n"
-"QWidget#performanceCard:hover {\n"
-"    transform: translateY(-2px);\n"
-"    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);\n"
-"}"));
-        performanceCardLayout = new QVBoxLayout(performanceCard);
-        performanceCardLayout->setSpacing(8);
-        performanceCardLayout->setObjectName("performanceCardLayout");
-        performanceCardLayout->setContentsMargins(20, 20, 20, 20);
-        performanceTitle = new QLabel(performanceCard);
-        performanceTitle->setObjectName("performanceTitle");
-        performanceTitle->setFont(font3);
-        performanceTitle->setStyleSheet(QString::fromUtf8("QLabel {\n"
-"    color: #6c757d;\n"
-"    font-weight: 300;\n"
-"    letter-spacing: 0.5px;\n"
-"}"));
-
-        performanceCardLayout->addWidget(performanceTitle);
-
-        performanceNumber = new QLabel(performanceCard);
-        performanceNumber->setObjectName("performanceNumber");
-        performanceNumber->setFont(font11);
-        performanceNumber->setStyleSheet(QString::fromUtf8("QLabel {\n"
-"    color: #28a745;\n"
-"    font-weight: 600;\n"
-"    letter-spacing: 0.8px;\n"
-"}"));
-
-        performanceCardLayout->addWidget(performanceNumber);
-
-        performanceStatus = new QLabel(performanceCard);
-        performanceStatus->setObjectName("performanceStatus");
-        performanceStatus->setFont(font12);
-        performanceStatus->setStyleSheet(QString::fromUtf8("QLabel {\n"
-"    color: #28a745;\n"
-"    font-weight: 300;\n"
-"    letter-spacing: 0.3px;\n"
-"}"));
-
-        performanceCardLayout->addWidget(performanceStatus);
-
-
-        statisticsCardsLayout->addWidget(performanceCard);
-
-
-        dashboardTabLayout->addWidget(statisticsCardsContainer);
-
-        chartsContainer = new QWidget(dashboardTab);
-        chartsContainer->setObjectName("chartsContainer");
-        chartsContainer->setMinimumSize(QSize(0, 300));
-        chartsContainer->setStyleSheet(QString::fromUtf8("QWidget#chartsContainer {\n"
-"    background: transparent;\n"
-"}"));
-        chartsLayout = new QHBoxLayout(chartsContainer);
-        chartsLayout->setSpacing(20);
-        chartsLayout->setObjectName("chartsLayout");
-        chartsLayout->setContentsMargins(0, 20, 0, 0);
-        progressCirclesWidget = new QWidget(chartsContainer);
-        progressCirclesWidget->setObjectName("progressCirclesWidget");
-        progressCirclesWidget->setMinimumSize(QSize(400, 300));
-        progressCirclesWidget->setStyleSheet(QString::fromUtf8("QWidget#progressCirclesWidget {\n"
-"    background-color: #ffffff;\n"
-"    border: 1px solid #e9ecef;\n"
-"    border-radius: 12px;\n"
-"    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);\n"
-"}"));
-        progressCirclesLayout = new QVBoxLayout(progressCirclesWidget);
-        progressCirclesLayout->setSpacing(20);
-        progressCirclesLayout->setObjectName("progressCirclesLayout");
-        progressCirclesLayout->setContentsMargins(30, 25, 30, 25);
-        progressCirclesTitle = new QLabel(progressCirclesWidget);
-        progressCirclesTitle->setObjectName("progressCirclesTitle");
-        progressCirclesTitle->setFont(font9);
-        progressCirclesTitle->setStyleSheet(QString::fromUtf8("QLabel {\n"
-"    color: #343a40;\n"
-"    font-weight: 500;\n"
-"    letter-spacing: 0.5px;\n"
-"}"));
-        progressCirclesTitle->setAlignment(Qt::AlignmentFlag::AlignCenter);
-
-        progressCirclesLayout->addWidget(progressCirclesTitle);
-
-        circlesRow = new QWidget(progressCirclesWidget);
-        circlesRow->setObjectName("circlesRow");
-        circlesRowLayout = new QHBoxLayout(circlesRow);
-        circlesRowLayout->setSpacing(40);
-        circlesRowLayout->setObjectName("circlesRowLayout");
-        developmentCircle = new QWidget(circlesRow);
-        developmentCircle->setObjectName("developmentCircle");
-        developmentCircle->setMinimumSize(QSize(100, 100));
-        developmentCircle->setMaximumSize(QSize(100, 100));
-        developmentCircle->setStyleSheet(QString::fromUtf8("QWidget#developmentCircle {\n"
-"    background-color: qconicalgradient(cx:0.5, cy:0.5, angle:90,\n"
-"        stop:0 #007bff, stop:0.75 #007bff, stop:0.751 #e9ecef, stop:1 #e9ecef);\n"
-"    border-radius: 50px;\n"
-"    border: 3px solid #ffffff;\n"
-"}\n"
-"\n"
-"QWidget#developmentCircle::after {\n"
-"    content: '';\n"
-"    position: absolute;\n"
-"    top: 15px;\n"
-"    left: 15px;\n"
-"    width: 70px;\n"
-"    height: 70px;\n"
-"    background-color: #ffffff;\n"
-"    border-radius: 35px;\n"
-"}"));
-
-        circlesRowLayout->addWidget(developmentCircle);
-
-        designCircle = new QWidget(circlesRow);
-        designCircle->setObjectName("designCircle");
-        designCircle->setMinimumSize(QSize(100, 100));
-        designCircle->setMaximumSize(QSize(100, 100));
-        designCircle->setStyleSheet(QString::fromUtf8("QWidget#designCircle {\n"
-"    background-color: qconicalgradient(cx:0.5, cy:0.5, angle:90,\n"
-"        stop:0 #17a2b8, stop:0.82 #17a2b8, stop:0.821 #e9ecef, stop:1 #e9ecef);\n"
-"    border-radius: 50px;\n"
-"    border: 3px solid #ffffff;\n"
-"}"));
-
-        circlesRowLayout->addWidget(designCircle);
-
-        managementCircle = new QWidget(circlesRow);
-        managementCircle->setObjectName("managementCircle");
-        managementCircle->setMinimumSize(QSize(100, 100));
-        managementCircle->setMaximumSize(QSize(100, 100));
-        managementCircle->setStyleSheet(QString::fromUtf8("QWidget#managementCircle {\n"
-"    background-color: qconicalgradient(cx:0.5, cy:0.5, angle:90,\n"
-"        stop:0 #28a745, stop:0.68 #28a745, stop:0.681 #e9ecef, stop:1 #e9ecef);\n"
-"    border-radius: 50px;\n"
-"    border: 3px solid #ffffff;\n"
-"}"));
-
-        circlesRowLayout->addWidget(managementCircle);
-
-
-        progressCirclesLayout->addWidget(circlesRow);
-
-        circlesLabels = new QWidget(progressCirclesWidget);
-        circlesLabels->setObjectName("circlesLabels");
-        circlesLabelsLayout = new QHBoxLayout(circlesLabels);
-        circlesLabelsLayout->setSpacing(40);
-        circlesLabelsLayout->setObjectName("circlesLabelsLayout");
-        developmentLabel = new QLabel(circlesLabels);
-        developmentLabel->setObjectName("developmentLabel");
-        developmentLabel->setFont(font12);
-        developmentLabel->setStyleSheet(QString::fromUtf8("QLabel {\n"
-"    color: #495057;\n"
-"    font-weight: 300;\n"
-"    letter-spacing: 0.3px;\n"
-"}"));
-        developmentLabel->setAlignment(Qt::AlignmentFlag::AlignCenter);
-
-        circlesLabelsLayout->addWidget(developmentLabel);
-
-        designLabel = new QLabel(circlesLabels);
-        designLabel->setObjectName("designLabel");
-        designLabel->setFont(font12);
-        designLabel->setStyleSheet(QString::fromUtf8("QLabel {\n"
-"    color: #495057;\n"
-"    font-weight: 300;\n"
-"    letter-spacing: 0.3px;\n"
-"}"));
-        designLabel->setAlignment(Qt::AlignmentFlag::AlignCenter);
-
-        circlesLabelsLayout->addWidget(designLabel);
-
-        managementLabel = new QLabel(circlesLabels);
-        managementLabel->setObjectName("managementLabel");
-        managementLabel->setFont(font12);
-        managementLabel->setStyleSheet(QString::fromUtf8("QLabel {\n"
-"    color: #495057;\n"
-"    font-weight: 300;\n"
-"    letter-spacing: 0.3px;\n"
-"}"));
-        managementLabel->setAlignment(Qt::AlignmentFlag::AlignCenter);
-
-        circlesLabelsLayout->addWidget(managementLabel);
-
-
-        progressCirclesLayout->addWidget(circlesLabels);
-
-
-        chartsLayout->addWidget(progressCirclesWidget);
-
-        chartWidget = new QWidget(chartsContainer);
-        chartWidget->setObjectName("chartWidget");
-        chartWidget->setMinimumSize(QSize(400, 300));
-        chartWidget->setStyleSheet(QString::fromUtf8("QWidget#chartWidget {\n"
-"    background-color: #ffffff;\n"
-"    border: 1px solid #e9ecef;\n"
-"    border-radius: 12px;\n"
-"    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);\n"
-"}"));
-        chartLayout = new QVBoxLayout(chartWidget);
-        chartLayout->setSpacing(15);
-        chartLayout->setObjectName("chartLayout");
-        chartLayout->setContentsMargins(30, 25, 30, 25);
-        chartTitle = new QLabel(chartWidget);
-        chartTitle->setObjectName("chartTitle");
-        chartTitle->setFont(font9);
-        chartTitle->setStyleSheet(QString::fromUtf8("QLabel {\n"
-"    color: #343a40;\n"
-"    font-weight: 500;\n"
-"    letter-spacing: 0.5px;\n"
-"}"));
-        chartTitle->setAlignment(Qt::AlignmentFlag::AlignCenter);
-
-        chartLayout->addWidget(chartTitle);
-
-        chartBars = new QWidget(chartWidget);
-        chartBars->setObjectName("chartBars");
-        chartBars->setMinimumSize(QSize(0, 200));
-        chartBarsLayout = new QHBoxLayout(chartBars);
-        chartBarsLayout->setSpacing(15);
-        chartBarsLayout->setObjectName("chartBarsLayout");
-        chartBarsLayout->setContentsMargins(20, 10, 20, 10);
-        bar1Container = new QWidget(chartBars);
-        bar1Container->setObjectName("bar1Container");
-        bar1Layout = new QVBoxLayout(bar1Container);
-        bar1Layout->setSpacing(5);
-        bar1Layout->setObjectName("bar1Layout");
-        bar1Spacer = new QSpacerItem(20, 60, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
-
-        bar1Layout->addItem(bar1Spacer);
-
-        bar1 = new QWidget(bar1Container);
-        bar1->setObjectName("bar1");
-        bar1->setMinimumSize(QSize(40, 120));
-        bar1->setStyleSheet(QString::fromUtf8("QWidget#bar1 {\n"
-"    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0,\n"
-"        stop:0 #007bff, stop:1 #66b3ff);\n"
-"    border-radius: 6px;\n"
-"}"));
-
-        bar1Layout->addWidget(bar1);
-
-        bar1Label = new QLabel(bar1Container);
-        bar1Label->setObjectName("bar1Label");
-        QFont font13;
-        font13.setFamilies({QString::fromUtf8("Poppins")});
-        font13.setPointSize(9);
-        font13.setWeight(QFont::Light);
-        bar1Label->setFont(font13);
-        bar1Label->setStyleSheet(QString::fromUtf8("QLabel {\n"
-"    color: #6c757d;\n"
-"    font-weight: 300;\n"
-"}"));
-        bar1Label->setAlignment(Qt::AlignmentFlag::AlignCenter);
-
-        bar1Layout->addWidget(bar1Label);
-
-
-        chartBarsLayout->addWidget(bar1Container);
-
-        bar2Container = new QWidget(chartBars);
-        bar2Container->setObjectName("bar2Container");
-        bar2Layout = new QVBoxLayout(bar2Container);
-        bar2Layout->setSpacing(5);
-        bar2Layout->setObjectName("bar2Layout");
-        bar2Spacer = new QSpacerItem(20, 20, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
-
-        bar2Layout->addItem(bar2Spacer);
-
-        bar2 = new QWidget(bar2Container);
-        bar2->setObjectName("bar2");
-        bar2->setMinimumSize(QSize(40, 160));
-        bar2->setStyleSheet(QString::fromUtf8("QWidget#bar2 {\n"
-"    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0,\n"
-"        stop:0 #17a2b8, stop:1 #70c9d6);\n"
-"    border-radius: 6px;\n"
-"}"));
-
-        bar2Layout->addWidget(bar2);
-
-        bar2Label = new QLabel(bar2Container);
-        bar2Label->setObjectName("bar2Label");
-        bar2Label->setFont(font13);
-        bar2Label->setStyleSheet(QString::fromUtf8("QLabel {\n"
-"    color: #6c757d;\n"
-"    font-weight: 300;\n"
-"}"));
-        bar2Label->setAlignment(Qt::AlignmentFlag::AlignCenter);
-
-        bar2Layout->addWidget(bar2Label);
-
-
-        chartBarsLayout->addWidget(bar2Container);
-
-        bar3Container = new QWidget(chartBars);
-        bar3Container->setObjectName("bar3Container");
-        bar3Layout = new QVBoxLayout(bar3Container);
-        bar3Layout->setSpacing(5);
-        bar3Layout->setObjectName("bar3Layout");
-        bar3Spacer = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
-
-        bar3Layout->addItem(bar3Spacer);
-
-        bar3 = new QWidget(bar3Container);
-        bar3->setObjectName("bar3");
-        bar3->setMinimumSize(QSize(40, 140));
-        bar3->setStyleSheet(QString::fromUtf8("QWidget#bar3 {\n"
-"    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0,\n"
-"        stop:0 #28a745, stop:1 #71dd7a);\n"
-"    border-radius: 6px;\n"
-"}"));
-
-        bar3Layout->addWidget(bar3);
-
-        bar3Label = new QLabel(bar3Container);
-        bar3Label->setObjectName("bar3Label");
-        bar3Label->setFont(font13);
-        bar3Label->setStyleSheet(QString::fromUtf8("QLabel {\n"
-"    color: #6c757d;\n"
-"    font-weight: 300;\n"
-"}"));
-        bar3Label->setAlignment(Qt::AlignmentFlag::AlignCenter);
-
-        bar3Layout->addWidget(bar3Label);
-
-
-        chartBarsLayout->addWidget(bar3Container);
-
-        bar4Container = new QWidget(chartBars);
-        bar4Container->setObjectName("bar4Container");
-        bar4Layout = new QVBoxLayout(bar4Container);
-        bar4Layout->setSpacing(5);
-        bar4Layout->setObjectName("bar4Layout");
-        bar4Spacer = new QSpacerItem(20, 5, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
-
-        bar4Layout->addItem(bar4Spacer);
-
-        bar4 = new QWidget(bar4Container);
-        bar4->setObjectName("bar4");
-        bar4->setMinimumSize(QSize(40, 175));
-        bar4->setStyleSheet(QString::fromUtf8("QWidget#bar4 {\n"
-"    background: qlineargradient(spread:pad, x1:0, y1:1, x2:0, y2:0,\n"
-"        stop:0 #ffc107, stop:1 #ffe066);\n"
-"    border-radius: 6px;\n"
-"}"));
-
-        bar4Layout->addWidget(bar4);
-
-        bar4Label = new QLabel(bar4Container);
-        bar4Label->setObjectName("bar4Label");
-        bar4Label->setFont(font13);
-        bar4Label->setStyleSheet(QString::fromUtf8("QLabel {\n"
-"    color: #6c757d;\n"
-"    font-weight: 300;\n"
-"}"));
-        bar4Label->setAlignment(Qt::AlignmentFlag::AlignCenter);
-
-        bar4Layout->addWidget(bar4Label);
-
-
-        chartBarsLayout->addWidget(bar4Container);
-
-
-        chartLayout->addWidget(chartBars);
-
-
-        chartsLayout->addWidget(chartWidget);
-
-
-        dashboardTabLayout->addWidget(chartsContainer);
-
-        dashboardTabSpacer = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
-
-        dashboardTabLayout->addItem(dashboardTabSpacer);
-
-        QIcon icon14;
-        icon14.addFile(QString::fromUtf8(":/resources/icons/dashboard.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        employerTabWidget->addTab(dashboardTab, icon14, QString());
         chatbotTab = new QWidget();
         chatbotTab->setObjectName("chatbotTab");
         chatbotLayout = new QVBoxLayout(chatbotTab);
@@ -2137,7 +1564,7 @@ public:
         chatbotLayout->setContentsMargins(24, 24, 24, 24);
         chatbotTitle = new QLabel(chatbotTab);
         chatbotTitle->setObjectName("chatbotTitle");
-        chatbotTitle->setFont(font9);
+        chatbotTitle->setFont(font8);
         chatbotTitle->setStyleSheet(QString::fromUtf8("QLabel {\n"
 "    color: #343a40;\n"
 "    font-weight: 500;\n"
@@ -2146,31 +1573,148 @@ public:
 
         chatbotLayout->addWidget(chatbotTitle);
 
-        chatbotPlaceholder = new QLabel(chatbotTab);
-        chatbotPlaceholder->setObjectName("chatbotPlaceholder");
-        QFont font14;
-        font14.setFamilies({QString::fromUtf8("Poppins")});
-        font14.setPointSize(14);
-        font14.setWeight(QFont::Light);
-        chatbotPlaceholder->setFont(font14);
-        chatbotPlaceholder->setStyleSheet(QString::fromUtf8("QLabel {\n"
-"    color: #6c757d;\n"
-"    font-weight: 300;\n"
-"    letter-spacing: 0.5px;\n"
-"    padding: 16px 0;\n"
+        chatbotDisplay = new QTextEdit(chatbotTab);
+        chatbotDisplay->setObjectName("chatbotDisplay");
+        chatbotDisplay->setMinimumSize(QSize(0, 300));
+        chatbotDisplay->setStyleSheet(QString::fromUtf8("QTextEdit {\n"
+"    border: 2px solid #e1e8ed;\n"
+"    border-radius: 8px;\n"
+"    background-color: #ffffff;\n"
+"    padding: 12px;\n"
+"    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;\n"
+"    font-size: 12px;\n"
+"    color: #343a40;\n"
+"}\n"
+"\n"
+"QTextEdit:hover {\n"
+"    border: 2px solid #1da1f2;\n"
 "}"));
-        chatbotPlaceholder->setAlignment(Qt::AlignmentFlag::AlignTop);
-        chatbotPlaceholder->setWordWrap(true);
+        chatbotDisplay->setReadOnly(true);
 
-        chatbotLayout->addWidget(chatbotPlaceholder);
+        chatbotLayout->addWidget(chatbotDisplay);
 
-        chatbotSpacer = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
+        chatbotInputLayout = new QHBoxLayout();
+        chatbotInputLayout->setObjectName("chatbotInputLayout");
+        chatbotInput = new QLineEdit(chatbotTab);
+        chatbotInput->setObjectName("chatbotInput");
+        chatbotInput->setMinimumSize(QSize(0, 36));
+        chatbotInput->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
+"    border: 2px solid #e1e8ed;\n"
+"    border-radius: 8px;\n"
+"    padding: 8px 12px;\n"
+"    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;\n"
+"    font-size: 12px;\n"
+"    background-color: #ffffff;\n"
+"    color: #343a40;\n"
+"}\n"
+"\n"
+"QLineEdit:focus {\n"
+"    border: 2px solid #1da1f2;\n"
+"    background-color: #f8f9ff;\n"
+"}\n"
+"\n"
+"QLineEdit::placeholder {\n"
+"    color: #adb5bd;\n"
+"}"));
 
-        chatbotLayout->addItem(chatbotSpacer);
+        chatbotInputLayout->addWidget(chatbotInput);
 
-        QIcon icon15;
-        icon15.addFile(QString::fromUtf8(":/resources/icons/chatbot.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        employerTabWidget->addTab(chatbotTab, icon15, QString());
+        chatbotSendButton = new QPushButton(chatbotTab);
+        chatbotSendButton->setObjectName("chatbotSendButton");
+        chatbotSendButton->setMinimumSize(QSize(80, 36));
+        chatbotSendButton->setMaximumSize(QSize(80, 16777215));
+        chatbotSendButton->setCursor(QCursor(Qt::CursorShape::PointingHandCursor));
+        chatbotSendButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: #1da1f2;\n"
+"    color: white;\n"
+"    border: none;\n"
+"    border-radius: 8px;\n"
+"    font-weight: 600;\n"
+"    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;\n"
+"    padding: 8px;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #1a91da;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #1580c1;\n"
+"}"));
+
+        chatbotInputLayout->addWidget(chatbotSendButton);
+
+
+        chatbotLayout->addLayout(chatbotInputLayout);
+
+        chatbotButtonLayout = new QHBoxLayout();
+        chatbotButtonLayout->setObjectName("chatbotButtonLayout");
+        chatbotClearButton = new QPushButton(chatbotTab);
+        chatbotClearButton->setObjectName("chatbotClearButton");
+        chatbotClearButton->setMinimumSize(QSize(100, 32));
+        chatbotClearButton->setCursor(QCursor(Qt::CursorShape::PointingHandCursor));
+        chatbotClearButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: #6c757d;\n"
+"    color: white;\n"
+"    border: none;\n"
+"    border-radius: 6px;\n"
+"    font-weight: 600;\n"
+"    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #5a6268;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #4e555b;\n"
+"}"));
+
+        chatbotButtonLayout->addWidget(chatbotClearButton);
+
+        chatbotHistoryButton = new QPushButton(chatbotTab);
+        chatbotHistoryButton->setObjectName("chatbotHistoryButton");
+        chatbotHistoryButton->setMinimumSize(QSize(100, 32));
+        chatbotHistoryButton->setCursor(QCursor(Qt::CursorShape::PointingHandCursor));
+        chatbotHistoryButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: #28a745;\n"
+"    color: white;\n"
+"    border: none;\n"
+"    border-radius: 6px;\n"
+"    font-weight: 600;\n"
+"    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #218838;\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #1e7e34;\n"
+"}"));
+
+        chatbotButtonLayout->addWidget(chatbotHistoryButton);
+
+        horizontalSpacer_6 = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        chatbotButtonLayout->addItem(horizontalSpacer_6);
+
+        chatbotStatusLabel = new QLabel(chatbotTab);
+        chatbotStatusLabel->setObjectName("chatbotStatusLabel");
+        chatbotStatusLabel->setStyleSheet(QString::fromUtf8("QLabel {\n"
+"    color: #6c757d;\n"
+"    font-style: italic;\n"
+"    font-size: 11px;\n"
+"}"));
+
+        chatbotButtonLayout->addWidget(chatbotStatusLabel);
+
+
+        chatbotLayout->addLayout(chatbotButtonLayout);
+
+        QIcon icon14;
+        icon14.addFile(QString::fromUtf8(":/resources/icons/chatbot.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        employerTabWidget->addTab(chatbotTab, icon14, QString());
 
         employerLayout->addWidget(employerTabWidget);
 
@@ -2260,11 +1804,11 @@ public:
 
         profileInfoContent = new QLabel(profileInfoTab);
         profileInfoContent->setObjectName("profileInfoContent");
-        QFont font15;
-        font15.setFamilies({QString::fromUtf8("Poppins")});
-        font15.setPointSize(14);
-        font15.setBold(true);
-        profileInfoContent->setFont(font15);
+        QFont font10;
+        font10.setFamilies({QString::fromUtf8("Poppins")});
+        font10.setPointSize(14);
+        font10.setBold(true);
+        profileInfoContent->setFont(font10);
         profileInfoContent->setStyleSheet(QString::fromUtf8("QLabel {\n"
 "    color: #6c757d;\n"
 "    font-weight: 700;\n"
@@ -2295,9 +1839,9 @@ public:
 
         profileInfoLayout->addItem(profileInfoSpacer);
 
-        QIcon icon16;
-        icon16.addFile(QString::fromUtf8(":/resources/icons/info.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        profileTabWidget->addTab(profileInfoTab, icon16, QString());
+        QIcon icon15;
+        icon15.addFile(QString::fromUtf8(":/resources/icons/info.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        profileTabWidget->addTab(profileInfoTab, icon15, QString());
         profileSettingsTab = new QWidget();
         profileSettingsTab->setObjectName("profileSettingsTab");
         profileSettingsLayout = new QVBoxLayout(profileSettingsTab);
@@ -2329,7 +1873,7 @@ public:
 
         profileSettingsContent = new QLabel(profileSettingsTab);
         profileSettingsContent->setObjectName("profileSettingsContent");
-        profileSettingsContent->setFont(font15);
+        profileSettingsContent->setFont(font10);
         profileSettingsContent->setStyleSheet(QString::fromUtf8("QLabel {\n"
 "    color: #6c757d;\n"
 "    font-weight: 700;\n"
@@ -2360,9 +1904,9 @@ public:
 
         profileSettingsLayout->addItem(profileSettingsSpacer);
 
-        QIcon icon17;
-        icon17.addFile(QString::fromUtf8(":/resources/icons/settings.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        profileTabWidget->addTab(profileSettingsTab, icon17, QString());
+        QIcon icon16;
+        icon16.addFile(QString::fromUtf8(":/resources/icons/settings.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        profileTabWidget->addTab(profileSettingsTab, icon16, QString());
 
         profileLayout->addWidget(profileTabWidget);
 
@@ -2469,7 +2013,11 @@ public:
 
         editorContent = new QLabel(editorPage);
         editorContent->setObjectName("editorContent");
-        editorContent->setFont(font14);
+        QFont font11;
+        font11.setFamilies({QString::fromUtf8("Poppins")});
+        font11.setPointSize(14);
+        font11.setWeight(QFont::Light);
+        editorContent->setFont(font11);
         editorContent->setStyleSheet(QString::fromUtf8("QLabel {\n"
 "    color: #6c757d;\n"
 "    font-weight: 300;\n"
@@ -2499,7 +2047,7 @@ public:
 
         libraryContent = new QLabel(libraryPage);
         libraryContent->setObjectName("libraryContent");
-        libraryContent->setFont(font14);
+        libraryContent->setFont(font11);
         libraryContent->setStyleSheet(QString::fromUtf8("QLabel {\n"
 "    color: #6c757d;\n"
 "    font-weight: 300;\n"
@@ -2544,7 +2092,7 @@ public:
 
         settingsContent = new QLabel(settingsPage);
         settingsContent->setObjectName("settingsContent");
-        settingsContent->setFont(font14);
+        settingsContent->setFont(font11);
         settingsContent->setStyleSheet(QString::fromUtf8("QLabel {\n"
 "    color: #6c757d;\n"
 "    font-weight: 300;\n"
@@ -2726,10 +2274,10 @@ public:
         shopBtn->setText(QCoreApplication::translate("MainWindow", "About", nullptr));
         loginBtn->setText(QCoreApplication::translate("MainWindow", "Login", nullptr));
         displayTitle->setText(QCoreApplication::translate("MainWindow", "                                                                            Employee Management", nullptr));
-        searchInput->setPlaceholderText(QCoreApplication::translate("MainWindow", "Search employees...", nullptr));
-        searchBtn->setText(QCoreApplication::translate("MainWindow", "Search", nullptr));
+        searchInput->setPlaceholderText(QCoreApplication::translate("MainWindow", "Search by First or Last name...", nullptr));
         sortBtn->setText(QCoreApplication::translate("MainWindow", "Sort by Name", nullptr));
         exportBtn->setText(QCoreApplication::translate("MainWindow", "Export as PDF", nullptr));
+        statisticsBtn->setText(QCoreApplication::translate("MainWindow", "Statistics", nullptr));
         QTableWidgetItem *___qtablewidgetitem = employeeTable->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QCoreApplication::translate("MainWindow", "Select", nullptr));
         QTableWidgetItem *___qtablewidgetitem1 = employeeTable->horizontalHeaderItem(1);
@@ -2748,21 +2296,23 @@ public:
         ___qtablewidgetitem7->setText(QCoreApplication::translate("MainWindow", "Start Date", nullptr));
         QTableWidgetItem *___qtablewidgetitem8 = employeeTable->horizontalHeaderItem(8);
         ___qtablewidgetitem8->setText(QCoreApplication::translate("MainWindow", "Resources", nullptr));
+        QTableWidgetItem *___qtablewidgetitem9 = employeeTable->horizontalHeaderItem(9);
+        ___qtablewidgetitem9->setText(QCoreApplication::translate("MainWindow", "Projects", nullptr));
 
         const bool __sortingEnabled = employeeTable->isSortingEnabled();
         employeeTable->setSortingEnabled(false);
-        QTableWidgetItem *___qtablewidgetitem9 = employeeTable->item(0, 0);
-        ___qtablewidgetitem9->setText(QCoreApplication::translate("MainWindow", "\342\230\220", nullptr));
-        QTableWidgetItem *___qtablewidgetitem10 = employeeTable->item(0, 2);
-        ___qtablewidgetitem10->setText(QCoreApplication::translate("MainWindow", "001", nullptr));
-        QTableWidgetItem *___qtablewidgetitem11 = employeeTable->item(0, 3);
-        ___qtablewidgetitem11->setText(QCoreApplication::translate("MainWindow", "AmineTemplar", nullptr));
-        QTableWidgetItem *___qtablewidgetitem12 = employeeTable->item(0, 4);
-        ___qtablewidgetitem12->setText(QCoreApplication::translate("MainWindow", "amine@templar.dev", nullptr));
-        QTableWidgetItem *___qtablewidgetitem13 = employeeTable->item(0, 5);
-        ___qtablewidgetitem13->setText(QCoreApplication::translate("MainWindow", "Administrator", nullptr));
-        QTableWidgetItem *___qtablewidgetitem14 = employeeTable->item(0, 6);
-        ___qtablewidgetitem14->setText(QCoreApplication::translate("MainWindow", "+216 00 000 000", nullptr));
+        QTableWidgetItem *___qtablewidgetitem10 = employeeTable->item(0, 0);
+        ___qtablewidgetitem10->setText(QCoreApplication::translate("MainWindow", "\342\230\220", nullptr));
+        QTableWidgetItem *___qtablewidgetitem11 = employeeTable->item(0, 2);
+        ___qtablewidgetitem11->setText(QCoreApplication::translate("MainWindow", "001", nullptr));
+        QTableWidgetItem *___qtablewidgetitem12 = employeeTable->item(0, 3);
+        ___qtablewidgetitem12->setText(QCoreApplication::translate("MainWindow", "AmineTemplar", nullptr));
+        QTableWidgetItem *___qtablewidgetitem13 = employeeTable->item(0, 4);
+        ___qtablewidgetitem13->setText(QCoreApplication::translate("MainWindow", "amine@templar.dev", nullptr));
+        QTableWidgetItem *___qtablewidgetitem14 = employeeTable->item(0, 5);
+        ___qtablewidgetitem14->setText(QCoreApplication::translate("MainWindow", "Administrator", nullptr));
+        QTableWidgetItem *___qtablewidgetitem15 = employeeTable->item(0, 6);
+        ___qtablewidgetitem15->setText(QCoreApplication::translate("MainWindow", "+216 00 000 000", nullptr));
         employeeTable->setSortingEnabled(__sortingEnabled);
 
         modifyBtn->setText(QCoreApplication::translate("MainWindow", "Modify", nullptr));
@@ -2773,31 +2323,20 @@ public:
         cancelBtn->setText(QCoreApplication::translate("MainWindow", "Cancel", nullptr));
         saveEmployeeBtn->setText(QCoreApplication::translate("MainWindow", "Save Employee", nullptr));
         employerTabWidget->setTabText(employerTabWidget->indexOf(addTab), QCoreApplication::translate("MainWindow", "Add", nullptr));
-        dashboardTabTitle->setText(QCoreApplication::translate("MainWindow", "Employer Dashboard", nullptr));
-        totalEmployeesTitle->setText(QCoreApplication::translate("MainWindow", "Total Employees", nullptr));
-        totalEmployeesNumber->setText(QCoreApplication::translate("MainWindow", "142", nullptr));
-        totalEmployeesGrowth->setText(QCoreApplication::translate("MainWindow", "+12% from last month", nullptr));
-        activeProjectsTitle->setText(QCoreApplication::translate("MainWindow", "Active Projects", nullptr));
-        activeProjectsNumber->setText(QCoreApplication::translate("MainWindow", "23", nullptr));
-        activeProjectsStatus->setText(QCoreApplication::translate("MainWindow", "5 near deadline", nullptr));
-        performanceTitle->setText(QCoreApplication::translate("MainWindow", "Performance Score", nullptr));
-        performanceNumber->setText(QCoreApplication::translate("MainWindow", "94.2%", nullptr));
-        performanceStatus->setText(QCoreApplication::translate("MainWindow", "Excellent", nullptr));
-        progressCirclesTitle->setText(QCoreApplication::translate("MainWindow", "Department Progress", nullptr));
-        developmentLabel->setText(QCoreApplication::translate("MainWindow", "Development\n"
-"75%", nullptr));
-        designLabel->setText(QCoreApplication::translate("MainWindow", "Design\n"
-"82%", nullptr));
-        managementLabel->setText(QCoreApplication::translate("MainWindow", "Management\n"
-"68%", nullptr));
-        chartTitle->setText(QCoreApplication::translate("MainWindow", "Monthly Growth", nullptr));
-        bar1Label->setText(QCoreApplication::translate("MainWindow", "Jan", nullptr));
-        bar2Label->setText(QCoreApplication::translate("MainWindow", "Feb", nullptr));
-        bar3Label->setText(QCoreApplication::translate("MainWindow", "Mar", nullptr));
-        bar4Label->setText(QCoreApplication::translate("MainWindow", "Apr", nullptr));
-        employerTabWidget->setTabText(employerTabWidget->indexOf(dashboardTab), QCoreApplication::translate("MainWindow", "Statistics", nullptr));
-        chatbotTitle->setText(QCoreApplication::translate("MainWindow", "AI Assistant", nullptr));
-        chatbotPlaceholder->setText(QCoreApplication::translate("MainWindow", "AI-powered chatbot for employee management assistance will be integrated here.", nullptr));
+        chatbotTitle->setText(QCoreApplication::translate("MainWindow", "AI Assistant - Employee Management Help", nullptr));
+        chatbotDisplay->setHtml(QCoreApplication::translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
+"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
+"p, li { white-space: pre-wrap; }\n"
+"hr { height: 1px; border-width: 0; }\n"
+"li.unchecked::marker { content: \"\\2610\"; }\n"
+"li.checked::marker { content: \"\\2612\"; }\n"
+"</style></head><body style=\" font-family:'Poppins','Segoe UI','Arial','sans-serif'; font-size:12px; font-weight:400; font-style:normal;\">\n"
+"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-family:'Poppins'; font-weight:700; color:#1da1f2;\">AI Assistant</span><span style=\" font-family:'Poppins';\">: Hello! I'm your AI assistant for employee and project management. Ask me anything about HR processes, employee benefits, or project management best practices!</span></p></body></html>", nullptr));
+        chatbotInput->setPlaceholderText(QCoreApplication::translate("MainWindow", "Type your question here...", nullptr));
+        chatbotSendButton->setText(QCoreApplication::translate("MainWindow", "Send", nullptr));
+        chatbotClearButton->setText(QCoreApplication::translate("MainWindow", "Clear Chat", nullptr));
+        chatbotHistoryButton->setText(QCoreApplication::translate("MainWindow", "Show History", nullptr));
+        chatbotStatusLabel->setText(QCoreApplication::translate("MainWindow", "Ready", nullptr));
         employerTabWidget->setTabText(employerTabWidget->indexOf(chatbotTab), QCoreApplication::translate("MainWindow", "Chatbot", nullptr));
         profileInfoTitle->setText(QCoreApplication::translate("MainWindow", "User Profile Information", nullptr));
         profileInfoContent->setText(QCoreApplication::translate("MainWindow", "User profile management and information display functionality is integrated here. You can manage your personal information, preferences, and account settings.", nullptr));

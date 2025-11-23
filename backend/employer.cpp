@@ -3,6 +3,10 @@
 #include <QSqlError>
 #include <QSqlDatabase>
 #include <QCryptographicHash>
+#include <QFile>
+#include <QTextDocument>
+#include <QPrinter>
+#include <QFontDatabase>
 
 QString Employer::hashPassword(const QString &password)
 {
@@ -245,6 +249,297 @@ bool Employer::removeCascade(qint64 employerId)
         return false;
     }
     
+    return true;
+}
+
+EmployerStatistics Employer::computeStatistics()
+{
+    EmployerStatistics stats;
+    QSqlDatabase db = QSqlDatabase::database();
+    QSqlQuery query(db);
+
+    // Total employees
+    if (query.exec("SELECT COUNT(*) FROM EMPLOYER") && query.next()) {
+        stats.totalEmployees = query.value(0).toInt();
+    }
+
+    // Active employees (if STATUS column exists)
+    if (query.exec("SELECT COUNT(*) FROM EMPLOYER WHERE STATUS = 'ACTIVE'") && query.next()) {
+        stats.activeEmployees = query.value(0).toInt();
+    }
+
+    // Average salary (best-effort: if SALARY column missing, this may return NULL)
+    if (query.exec("SELECT AVG(SALARY) FROM EMPLOYER") && query.next()) {
+        stats.averageSalary = query.value(0).toDouble();
+    } else {
+        stats.averageSalary = 0.0;
+    }
+
+    // Hires per year - adapt to driver (SQLite vs Oracle-like)
+    QString driver = db.driverName().toLower();
+    if (driver.contains("sqlite")) {
+        if (query.exec("SELECT strftime('%Y', HIRE_DATE) AS yr, COUNT(*) FROM EMPLOYER GROUP BY yr ORDER BY yr DESC")) {
+            while (query.next()) {
+                QString yearStr = query.value(0).toString();
+                int count = query.value(1).toInt();
+                if (!yearStr.isEmpty()) stats.hiresPerYear[yearStr.toInt()] = count;
+            }
+        }
+    } else {
+        // Try EXTRACT (Oracle) then TO_CHAR fallback
+        if (query.exec("SELECT EXTRACT(YEAR FROM HIRE_DATE) AS yr, COUNT(*) FROM EMPLOYER GROUP BY EXTRACT(YEAR FROM HIRE_DATE) ORDER BY yr DESC")) {
+            while (query.next()) {
+                int year = query.value(0).toInt();
+                int count = query.value(1).toInt();
+                stats.hiresPerYear[year] = count;
+            }
+        } else if (query.exec("SELECT TO_CHAR(HIRE_DATE,'YYYY') AS yr, COUNT(*) FROM EMPLOYER GROUP BY TO_CHAR(HIRE_DATE,'YYYY') ORDER BY yr DESC")) {
+            while (query.next()) {
+                QString yearStr = query.value(0).toString();
+                int count = query.value(1).toInt();
+                if (!yearStr.isEmpty()) stats.hiresPerYear[yearStr.toInt()] = count;
+            }
+        }
+    }
+
+    // Role distribution
+    if (query.exec("SELECT ROLE, COUNT(*) FROM EMPLOYER GROUP BY ROLE")) {
+        while (query.next()) {
+            QString role = query.value(0).toString();
+            int count = query.value(1).toInt();
+            stats.roleDistribution[role] = count;
+        }
+    }
+
+    // New employees this year & month (best-effort queries depending on driver)
+    QDate now = QDate::currentDate();
+    QString yearStr = QString::number(now.year());
+    QString monthStr = QString("%1").arg(now.month(), 2, 10, QChar('0'));
+    if (driver.contains("sqlite")) {
+        QString q1 = QString("SELECT COUNT(*) FROM EMPLOYER WHERE strftime('%Y', HIRE_DATE) = '%1'").arg(yearStr);
+        if (query.exec(q1) && query.next()) stats.newEmployeesThisYear = query.value(0).toInt();
+
+        QString q2 = QString("SELECT COUNT(*) FROM EMPLOYER WHERE strftime('%Y', HIRE_DATE) = '%1' AND strftime('%m', HIRE_DATE) = '%2'")
+                         .arg(yearStr).arg(monthStr);
+        if (query.exec(q2) && query.next()) stats.newEmployeesThisMonth = query.value(0).toInt();
+    } else {
+        QString q1 = QString("SELECT COUNT(*) FROM EMPLOYER WHERE TO_CHAR(HIRE_DATE,'YYYY') = '%1'").arg(yearStr);
+        if (!query.exec(q1)) {
+            q1 = QString("SELECT COUNT(*) FROM EMPLOYER WHERE EXTRACT(YEAR FROM HIRE_DATE) = %1").arg(yearStr);
+        }
+        if (query.exec(q1) && query.next()) stats.newEmployeesThisYear = query.value(0).toInt();
+
+        QString q2 = QString("SELECT COUNT(*) FROM EMPLOYER WHERE TO_CHAR(HIRE_DATE,'YYYY') = '%1' AND TO_CHAR(HIRE_DATE,'MM') = '%2'")
+                         .arg(yearStr).arg(monthStr);
+        if (!query.exec(q2)) {
+            q2 = QString("SELECT COUNT(*) FROM EMPLOYER WHERE EXTRACT(YEAR FROM HIRE_DATE) = %1 AND EXTRACT(MONTH FROM HIRE_DATE) = %2").arg(yearStr).arg(now.month());
+        }
+        if (query.exec(q2) && query.next()) stats.newEmployeesThisMonth = query.value(0).toInt();
+    }
+
+    // Most common role
+    if (!stats.roleDistribution.isEmpty()) {
+        int best = -1;
+        for (auto it = stats.roleDistribution.constBegin(); it != stats.roleDistribution.constEnd(); ++it) {
+            if (it.value() > best) {
+                best = it.value();
+                stats.mostCommonRole = it.key();
+            }
+        }
+    }
+
+    // department count: distinct ROLE count
+    if (query.exec("SELECT COUNT(DISTINCT ROLE) FROM EMPLOYER") && query.next()) {
+        stats.departmentCount = query.value(0).toInt();
+    }
+
+    if (stats.totalEmployees > 0) {
+        stats.retentionRate = (double)stats.activeEmployees / stats.totalEmployees * 100.0;
+    } else {
+        stats.retentionRate = 0.0;
+    }
+
+    // Min and Max Salary
+    if (query.exec("SELECT MIN(SALARY), MAX(SALARY) FROM EMPLOYER") && query.next()) {
+        stats.minSalary = query.value(0).toDouble();
+        stats.maxSalary = query.value(1).toDouble();
+    }
+
+    // Hires per month in current year
+    if (driver.contains("sqlite")) {
+        QString qMonth = QString("SELECT strftime('%m', HIRE_DATE) AS mon, COUNT(*) FROM EMPLOYER WHERE strftime('%Y', HIRE_DATE) = '%1' GROUP BY mon ORDER BY mon").arg(yearStr);
+        if (query.exec(qMonth)) {
+            while (query.next()) {
+                QString monStr = query.value(0).toString();
+                int count = query.value(1).toInt();
+                if (!monStr.isEmpty()) stats.hiresPerMonth[monStr.toInt()] = count;
+            }
+        }
+    } else {
+        QString qMonth = QString("SELECT TO_CHAR(HIRE_DATE,'MM') AS mon, COUNT(*) FROM EMPLOYER WHERE TO_CHAR(HIRE_DATE,'YYYY') = '%1' GROUP BY TO_CHAR(HIRE_DATE,'MM') ORDER BY mon").arg(yearStr);
+        if (!query.exec(qMonth)) {
+            qMonth = QString("SELECT EXTRACT(MONTH FROM HIRE_DATE) AS mon, COUNT(*) FROM EMPLOYER WHERE EXTRACT(YEAR FROM HIRE_DATE) = %1 GROUP BY EXTRACT(MONTH FROM HIRE_DATE) ORDER BY mon").arg(now.year());
+        }
+        if (query.exec(qMonth)) {
+            while (query.next()) {
+                int mon = query.value(0).toInt();
+                int count = query.value(1).toInt();
+                stats.hiresPerMonth[mon] = count;
+            }
+        }
+    }
+
+    // Top Projects managed by employers
+    if (query.exec("SELECT PROJECT_NAME, COUNT(*) FROM PROJECTS GROUP BY PROJECT_NAME ORDER BY COUNT(*) DESC LIMIT 10")) {
+        while (query.next()) {
+            QString projName = query.value(0).toString();
+            int count = query.value(1).toInt();
+            stats.topProjects[projName] = count;
+        }
+    }
+
+    // Top Resources used by employers
+    if (query.exec("SELECT RESOURCE_NAME, COUNT(*) FROM RESSOURCE GROUP BY RESOURCE_NAME ORDER BY COUNT(*) DESC LIMIT 10")) {
+        while (query.next()) {
+            QString resName = query.value(0).toString();
+            int count = query.value(1).toInt();
+            stats.topResources[resName] = count;
+        }
+    }
+
+    return stats;
+}
+
+bool Employer::exportToPdf(const QString &filePath, QString *errorMessage)
+{
+    QVector<Employer> employees = Employer::selectAll();
+
+    if (employees.isEmpty()) {
+        if (errorMessage) *errorMessage = "Aucun employé à exporter.";
+        return false;
+    }
+
+    EmployerStatistics stats = Employer::computeStatistics();
+
+    // Ensure Poppins is available for the document; it is added at application start in main.
+    const QString poppinsRcc = ":/resources/fonts/Poppins-Light.ttf";
+    static QString poppinsFamily;
+    if (poppinsFamily.isEmpty()) {
+        int fontId = QFontDatabase::addApplicationFont(poppinsRcc);
+        if (fontId != -1) {
+            QStringList families = QFontDatabase::applicationFontFamilies(fontId);
+            if (!families.isEmpty()) poppinsFamily = families.first();
+        }
+    }
+
+    QString html = "<html><head><style>";
+    html += "@page { margin: 48px 30px 70px 30px; }"; // top/bottom margins for title & footer
+    html += "body{font-family: 'Poppins', Arial, sans-serif; margin: 0px; font-size: 12px; color:#222;}";
+    html += "table{width:100%; border-collapse:collapse; table-layout:fixed;}";
+    html += "thead{display: table-header-group;}";
+    html += "tr{page-break-inside: avoid;}";
+    html += "th, td{border:1px solid #ddd; padding:8px; text-align:left; vertical-align:top;}";
+    html += "th{background:#f7f7f7; font-weight:700; font-size:12px;}";
+    html += "tr:nth-child(even){background:#fbfbfb;}";
+    html += "thead th{background:#e9eefc; border-bottom:2px solid #d6ddf6;}";
+    html += "td{overflow-wrap:break-word; word-break:break-word; hyphens:auto; white-space:normal;}";
+    html += ".email{max-width:260px; overflow-wrap:break-word; text-align:left;}";
+    html += "</style></head><body>";
+    html += "<h1 align='center' style='font-size:20px; margin:10px 0; font-weight:700;'>Liste des employés</h1>";
+    html += "<div style='text-align:center; margin-bottom:8px;color:#666;'>Comprehensive list of employees and analytics</div>";
+
+    // Table of employees
+    // Use colgroup to control widths; table-layout:fixed for consistent column sizing
+    html += "<div style='display:flex; justify-content:space-between; gap:10px; margin-bottom:8px;'>";
+    html += "<div style='flex:1; padding:8px; border-radius:6px; background:#f4f8ff; text-align:center; font-weight:600;'>Total: " + QString::number(stats.totalEmployees) + "</div>";
+    html += "<div style='flex:1; padding:8px; border-radius:6px; background:#f4fff4; text-align:center; font-weight:600;'>Active: " + QString::number(stats.activeEmployees) + "</div>";
+    html += "<div style='flex:1; padding:8px; border-radius:6px; background:#fff8f0; text-align:center; font-weight:600;'>Retention: " + QString::number(stats.retentionRate, 'f', 1) + "%</div>";
+    html += "</div>";
+
+    html += "<table><colgroup>";
+    html += "<col style='width:6%'/><col style='width:14%'/><col style='width:14%'/><col style='width:26%'/><col style='width:12%'/><col style='width:18%'/><col style='width:10%'/></colgroup>";
+    html += "<thead><tr><th style='text-align:center;'>ID</th><th>Prénom</th><th>Nom</th><th>Email</th><th>Téléphone</th><th>Rôle</th><th style='text-align:center;'>Date Embauche</th></tr></thead>";
+    html += "<tbody>";
+
+    for (const Employer &e : employees) {
+        html += "<tr>";
+        html += "<td>" + QString::number(e.employerId) + "</td>";
+        html += "<td>" + e.firstName.toHtmlEscaped() + "</td>";
+        html += "<td>" + e.lastName.toHtmlEscaped() + "</td>";
+        html += "<td class='email'>" + e.email.toHtmlEscaped() + "</td>";
+        html += "<td>" + e.phone.toHtmlEscaped() + "</td>";
+        html += "<td>" + e.role.toHtmlEscaped() + "</td>";
+        html += "<td>" + e.startDate.toString("yyyy-MM-dd") + "</td>";
+        html += "</tr>";
+    }
+    html += "</tbody></table><br>";
+
+    // Statistics section
+    html += "<h2 style='margin-top: 18px; margin-bottom:4px;'>Statistiques</h2>";
+    html += "<ul>";
+    html += "<li>Total employés: " + QString::number(stats.totalEmployees) + "</li>";
+    html += "<li>Employés actifs: " + QString::number(stats.activeEmployees) + "</li>";
+    html += "<li>Nouvel(s) embauché(s) ce mois: " + QString::number(stats.newEmployeesThisMonth) + "</li>";
+    html += "<li>Nouvel(s) embauché(s) cette année: " + QString::number(stats.newEmployeesThisYear) + "</li>";
+    html += "<li>Salaire moyen: " + QString::number(stats.averageSalary, 'f', 2) + "</li>";
+    html += "<li>Min salaire: " + QString::number(stats.minSalary, 'f', 2) + "</li>";
+    html += "<li>Max salaire: " + QString::number(stats.maxSalary, 'f', 2) + "</li>";
+    html += "<li>Taux de rétention: " + QString::number(stats.retentionRate, 'f', 2) + "%</li>";
+    if (!stats.mostCommonRole.isEmpty()) {
+        html += "<li>Rôle le plus courant: " + stats.mostCommonRole.toHtmlEscaped() + "</li>";
+    }
+    html += "</ul>";
+    html += "<div style='margin-top:10px;'><strong>Top roles</strong></div>";
+
+    // Role distribution (simple list)
+    if (!stats.roleDistribution.isEmpty()) {
+        html += "<h3>Distribution par rôle</h3>";
+        html += "<table><tr><th>Rôle</th><th>Count</th></tr>";
+        for (auto it = stats.roleDistribution.constBegin(); it != stats.roleDistribution.constEnd(); ++it) {
+            html += "<tr>";
+            html += "<td>" + it.key().toHtmlEscaped() + "</td>";
+            html += "<td>" + QString::number(it.value()) + "</td>";
+            html += "</tr>";
+        }
+        html += "</table>";
+    }
+
+    // Footer: centered text only (no image) — subtle separator line and small caption
+    html += "<div style='position:fixed; left:0; right:0; bottom:6px; text-align:center;'>";
+    html += "<div style='display:inline-block; margin:0 auto; padding-top:8px; border-top:1px solid #eee; width:100%;'>";
+    html += "<div style='font-size:11px; color:#666; margin-top:6px;'>Inspira Studio — Rapport des employés • Generated " + QDate::currentDate().toString("yyyy-MM-dd") + "</div>";
+    html += "</div></div>";
+
+    html += "</body></html>";
+
+    // Use QTextDocument + QPrinter to generate PDF
+    QPrinter printer(QPrinter::HighResolution);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setOutputFileName(filePath);
+
+    QTextDocument doc;
+    // Explicitly set default font to Poppins if available; otherwise fallback
+    if (!poppinsFamily.isEmpty()) {
+        QFont defaultFont(poppinsFamily, 11);
+        doc.setDefaultFont(defaultFont);
+    } else {
+        QFont f("Arial", 11);
+        doc.setDefaultFont(f);
+    }
+    doc.setHtml(html);
+
+    // Make sure the doc fits the page size (help with text flow/table wrapping)
+    const QSizeF pageRect = printer.pageRect(QPrinter::Point).size();
+    doc.setPageSize(pageRect);
+
+    // Try printing to PDF; handle errors if thrown
+    try {
+        doc.print(&printer);
+    } catch (...) {
+        if (errorMessage) *errorMessage = "Erreur lors de la génération du PDF.";
+        return false;
+    }
+
     return true;
 }
 

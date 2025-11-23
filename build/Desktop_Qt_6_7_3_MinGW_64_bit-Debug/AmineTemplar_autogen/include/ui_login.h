@@ -31,6 +31,7 @@ public:
     QWidget *loginFormPage;
     QVBoxLayout *loginFormLayout;
     QLabel *loginTitle;
+    QPushButton *loginBackButton;
     QSpacerItem *loginTitleSpacer;
     QLineEdit *loginEmailLineEdit;
     QSpacerItem *loginFieldSpacer1;
@@ -78,7 +79,7 @@ public:
     {
         if (LoginPage->objectName().isEmpty())
             LoginPage->setObjectName("LoginPage");
-        LoginPage->resize(450, 600);
+        LoginPage->resize(487, 729);
         LoginPage->setStyleSheet(QString::fromUtf8("QWidget#LoginPage {\n"
 "    background-color: transparent;\n"
 "    font-family: 'Poppins';\n"
@@ -100,6 +101,7 @@ public:
         QFont font;
         font.setFamilies({QString::fromUtf8("Poppins")});
         font.setPointSize(28);
+        font.setWeight(QFont::DemiBold);
         loginTitle->setFont(font);
         loginTitle->setStyleSheet(QString::fromUtf8("QLabel {\n"
 "    color: #14171a;\n"
@@ -109,9 +111,22 @@ public:
 "    padding: 24px 0px;\n"
 "    text-align: center;\n"
 "}"));
-        loginTitle->setAlignment(Qt::AlignCenter);
+        loginTitle->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
         loginFormLayout->addWidget(loginTitle);
+
+        loginBackButton = new QPushButton(loginFormPage);
+        loginBackButton->setObjectName("loginBackButton");
+        loginBackButton->setMinimumSize(QSize(0, 32));
+        QFont font1;
+        font1.setFamilies({QString::fromUtf8("Poppins")});
+        font1.setPointSize(10);
+        font1.setBold(false);
+        loginBackButton->setFont(font1);
+        loginBackButton->setStyleSheet(QString::fromUtf8("QPushButton { background-color: transparent; color: #6c757d; border: none; font-weight: 400; } QPushButton:hover { color: #007bff; }"));
+        loginBackButton->setFlat(true);
+
+        loginFormLayout->addWidget(loginBackButton);
 
         loginTitleSpacer = new QSpacerItem(20, 32, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Fixed);
 
@@ -120,10 +135,11 @@ public:
         loginEmailLineEdit = new QLineEdit(loginFormPage);
         loginEmailLineEdit->setObjectName("loginEmailLineEdit");
         loginEmailLineEdit->setMinimumSize(QSize(0, 48));
-        QFont font1;
-        font1.setFamilies({QString::fromUtf8("Poppins")});
-        font1.setPointSize(12);
-        loginEmailLineEdit->setFont(font1);
+        QFont font2;
+        font2.setFamilies({QString::fromUtf8("Poppins")});
+        font2.setPointSize(12);
+        font2.setWeight(QFont::Light);
+        loginEmailLineEdit->setFont(font2);
         loginEmailLineEdit->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
 "    padding: 12px 16px;\n"
 "    border: 1px solid #dee2e6;\n"
@@ -150,7 +166,7 @@ public:
         loginPasswordLineEdit = new QLineEdit(loginFormPage);
         loginPasswordLineEdit->setObjectName("loginPasswordLineEdit");
         loginPasswordLineEdit->setMinimumSize(QSize(0, 48));
-        loginPasswordLineEdit->setFont(font1);
+        loginPasswordLineEdit->setFont(font2);
         loginPasswordLineEdit->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
 "    padding: 12px 16px;\n"
 "    border: 1px solid #dee2e6;\n"
@@ -167,7 +183,7 @@ public:
 "QLineEdit:hover {\n"
 "    border-color: #adb5bd;\n"
 "}"));
-        loginPasswordLineEdit->setEchoMode(QLineEdit::Password);
+        loginPasswordLineEdit->setEchoMode(QLineEdit::EchoMode::Password);
 
         loginFormLayout->addWidget(loginPasswordLineEdit);
 
@@ -177,10 +193,11 @@ public:
 
         rememberMeCheckBox = new QCheckBox(loginFormPage);
         rememberMeCheckBox->setObjectName("rememberMeCheckBox");
-        QFont font2;
-        font2.setFamilies({QString::fromUtf8("Poppins")});
-        font2.setPointSize(11);
-        rememberMeCheckBox->setFont(font2);
+        QFont font3;
+        font3.setFamilies({QString::fromUtf8("Poppins")});
+        font3.setPointSize(11);
+        font3.setWeight(QFont::Light);
+        rememberMeCheckBox->setFont(font3);
         rememberMeCheckBox->setStyleSheet(QString::fromUtf8("QCheckBox {\n"
 "    color: #6c757d;\n"
 "    font-weight: 300;\n"
@@ -210,7 +227,11 @@ public:
         loginButton = new QPushButton(loginFormPage);
         loginButton->setObjectName("loginButton");
         loginButton->setMinimumSize(QSize(0, 48));
-        loginButton->setFont(font1);
+        QFont font4;
+        font4.setFamilies({QString::fromUtf8("Poppins")});
+        font4.setPointSize(12);
+        font4.setWeight(QFont::Medium);
+        loginButton->setFont(font4);
         loginButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: #007bff;\n"
 "    color: white;\n"
@@ -243,7 +264,11 @@ public:
         faceLoginButton = new QPushButton(loginFormPage);
         faceLoginButton->setObjectName("faceLoginButton");
         faceLoginButton->setMinimumSize(QSize(0, 48));
-        faceLoginButton->setFont(font1);
+        QFont font5;
+        font5.setFamilies({QString::fromUtf8("Poppins")});
+        font5.setPointSize(12);
+        font5.setBold(false);
+        faceLoginButton->setFont(font5);
         faceLoginButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: #ffffff;\n"
 "    color: #007bff;\n"
@@ -279,7 +304,12 @@ public:
 
         forgotPasswordNavButton = new QPushButton(loginFormPage);
         forgotPasswordNavButton->setObjectName("forgotPasswordNavButton");
-        forgotPasswordNavButton->setFont(font2);
+        QFont font6;
+        font6.setFamilies({QString::fromUtf8("Poppins")});
+        font6.setPointSize(11);
+        font6.setWeight(QFont::Light);
+        font6.setUnderline(true);
+        forgotPasswordNavButton->setFont(font6);
         forgotPasswordNavButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: transparent;\n"
 "    color: #007bff;\n"
@@ -302,7 +332,7 @@ public:
 
         signUpNavButton = new QPushButton(loginFormPage);
         signUpNavButton->setObjectName("signUpNavButton");
-        signUpNavButton->setFont(font2);
+        signUpNavButton->setFont(font3);
         signUpNavButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: transparent;\n"
 "    color: #6c757d;\n"
@@ -335,7 +365,7 @@ public:
 "    padding: 24px 0px;\n"
 "    text-align: center;\n"
 "}"));
-        signUpTitle->setAlignment(Qt::AlignCenter);
+        signUpTitle->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
         signUpFormLayout->addWidget(signUpTitle);
 
@@ -346,7 +376,7 @@ public:
         fullNameLineEdit = new QLineEdit(signUpFormPage);
         fullNameLineEdit->setObjectName("fullNameLineEdit");
         fullNameLineEdit->setMinimumSize(QSize(0, 48));
-        fullNameLineEdit->setFont(font1);
+        fullNameLineEdit->setFont(font2);
         fullNameLineEdit->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
 "    padding: 12px 16px;\n"
 "    border: 1px solid #dee2e6;\n"
@@ -373,7 +403,7 @@ public:
         signUpEmailLineEdit = new QLineEdit(signUpFormPage);
         signUpEmailLineEdit->setObjectName("signUpEmailLineEdit");
         signUpEmailLineEdit->setMinimumSize(QSize(0, 48));
-        signUpEmailLineEdit->setFont(font1);
+        signUpEmailLineEdit->setFont(font2);
         signUpEmailLineEdit->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
 "    padding: 12px 16px;\n"
 "    border: 1px solid #dee2e6;\n"
@@ -400,7 +430,7 @@ public:
         signUpPasswordLineEdit = new QLineEdit(signUpFormPage);
         signUpPasswordLineEdit->setObjectName("signUpPasswordLineEdit");
         signUpPasswordLineEdit->setMinimumSize(QSize(0, 48));
-        signUpPasswordLineEdit->setFont(font1);
+        signUpPasswordLineEdit->setFont(font2);
         signUpPasswordLineEdit->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
 "    padding: 12px 16px;\n"
 "    border: 1px solid #dee2e6;\n"
@@ -417,7 +447,7 @@ public:
 "QLineEdit:hover {\n"
 "    border-color: #adb5bd;\n"
 "}"));
-        signUpPasswordLineEdit->setEchoMode(QLineEdit::Password);
+        signUpPasswordLineEdit->setEchoMode(QLineEdit::EchoMode::Password);
 
         signUpFormLayout->addWidget(signUpPasswordLineEdit);
 
@@ -428,7 +458,7 @@ public:
         confirmPasswordLineEdit = new QLineEdit(signUpFormPage);
         confirmPasswordLineEdit->setObjectName("confirmPasswordLineEdit");
         confirmPasswordLineEdit->setMinimumSize(QSize(0, 48));
-        confirmPasswordLineEdit->setFont(font1);
+        confirmPasswordLineEdit->setFont(font2);
         confirmPasswordLineEdit->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
 "    padding: 12px 16px;\n"
 "    border: 1px solid #dee2e6;\n"
@@ -445,7 +475,7 @@ public:
 "QLineEdit:hover {\n"
 "    border-color: #adb5bd;\n"
 "}"));
-        confirmPasswordLineEdit->setEchoMode(QLineEdit::Password);
+        confirmPasswordLineEdit->setEchoMode(QLineEdit::EchoMode::Password);
 
         signUpFormLayout->addWidget(confirmPasswordLineEdit);
 
@@ -455,7 +485,7 @@ public:
 
         acceptTermsCheckBox = new QCheckBox(signUpFormPage);
         acceptTermsCheckBox->setObjectName("acceptTermsCheckBox");
-        acceptTermsCheckBox->setFont(font2);
+        acceptTermsCheckBox->setFont(font3);
         acceptTermsCheckBox->setStyleSheet(QString::fromUtf8("QCheckBox {\n"
 "    color: #6c757d;\n"
 "    font-weight: 300;\n"
@@ -485,7 +515,7 @@ public:
         signUpButton = new QPushButton(signUpFormPage);
         signUpButton->setObjectName("signUpButton");
         signUpButton->setMinimumSize(QSize(0, 48));
-        signUpButton->setFont(font1);
+        signUpButton->setFont(font2);
         signUpButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: #007bff;\n"
 "    color: white;\n"
@@ -510,7 +540,7 @@ public:
 
         backToLoginFromSignUpButton = new QPushButton(signUpFormPage);
         backToLoginFromSignUpButton->setObjectName("backToLoginFromSignUpButton");
-        backToLoginFromSignUpButton->setFont(font2);
+        backToLoginFromSignUpButton->setFont(font3);
         backToLoginFromSignUpButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: transparent;\n"
 "    color: #6c757d;\n"
@@ -543,7 +573,7 @@ public:
 "    padding: 24px 0px;\n"
 "    text-align: center;\n"
 "}"));
-        forgotPasswordTitle->setAlignment(Qt::AlignCenter);
+        forgotPasswordTitle->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
         forgotPasswordFormLayout->addWidget(forgotPasswordTitle);
 
@@ -553,13 +583,13 @@ public:
 
         forgotPasswordDescription = new QLabel(forgotPasswordFormPage);
         forgotPasswordDescription->setObjectName("forgotPasswordDescription");
-        forgotPasswordDescription->setFont(font1);
+        forgotPasswordDescription->setFont(font2);
         forgotPasswordDescription->setStyleSheet(QString::fromUtf8("QLabel {\n"
 "    color: #6c757d;\n"
 "    font-weight: 300;\n"
 "    letter-spacing: 0.5px;\n"
 "}"));
-        forgotPasswordDescription->setAlignment(Qt::AlignCenter);
+        forgotPasswordDescription->setAlignment(Qt::AlignmentFlag::AlignCenter);
         forgotPasswordDescription->setWordWrap(true);
 
         forgotPasswordFormLayout->addWidget(forgotPasswordDescription);
@@ -571,7 +601,7 @@ public:
         resetEmailLineEdit = new QLineEdit(forgotPasswordFormPage);
         resetEmailLineEdit->setObjectName("resetEmailLineEdit");
         resetEmailLineEdit->setMinimumSize(QSize(0, 48));
-        resetEmailLineEdit->setFont(font1);
+        resetEmailLineEdit->setFont(font2);
         resetEmailLineEdit->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
 "    padding: 12px 16px;\n"
 "    border: 1px solid #dee2e6;\n"
@@ -598,7 +628,7 @@ public:
         sendResetLinkButton = new QPushButton(forgotPasswordFormPage);
         sendResetLinkButton->setObjectName("sendResetLinkButton");
         sendResetLinkButton->setMinimumSize(QSize(0, 48));
-        sendResetLinkButton->setFont(font1);
+        sendResetLinkButton->setFont(font2);
         sendResetLinkButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: #007bff;\n"
 "    color: white;\n"
@@ -623,7 +653,7 @@ public:
 
         backToLoginFromForgotButton = new QPushButton(forgotPasswordFormPage);
         backToLoginFromForgotButton->setObjectName("backToLoginFromForgotButton");
-        backToLoginFromForgotButton->setFont(font2);
+        backToLoginFromForgotButton->setFont(font3);
         backToLoginFromForgotButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
 "    background-color: transparent;\n"
 "    color: #6c757d;\n"
@@ -656,6 +686,7 @@ public:
     {
         LoginPage->setWindowTitle(QCoreApplication::translate("LoginPage", "Login", nullptr));
         loginTitle->setText(QCoreApplication::translate("LoginPage", "Sign In", nullptr));
+        loginBackButton->setText(QString());
         loginEmailLineEdit->setPlaceholderText(QCoreApplication::translate("LoginPage", "Email or Username", nullptr));
         loginPasswordLineEdit->setPlaceholderText(QCoreApplication::translate("LoginPage", "Password", nullptr));
         rememberMeCheckBox->setText(QCoreApplication::translate("LoginPage", "Remember me", nullptr));

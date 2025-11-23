@@ -1,4 +1,53 @@
 {
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "CMake: Configure (MinGW Makefiles)",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "-S", ".",
+        "-B", "build",
+        "-G", "MinGW Makefiles"
+      ],
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "CMake: Build",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--build", "build",
+        "--config", "Debug"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "CMake: Clean Build Directory",
+      "type": "shell",
+      "command": "powershell",
+      "args": [
+        "-NoProfile", "-Command", "Remove-Item -Recurse -Force ./build/*"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    }
+  ]
+}
+{
 	"version": "2.0.0",
 	"tasks": [
 		{

@@ -10,519 +10,505 @@
 #define UI_SPONSOR_H
 
 #include <QtCore/QVariant>
-#include <QtGui/QIcon>
+#include <QtGui/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QComboBox>
-#include <QtWidgets/QDateTimeEdit>
-#include <QtWidgets/QFormLayout>
-#include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QDateEdit>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
+#include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTableWidget>
-#include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 
-class Ui_SponsorWidget
+class Ui_SponsorWindow
 {
 public:
     QWidget *centralwidget;
-    QVBoxLayout *mainLayout;
-    QTabWidget *clientTabWidget;
-    QWidget *serviceManagementTab;
-    QVBoxLayout *serviceManagementLayout;
-    QLabel *headerTitle;
-    QHBoxLayout *topControlsLayout;
-    QLineEdit *searchServices;
-    QSpacerItem *topControlsSpacer;
-    QPushButton *exportCsvBtn;
-    QPushButton *btnSortByName;
-    QTableWidget *clientsTable;
-    QHBoxLayout *serviceButtonsLayout;
-    QSpacerItem *serviceButtonsSpacer;
-    QPushButton *btnEditService;
-    QPushButton *btnDeleteService;
-    QWidget *addTab;
-    QVBoxLayout *addLayout;
-    QLabel *addLabel;
-    QFormLayout *addFormLayout;
-    QLabel *addServiceIdLabel;
-    QLineEdit *addServiceIdEdit;
-    QLabel *addServiceNameLabel;
-    QLineEdit *addNameEdit;
-    QLabel *addServiceCategoryLabel;
-    QComboBox *addCategoryCombo;
-    QLabel *addServicePriceLabel;
-    QLineEdit *addPriceEdit;
-    QDateTimeEdit *addDateEdit;
-    QLabel *addServiceDateLabel;
-    QHBoxLayout *addButtonLayout;
-    QSpacerItem *addButtonSpacer;
-    QPushButton *addServiceBtn;
-    QSpacerItem *addVerticalSpacer;
-    QWidget *voiceChatTab;
-    QVBoxLayout *voiceChatLayout;
-    QHBoxLayout *voiceControlLayout;
-    QWidget *modifyTab;
-    QVBoxLayout *modifyLayout;
+    QTabWidget *tabWidget;
+    QWidget *tab_2;
+    QTableWidget *affiche;
+    QLineEdit *search1;
+    QPushButton *search1_2;
+    QPushButton *pdfexport;
+    QPushButton *deleteButton;
+    QLabel *label;
+    QPushButton *sort;
+    QPushButton *afficherButton;
+    QWidget *tab;
+    QLabel *label_7;
+    QLabel *label_4;
+    QLabel *label_3;
+    QLabel *label_2;
+    QLineEdit *ID;
+    QLabel *label_5;
+    QLabel *label_9;
+    QPushButton *addButton;
+    QLineEdit *Nom;
+    QLineEdit *EM;
+    QDateEdit *dd;
+    QDateEdit *df;
+    QComboBox *STS;
+    QPushButton *updateButton;
+    QPushButton *clear;
+    QWidget *tab_3;
     QMenuBar *menubar;
+    QMenu *menuG_SPONSORING;
     QStatusBar *statusbar;
 
-    void setupUi(QWidget *SponsorWidget)
+    void setupUi(QMainWindow *SponsorWindow)
     {
-        if (SponsorWidget->objectName().isEmpty())
-            SponsorWidget->setObjectName("SponsorWidget");
-        SponsorWidget->resize(1200, 800);
-        centralwidget = new QWidget(SponsorWidget);
+        if (SponsorWindow->objectName().isEmpty())
+            SponsorWindow->setObjectName("SponsorWindow");
+        SponsorWindow->resize(1459, 773);
+        SponsorWindow->setStyleSheet(QString::fromUtf8("background-color:rgb(0, 85, 127)"));
+        centralwidget = new QWidget(SponsorWindow);
         centralwidget->setObjectName("centralwidget");
-        centralwidget->setGeometry(QRect(10, 20, 1241, 665));
-        mainLayout = new QVBoxLayout(centralwidget);
-        mainLayout->setSpacing(20);
-        mainLayout->setObjectName("mainLayout");
-        mainLayout->setContentsMargins(30, 20, 30, 20);
-        clientTabWidget = new QTabWidget(centralwidget);
-        clientTabWidget->setObjectName("clientTabWidget");
-        serviceManagementTab = new QWidget();
-        serviceManagementTab->setObjectName("serviceManagementTab");
-        serviceManagementLayout = new QVBoxLayout(serviceManagementTab);
-        serviceManagementLayout->setSpacing(15);
-        serviceManagementLayout->setObjectName("serviceManagementLayout");
-        serviceManagementLayout->setContentsMargins(20, 20, 20, 20);
-        headerTitle = new QLabel(serviceManagementTab);
-        headerTitle->setObjectName("headerTitle");
-        headerTitle->setAlignment(Qt::AlignmentFlag::AlignCenter);
-
-        serviceManagementLayout->addWidget(headerTitle);
-
-        topControlsLayout = new QHBoxLayout();
-        topControlsLayout->setObjectName("topControlsLayout");
-        searchServices = new QLineEdit(serviceManagementTab);
-        searchServices->setObjectName("searchServices");
-        searchServices->setMinimumSize(QSize(250, 0));
-        searchServices->setClearButtonEnabled(true);
-
-        topControlsLayout->addWidget(searchServices);
-
-        topControlsSpacer = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
-
-        topControlsLayout->addItem(topControlsSpacer);
-
-        exportCsvBtn = new QPushButton(serviceManagementTab);
-        exportCsvBtn->setObjectName("exportCsvBtn");
-        QIcon icon;
-        icon.addFile(QString::fromUtf8(":/resources/icons/export.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        exportCsvBtn->setIcon(icon);
-        exportCsvBtn->setIconSize(QSize(16, 16));
-
-        topControlsLayout->addWidget(exportCsvBtn);
-
-        btnSortByName = new QPushButton(serviceManagementTab);
-        btnSortByName->setObjectName("btnSortByName");
-        QIcon icon1;
-        icon1.addFile(QString::fromUtf8(":/resources/icons/sort.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        btnSortByName->setIcon(icon1);
-        btnSortByName->setIconSize(QSize(16, 16));
-
-        topControlsLayout->addWidget(btnSortByName);
-
-
-        serviceManagementLayout->addLayout(topControlsLayout);
-
-        clientsTable = new QTableWidget(serviceManagementTab);
-        if (clientsTable->columnCount() < 4)
-            clientsTable->setColumnCount(4);
-        QFont font;
-        font.setBold(true);
-        QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
-        __qtablewidgetitem->setFont(font);
-        clientsTable->setHorizontalHeaderItem(0, __qtablewidgetitem);
-        QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
-        __qtablewidgetitem1->setFont(font);
-        clientsTable->setHorizontalHeaderItem(1, __qtablewidgetitem1);
-        QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
-        __qtablewidgetitem2->setFont(font);
-        clientsTable->setHorizontalHeaderItem(2, __qtablewidgetitem2);
-        QTableWidgetItem *__qtablewidgetitem3 = new QTableWidgetItem();
-        clientsTable->setHorizontalHeaderItem(3, __qtablewidgetitem3);
-        clientsTable->setObjectName("clientsTable");
-        clientsTable->setColumnCount(4);
-
-        serviceManagementLayout->addWidget(clientsTable);
-
-        serviceButtonsLayout = new QHBoxLayout();
-        serviceButtonsLayout->setObjectName("serviceButtonsLayout");
-        serviceButtonsSpacer = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
-
-        serviceButtonsLayout->addItem(serviceButtonsSpacer);
-
-        btnEditService = new QPushButton(serviceManagementTab);
-        btnEditService->setObjectName("btnEditService");
-        QIcon icon2;
-        icon2.addFile(QString::fromUtf8(":/resources/icons/modify.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        btnEditService->setIcon(icon2);
-        btnEditService->setIconSize(QSize(16, 16));
-
-        serviceButtonsLayout->addWidget(btnEditService);
-
-        btnDeleteService = new QPushButton(serviceManagementTab);
-        btnDeleteService->setObjectName("btnDeleteService");
-        QIcon icon3;
-        icon3.addFile(QString::fromUtf8(":/resources/icons/delete.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        btnDeleteService->setIcon(icon3);
-        btnDeleteService->setIconSize(QSize(16, 16));
-
-        serviceButtonsLayout->addWidget(btnDeleteService);
-
-
-        serviceManagementLayout->addLayout(serviceButtonsLayout);
-
-        QIcon icon4;
-        icon4.addFile(QString::fromUtf8(":/resources/icons/clients.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        clientTabWidget->addTab(serviceManagementTab, icon4, QString());
-        addTab = new QWidget();
-        addTab->setObjectName("addTab");
-        addLayout = new QVBoxLayout(addTab);
-        addLayout->setSpacing(15);
-        addLayout->setObjectName("addLayout");
-        addLayout->setContentsMargins(20, 20, 20, 20);
-        addLabel = new QLabel(addTab);
-        addLabel->setObjectName("addLabel");
-        addLabel->setAlignment(Qt::AlignmentFlag::AlignCenter);
-
-        addLayout->addWidget(addLabel);
-
-        addFormLayout = new QFormLayout();
-        addFormLayout->setObjectName("addFormLayout");
-        addServiceIdLabel = new QLabel(addTab);
-        addServiceIdLabel->setObjectName("addServiceIdLabel");
-
-        addFormLayout->setWidget(0, QFormLayout::LabelRole, addServiceIdLabel);
-
-        addServiceIdEdit = new QLineEdit(addTab);
-        addServiceIdEdit->setObjectName("addServiceIdEdit");
-        addServiceIdEdit->setReadOnly(true);
-
-        addFormLayout->setWidget(0, QFormLayout::FieldRole, addServiceIdEdit);
-
-        addServiceNameLabel = new QLabel(addTab);
-        addServiceNameLabel->setObjectName("addServiceNameLabel");
-
-        addFormLayout->setWidget(1, QFormLayout::LabelRole, addServiceNameLabel);
-
-        addNameEdit = new QLineEdit(addTab);
-        addNameEdit->setObjectName("addNameEdit");
-
-        addFormLayout->setWidget(1, QFormLayout::FieldRole, addNameEdit);
-
-        addServiceCategoryLabel = new QLabel(addTab);
-        addServiceCategoryLabel->setObjectName("addServiceCategoryLabel");
-
-        addFormLayout->setWidget(2, QFormLayout::LabelRole, addServiceCategoryLabel);
-
-        addCategoryCombo = new QComboBox(addTab);
-        addCategoryCombo->addItem(QString());
-        addCategoryCombo->addItem(QString());
-        addCategoryCombo->addItem(QString());
-        addCategoryCombo->setObjectName("addCategoryCombo");
-
-        addFormLayout->setWidget(2, QFormLayout::FieldRole, addCategoryCombo);
-
-        addServicePriceLabel = new QLabel(addTab);
-        addServicePriceLabel->setObjectName("addServicePriceLabel");
-
-        addFormLayout->setWidget(3, QFormLayout::LabelRole, addServicePriceLabel);
-
-        addPriceEdit = new QLineEdit(addTab);
-        addPriceEdit->setObjectName("addPriceEdit");
-
-        addFormLayout->setWidget(3, QFormLayout::FieldRole, addPriceEdit);
-
-        addDateEdit = new QDateTimeEdit(addTab);
-        addDateEdit->setObjectName("addDateEdit");
-
-        addFormLayout->setWidget(4, QFormLayout::FieldRole, addDateEdit);
-
-        addServiceDateLabel = new QLabel(addTab);
-        addServiceDateLabel->setObjectName("addServiceDateLabel");
-
-        addFormLayout->setWidget(4, QFormLayout::LabelRole, addServiceDateLabel);
-
-
-        addLayout->addLayout(addFormLayout);
-
-        addButtonLayout = new QHBoxLayout();
-        addButtonLayout->setObjectName("addButtonLayout");
-        addButtonSpacer = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
-
-        addButtonLayout->addItem(addButtonSpacer);
-
-        addServiceBtn = new QPushButton(addTab);
-        addServiceBtn->setObjectName("addServiceBtn");
-        QIcon icon5;
-        icon5.addFile(QString::fromUtf8(":/resources/icons/add.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        addServiceBtn->setIcon(icon5);
-
-        addButtonLayout->addWidget(addServiceBtn);
-
-
-        addLayout->addLayout(addButtonLayout);
-
-        addVerticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
-
-        addLayout->addItem(addVerticalSpacer);
-
-        clientTabWidget->addTab(addTab, icon5, QString());
-        voiceChatTab = new QWidget();
-        voiceChatTab->setObjectName("voiceChatTab");
-        voiceChatLayout = new QVBoxLayout(voiceChatTab);
-        voiceChatLayout->setSpacing(15);
-        voiceChatLayout->setObjectName("voiceChatLayout");
-        voiceChatLayout->setContentsMargins(20, 20, 20, 20);
-        voiceControlLayout = new QHBoxLayout();
-        voiceControlLayout->setObjectName("voiceControlLayout");
-
-        voiceChatLayout->addLayout(voiceControlLayout);
-
-        QIcon icon6;
-        icon6.addFile(QString::fromUtf8(":/resources/icons/mail.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        clientTabWidget->addTab(voiceChatTab, icon6, QString());
-        modifyTab = new QWidget();
-        modifyTab->setObjectName("modifyTab");
-        modifyLayout = new QVBoxLayout(modifyTab);
-        modifyLayout->setSpacing(15);
-        modifyLayout->setObjectName("modifyLayout");
-        modifyLayout->setContentsMargins(20, 20, 20, 20);
-        QIcon icon7;
-        icon7.addFile(QString::fromUtf8(":/resources/icons/chatbot.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        clientTabWidget->addTab(modifyTab, icon7, QString());
-
-        mainLayout->addWidget(clientTabWidget);
-
-        menubar = new QMenuBar(SponsorWidget);
-        menubar->setObjectName("menubar");
-        menubar->setGeometry(QRect(0, 0, 1200, 25));
-        statusbar = new QStatusBar(SponsorWidget);
-        statusbar->setObjectName("statusbar");
-        statusbar->setGeometry(QRect(0, 0, 20, 25));
-
-        retranslateUi(SponsorWidget);
-
-        clientTabWidget->setCurrentIndex(1);
-
-
-        QMetaObject::connectSlotsByName(SponsorWidget);
-    } // setupUi
-
-    void retranslateUi(QWidget *SponsorWidget)
-    {
-        SponsorWidget->setStyleSheet(QCoreApplication::translate("SponsorWidget", "QMainWindow {\n"
-"    background-color: #f8f9fa;\n"
-"    font-family: 'Segoe UI', Arial, sans-serif;\n"
-"}\n"
-"\n"
-"QTabWidget::pane {\n"
-"    border: 1px solid #e1e8ed;\n"
-"    border-radius: 8px;\n"
-"    background-color: #ffffff;\n"
-"    margin-top: 4px;\n"
-"}\n"
-"\n"
-"QTabWidget::tab-bar {\n"
-"    alignment: left;\n"
-"}\n"
-"\n"
-"QTabBar::tab {\n"
-"    background-color: #f8f9fa;\n"
-"    border: 1px solid #dee2e6;\n"
-"    border-bottom: none;\n"
-"    border-radius: 6px 6px 0 0;\n"
-"    padding: 12px 20px;\n"
-"    margin-right: 2px;\n"
-"    font-weight: 700; /* make tab text bold */\n"
-"    color: #495057;\n"
-"    font-size: 14px;\n"
-"    min-width: 100px;\n"
+        tabWidget = new QTabWidget(centralwidget);
+        tabWidget->setObjectName("tabWidget");
+        tabWidget->setGeometry(QRect(-10, 50, 1441, 671));
+        tabWidget->setStyleSheet(QString::fromUtf8("QTabBar::tab {\n"
+"    background: white;             /* white background */\n"
+"    color: black;                  /* black text */\n"
+"    padding: 8px 20px;\n"
+"    border: 1px solid #ccc;        /* light gray border */\n"
+"    border-radius: 5px;           /* rounded rectangle */\n"
+"    margin: 3px;\n"
 "}\n"
 "\n"
 "QTabBar::tab:selected {\n"
-"    background-color: #ffffff;\n"
-"    color: #007bff;\n"
-"    border-color: #007bff;\n"
-"    border-bottom: 1px solid #ffffff;\n"
+"    background: #f0f0f0;           /* light gray when active */\n"
+"    font-weight: bold;\n"
+"    border: 1px solid #999; \n"
+"border-bottom: 3px solid #2c3e50;       /* darker border for selected */\n"
 "}\n"
 "\n"
-"QTableWidget {\n"
-"    gridline-color: #e9ecef;\n"
-"    background-color: #ffffff;\n"
-"    alternate-background-color: #f8f9fa;\n"
-"    border: 1px solid #dee2e6;\n"
-"    bo"
-                        "rder-radius: 6px;\n"
+"QTabBar::tab:hover {\n"
+"    background: #e6e6e6;           /* hover effect */\n"
+"}\n"
+"\n"
+"QTabWidget::pane {\n"
+"    border: 1px solid #ccc;\n"
+"    border-radius: 10px;\n"
+"    margin-top: 5px;\n"
+"    background: white;\n"
+"}\n"
+""));
+        tab_2 = new QWidget();
+        tab_2->setObjectName("tab_2");
+        affiche = new QTableWidget(tab_2);
+        if (affiche->columnCount() < 6)
+            affiche->setColumnCount(6);
+        QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
+        affiche->setHorizontalHeaderItem(0, __qtablewidgetitem);
+        QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
+        affiche->setHorizontalHeaderItem(1, __qtablewidgetitem1);
+        QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
+        affiche->setHorizontalHeaderItem(2, __qtablewidgetitem2);
+        QTableWidgetItem *__qtablewidgetitem3 = new QTableWidgetItem();
+        affiche->setHorizontalHeaderItem(3, __qtablewidgetitem3);
+        QTableWidgetItem *__qtablewidgetitem4 = new QTableWidgetItem();
+        affiche->setHorizontalHeaderItem(4, __qtablewidgetitem4);
+        QTableWidgetItem *__qtablewidgetitem5 = new QTableWidgetItem();
+        affiche->setHorizontalHeaderItem(5, __qtablewidgetitem5);
+        affiche->setObjectName("affiche");
+        affiche->setGeometry(QRect(50, 130, 1211, 391));
+        QSizePolicy sizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Expanding);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(affiche->sizePolicy().hasHeightForWidth());
+        affiche->setSizePolicy(sizePolicy);
+        affiche->setStyleSheet(QString::fromUtf8("QTableWidget {\n"
+"    background-color: #f2f2f2;   /* gris tr\303\250s clair, proche du blanc */\n"
+"    gridline-color: #bdc3c7;     /* couleur des lignes */\n"
+"    font: 11pt \"Segoe UI\";\n"
+"    color: #000000;              /* texte en noir */\n"
+"    selection-background-color: #3498db; /* fond bleu quand s\303\251lectionn\303\251 */\n"
+"    selection-color: #ffffff;    /* texte blanc quand s\303\251lectionn\303\251 */\n"
+"    border: 2px solid #3498db;\n"
+"    border-radius: 6px;\n"
 "}\n"
 "\n"
 "QTableWidget::item {\n"
-"    padding: 8px;\n"
-"    border-bottom: 1px solid #e9ecef;\n"
-"}\n"
-"\n"
-"QTableWidget::item:selected {\n"
-"    background-color: #e3f2fd;\n"
-"    color: #1976d2;\n"
+"    background-color: #f2f2f2; /* gris clair pour chaque cellule */\n"
+"    color: #000000;            /* texte noir dans les cellules */\n"
 "}\n"
 "\n"
 "QHeaderView::section {\n"
-"    background-color: #f1f3f4;\n"
-"    padding: 10px;\n"
+"    background-color: #2c3e50;   /* fond des en-t\303\252tes */\n"
+"    color: #ffffff;              /* texte blanc dans les titres */\n"
+"    font-weight: bold;\n"
+"    padding: 6px;\n"
 "    border: none;\n"
-"    border-bottom: 2px solid #007bff;\n"
-"    font-weight: 600;\n"
-"    color: #495057;\n"
 "}\n"
 "\n"
-"QPushButton {\n"
-"    background-color: #007bff;\n"
-"    color: white;\n"
-"    border: none;\n"
-"    padding: 10px 20px;\n"
-"    border-radius: 6px;\n"
-"    font-weight: 600;\n"
-"    font-size: 14px;\n"
-"}\n"
-"\n"
-"/* Service Management Button Colors */\n"
-"QPushButton#exportCsvBtn {\n"
-"    background-color: #28a745;\n"
-"    color: white;\n"
-"}\n"
-"\n"
-"QPushButton#exportCsvBtn:hover {\n"
-"    background-color: #218838;\n"
-"}\n"
-"\n"
-"QPushButton#btnSortByName {\n"
-"    background-color: #17a2b8;\n"
-"    color: white;\n"
-"}\n"
-"\n"
-"QPushButton#btnSortByName:hover {\n"
-""
-                        "    background-color: #138496;\n"
-"}\n"
-"\n"
-"QPushButton#btnEditService {\n"
-"    /* Modified to match reference: yellow/golden modify button */\n"
-"    background-color: #f5b400;\n"
-"    color: white;\n"
-"    font-weight: 600;\n"
-"    border-radius: 10px;\n"
-"    padding: 10px 20px;\n"
-"}\n"
-"\n"
-"QPushButton#btnEditService:hover {\n"
-"    background-color: #e0a800;\n"
-"}\n"
-"\n"
-"QPushButton#btnEditService:disabled {\n"
-"    background-color: #6c757d;\n"
-"    color: #ffffff;\n"
-"}\n"
-"\n"
-"QPushButton#btnDeleteService {\n"
-"    background-color: #e53935;\n"
-"    color: white;\n"
-"    border-radius: 10px;\n"
-"    padding: 10px 20px;\n"
-"}\n"
-"\n"
-"QPushButton#btnDeleteService:hover {\n"
-"    background-color: #c62828;\n"
-"}\n"
-"\n"
-"QPushButton#btnDeleteService:disabled {\n"
-"    background-color: #6c757d;\n"
-"    color: #ffffff;\n"
-"}\n"
-"\n"
-"/* updateClientBtn removed from UI (Modify button removed from Clients tab) */\n"
-"\n"
-"QLineEdit, QTextEdit, QComboBox {\n"
-"    padding: 8px 12px;\n"
-"    border: 2"
-                        "px solid #d0d7dd;\n"
-"    border-radius: 12px;\n"
-"    background-color: #ffffff;\n"
-"    color: #000000;\n"
-"    font-size: 14px;\n"
-"}\n"
-"\n"
-"QLineEdit:hover {\n"
-"    border: 2px solid #4da3ff;\n"
+""));
+        affiche->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOn);
+        affiche->setSizeAdjustPolicy(QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents);
+        affiche->setAutoScroll(true);
+        search1 = new QLineEdit(tab_2);
+        search1->setObjectName("search1");
+        search1->setGeometry(QRect(10, 60, 361, 41));
+        search1->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
+"    border: 2px solid #3498db;   /* bleu d\303\250s le d\303\251part */\n"
+"    border-radius: 8px;\n"
+"    padding: 6px;\n"
+"    background-color: #ecf0f1;\n"
+"    font: 11pt \"Segoe UI\";\n"
+"    color: #2c3e50;\n"
 "}\n"
 "\n"
 "QLineEdit:focus {\n"
-"    border: 2px solid #007bff;\n"
-"    outline: none;\n"
+"    border: 2px solid #1d6fa5;   /* bleu plus fonc\303\251 quand focus */\n"
+"    background-color: #ffffff;\n"
+"}\n"
+""));
+        search1->setInputMask(QString::fromUtf8(""));
+        search1_2 = new QPushButton(tab_2);
+        search1_2->setObjectName("search1_2");
+        search1_2->setGeometry(QRect(380, 60, 141, 41));
+        search1_2->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: #2a75b3; /* bleu fonc\303\251 de base */\n"
+"    color: white;\n"
+"    border-radius: 10px;\n"
+"    padding: 8px 20px;\n"
+"    font-weight: bold;\n"
+"    border: none;\n"
 "}\n"
 "\n"
-"QLabel {\n"
-"    color: #000000;\n"
-"    font-size: 14px;\n"
-"    font-weight: 500;\n"
+"QPushButton:hover {\n"
+"    background-color: #28a745; /* vert au survol */\n"
 "}\n"
 "\n"
-"QLabel#headerTitle {\n"
-"    font-size: 24px;\n"
-"    font-weight: 700;\n"
-"    color: #000000;\n"
-"    padding: 20px 0;\n"
+"QPushButton:pressed {\n"
+"    background-color: #1e3f66; /* bleu encore plus fonc\303\251 au clic */\n"
 "}\n"
-"QLabel#headerTitle:hover {\n"
-"    color: #1e88ff; /* light blue text on hover */\n"
+""));
+        pdfexport = new QPushButton(tab_2);
+        pdfexport->setObjectName("pdfexport");
+        pdfexport->setGeometry(QRect(1190, 50, 211, 41));
+        pdfexport->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: #28a745; /* vert normal */\n"
+"    color: white;\n"
+"    border-radius: 10px;\n"
+"    padding: 8px 20px;\n"
+"    font-weight: bold;\n"
 "}\n"
-"", nullptr));
-        headerTitle->setText(QCoreApplication::translate("SponsorWidget", "Sponsor Management", nullptr));
-        searchServices->setPlaceholderText(QCoreApplication::translate("SponsorWidget", "Search sponsor...", nullptr));
-        exportCsvBtn->setText(QCoreApplication::translate("SponsorWidget", "Export CSV", nullptr));
-        btnSortByName->setText(QCoreApplication::translate("SponsorWidget", "Sort by Name", nullptr));
-        QTableWidgetItem *___qtablewidgetitem = clientsTable->horizontalHeaderItem(0);
-        ___qtablewidgetitem->setText(QCoreApplication::translate("SponsorWidget", "ID", nullptr));
-        QTableWidgetItem *___qtablewidgetitem1 = clientsTable->horizontalHeaderItem(1);
-        ___qtablewidgetitem1->setText(QCoreApplication::translate("SponsorWidget", "Name", nullptr));
-        QTableWidgetItem *___qtablewidgetitem2 = clientsTable->horizontalHeaderItem(2);
-        ___qtablewidgetitem2->setText(QCoreApplication::translate("SponsorWidget", "Email", nullptr));
-        QTableWidgetItem *___qtablewidgetitem3 = clientsTable->horizontalHeaderItem(3);
-        ___qtablewidgetitem3->setText(QCoreApplication::translate("SponsorWidget", "Status", nullptr));
-        btnEditService->setText(QCoreApplication::translate("SponsorWidget", "Edit", nullptr));
-        btnDeleteService->setText(QCoreApplication::translate("SponsorWidget", "Delete", nullptr));
-        clientTabWidget->setTabText(clientTabWidget->indexOf(serviceManagementTab), QCoreApplication::translate("SponsorWidget", "Sponsor Management", nullptr));
-        addLabel->setText(QCoreApplication::translate("SponsorWidget", "Add New Sponsor", nullptr));
-        addServiceIdLabel->setText(QCoreApplication::translate("SponsorWidget", "ID", nullptr));
-        addServiceNameLabel->setText(QCoreApplication::translate("SponsorWidget", "Name:", nullptr));
-        addServiceCategoryLabel->setText(QCoreApplication::translate("SponsorWidget", "Status", nullptr));
-        addCategoryCombo->setItemText(0, QCoreApplication::translate("SponsorWidget", "Active", nullptr));
-        addCategoryCombo->setItemText(1, QCoreApplication::translate("SponsorWidget", "Maintenance", nullptr));
-        addCategoryCombo->setItemText(2, QCoreApplication::translate("SponsorWidget", "Consulting", nullptr));
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #218838; /* vert fonc\303\251 quand souris dessus */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #004080; /* bleu fonc\303\251 quand on clique */\n"
+"}\n"
+""));
+        deleteButton = new QPushButton(tab_2);
+        deleteButton->setObjectName("deleteButton");
+        deleteButton->setGeometry(QRect(1270, 550, 151, 41));
+        deleteButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: #e74c3c; /* rouge normal */\n"
+"    color: white;\n"
+"    border-radius: 10px;\n"
+"    padding: 8px 20px;\n"
+"    font-weight: bold;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #c0392b; /* rouge fonc\303\251 quand souris dessus */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #27ae60; /* vert quand on clique */\n"
+"}\n"
+""));
+        label = new QLabel(tab_2);
+        label->setObjectName("label");
+        label->setGeometry(QRect(20, 10, 381, 31));
+        label->setStyleSheet(QString::fromUtf8("font: 700 16pt \"Simplified Arabic\";\n"
+"color: #000000"));
+        sort = new QPushButton(tab_2);
+        sort->setObjectName("sort");
+        sort->setGeometry(QRect(1020, 50, 161, 41));
+        sort->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: #2a75b3; /* bleu fonc\303\251 de base */\n"
+"    color: white;\n"
+"    border-radius: 10px;\n"
+"    padding: 8px 20px;\n"
+"    font-weight: bold;\n"
+"    border: none;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #28a745; /* vert au survol */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #1e3f66; /* bleu encore plus fonc\303\251 au clic */\n"
+"}\n"
+""));
+        afficherButton = new QPushButton(tab_2);
+        afficherButton->setObjectName("afficherButton");
+        afficherButton->setGeometry(QRect(1100, 550, 151, 41));
+        afficherButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: #e67e22; /* orange normal */\n"
+"    color: white;\n"
+"    border-radius: 10px;\n"
+"    padding: 8px 20px;\n"
+"    font-weight: bold;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #d35400; /* orange fonc\303\251 quand souris dessus */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #ff0000; /* rouge pur quand on clique */\n"
+"}\n"
+""));
+        tabWidget->addTab(tab_2, QString());
+        tab = new QWidget();
+        tab->setObjectName("tab");
+        label_7 = new QLabel(tab);
+        label_7->setObjectName("label_7");
+        label_7->setGeometry(QRect(470, 270, 131, 20));
+        label_7->setStyleSheet(QString::fromUtf8("color: #000000  /* texte noir */;\n"
+"font: 350 12pt \"Nirmala Text\";\n"
+""));
+        label_4 = new QLabel(tab);
+        label_4->setObjectName("label_4");
+        label_4->setGeometry(QRect(40, 280, 121, 21));
+        label_4->setStyleSheet(QString::fromUtf8("color: #000000  /* texte noir */;\n"
+"font: 350 12pt \"Nirmala Text\";\n"
+""));
+        label_3 = new QLabel(tab);
+        label_3->setObjectName("label_3");
+        label_3->setGeometry(QRect(470, 190, 151, 31));
+        label_3->setStyleSheet(QString::fromUtf8("color: #000000  /* texte noir */;\n"
+"font: 350 12pt \"Nirmala Text\";\n"
+""));
+        label_2 = new QLabel(tab);
+        label_2->setObjectName("label_2");
+        label_2->setGeometry(QRect(40, 200, 141, 20));
+        label_2->setStyleSheet(QString::fromUtf8("color: #000000  /* texte noir */;\n"
+"font: 350 12pt \"Nirmala Text\";\n"
+""));
+        ID = new QLineEdit(tab);
+        ID->setObjectName("ID");
+        ID->setGeometry(QRect(200, 190, 171, 41));
+        ID->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
+"    border: 2px solid #3498db;   /* bleu d\303\250s le d\303\251part */\n"
+"    border-radius: 8px;\n"
+"    padding: 6px;\n"
+"    background-color: #ecf0f1;\n"
+"    font: 11pt \"Segoe UI\";\n"
+"    color: #2c3e50;\n"
+"}\n"
+"\n"
+"QLineEdit:focus {\n"
+"    border: 2px solid #1d6fa5;   /* bleu plus fonc\303\251 quand focus */\n"
+"    background-color: #ffffff;\n"
+"}\n"
+""));
+        label_5 = new QLabel(tab);
+        label_5->setObjectName("label_5");
+        label_5->setGeometry(QRect(470, 350, 111, 31));
+        label_5->setStyleSheet(QString::fromUtf8("color: #000000  /* texte noir */;\n"
+"font: 350 12pt \"Nirmala Text\";\n"
+""));
+        label_9 = new QLabel(tab);
+        label_9->setObjectName("label_9");
+        label_9->setGeometry(QRect(40, 350, 201, 21));
+        label_9->setStyleSheet(QString::fromUtf8("color: #000000  /* texte noir */;\n"
+"font: 350 12pt \"Nirmala Text\";\n"
+""));
+        addButton = new QPushButton(tab);
+        addButton->setObjectName("addButton");
+        addButton->setGeometry(QRect(1030, 470, 101, 51));
+        addButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: #0fff67; /* orange normal */\n"
+"    color: white;\n"
+"    border-radius: 10px;\n"
+"    padding: 8px 20px;\n"
+"    font-weight: bold;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #d35400; /* orange fonc\303\251 quand souris dessus */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #ff0000; /* rouge pur quand on clique */\n"
+"}\n"
+""));
+        Nom = new QLineEdit(tab);
+        Nom->setObjectName("Nom");
+        Nom->setGeometry(QRect(660, 190, 171, 41));
+        Nom->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
+"    border: 2px solid #3498db;   /* bleu d\303\250s le d\303\251part */\n"
+"    border-radius: 8px;\n"
+"    padding: 6px;\n"
+"    background-color: #ecf0f1;\n"
+"    font: 11pt \"Segoe UI\";\n"
+"    color: #2c3e50;\n"
+"}\n"
+"\n"
+"QLineEdit:focus {\n"
+"    border: 2px solid #1d6fa5;   /* bleu plus fonc\303\251 quand focus */\n"
+"    background-color: #ffffff;\n"
+"}\n"
+""));
+        EM = new QLineEdit(tab);
+        EM->setObjectName("EM");
+        EM->setGeometry(QRect(660, 260, 171, 41));
+        EM->setStyleSheet(QString::fromUtf8("QLineEdit {\n"
+"    border: 2px solid #3498db;   /* bleu d\303\250s le d\303\251part */\n"
+"    border-radius: 8px;\n"
+"    padding: 6px;\n"
+"    background-color: #ecf0f1;\n"
+"    font: 11pt \"Segoe UI\";\n"
+"    color: #2c3e50;\n"
+"}\n"
+"\n"
+"QLineEdit:focus {\n"
+"    border: 2px solid #1d6fa5;   /* bleu plus fonc\303\251 quand focus */\n"
+"    background-color: #ffffff;\n"
+"}\n"
+""));
+        dd = new QDateEdit(tab);
+        dd->setObjectName("dd");
+        dd->setGeometry(QRect(200, 280, 194, 29));
+        dd->setStyleSheet(QString::fromUtf8("color: #000000;  /* texte noir */"));
+        df = new QDateEdit(tab);
+        df->setObjectName("df");
+        df->setGeometry(QRect(200, 350, 194, 29));
+        df->setStyleSheet(QString::fromUtf8("color: #000000;  /* texte noir */"));
+        STS = new QComboBox(tab);
+        STS->addItem(QString());
+        STS->addItem(QString());
+        STS->addItem(QString());
+        STS->setObjectName("STS");
+        STS->setGeometry(QRect(660, 350, 171, 28));
+        STS->setStyleSheet(QString::fromUtf8("color:rgb(0, 0, 0)"));
+        updateButton = new QPushButton(tab);
+        updateButton->setObjectName("updateButton");
+        updateButton->setGeometry(QRect(910, 470, 111, 51));
+        updateButton->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: #e67e22; /* orange normal */\n"
+"    color: white;\n"
+"    border-radius: 10px;\n"
+"    padding: 8px 20px;\n"
+"    font-weight: bold;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #d35400; /* orange fonc\303\251 quand souris dessus */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #ff0000; /* rouge pur quand on clique */\n"
+"}\n"
+""));
+        clear = new QPushButton(tab);
+        clear->setObjectName("clear");
+        clear->setGeometry(QRect(1140, 470, 111, 51));
+        clear->setStyleSheet(QString::fromUtf8("QPushButton {\n"
+"    background-color: #e67e22; /* orange normal */\n"
+"    color: white;\n"
+"    border-radius: 10px;\n"
+"    padding: 8px 20px;\n"
+"    font-weight: bold;\n"
+"}\n"
+"\n"
+"QPushButton:hover {\n"
+"    background-color: #d35400; /* orange fonc\303\251 quand souris dessus */\n"
+"}\n"
+"\n"
+"QPushButton:pressed {\n"
+"    background-color: #ff0000; /* rouge pur quand on clique */\n"
+"}\n"
+""));
+        tabWidget->addTab(tab, QString());
+        tab_3 = new QWidget();
+        tab_3->setObjectName("tab_3");
+        tabWidget->addTab(tab_3, QString());
+        SponsorWindow->setCentralWidget(centralwidget);
+        menubar = new QMenuBar(SponsorWindow);
+        menubar->setObjectName("menubar");
+        menubar->setGeometry(QRect(0, 0, 1459, 25));
+        menuG_SPONSORING = new QMenu(menubar);
+        menuG_SPONSORING->setObjectName("menuG_SPONSORING");
+        SponsorWindow->setMenuBar(menubar);
+        statusbar = new QStatusBar(SponsorWindow);
+        statusbar->setObjectName("statusbar");
+        SponsorWindow->setStatusBar(statusbar);
 
-        addServicePriceLabel->setText(QCoreApplication::translate("SponsorWidget", "Price:", nullptr));
-        addDateEdit->setDisplayFormat(QCoreApplication::translate("SponsorWidget", "yyyy-MM-dd HH:mm", nullptr));
-        addServiceDateLabel->setText(QCoreApplication::translate("SponsorWidget", "Date Created:", nullptr));
-        addServiceBtn->setText(QCoreApplication::translate("SponsorWidget", "Add", nullptr));
-        clientTabWidget->setTabText(clientTabWidget->indexOf(addTab), QCoreApplication::translate("SponsorWidget", "Add", nullptr));
-        clientTabWidget->setTabText(clientTabWidget->indexOf(voiceChatTab), QCoreApplication::translate("SponsorWidget", "Automatic Email", nullptr));
-        clientTabWidget->setTabText(clientTabWidget->indexOf(modifyTab), QCoreApplication::translate("SponsorWidget", "Scheduling with Calendar", nullptr));
+        menubar->addAction(menuG_SPONSORING->menuAction());
+
+        retranslateUi(SponsorWindow);
+
+        tabWidget->setCurrentIndex(1);
+
+
+        QMetaObject::connectSlotsByName(SponsorWindow);
+    } // setupUi
+
+    void retranslateUi(QMainWindow *SponsorWindow)
+    {
+        SponsorWindow->setWindowTitle(QCoreApplication::translate("SponsorWindow", "MainWindow", nullptr));
+        QTableWidgetItem *___qtablewidgetitem = affiche->horizontalHeaderItem(0);
+        ___qtablewidgetitem->setText(QCoreApplication::translate("SponsorWindow", "ID", nullptr));
+        QTableWidgetItem *___qtablewidgetitem1 = affiche->horizontalHeaderItem(1);
+        ___qtablewidgetitem1->setText(QCoreApplication::translate("SponsorWindow", "Nom ", nullptr));
+        QTableWidgetItem *___qtablewidgetitem2 = affiche->horizontalHeaderItem(2);
+        ___qtablewidgetitem2->setText(QCoreApplication::translate("SponsorWindow", "Date-D", nullptr));
+        QTableWidgetItem *___qtablewidgetitem3 = affiche->horizontalHeaderItem(3);
+        ___qtablewidgetitem3->setText(QCoreApplication::translate("SponsorWindow", "Date-F", nullptr));
+        QTableWidgetItem *___qtablewidgetitem4 = affiche->horizontalHeaderItem(4);
+        ___qtablewidgetitem4->setText(QCoreApplication::translate("SponsorWindow", "E-Mail", nullptr));
+        QTableWidgetItem *___qtablewidgetitem5 = affiche->horizontalHeaderItem(5);
+        ___qtablewidgetitem5->setText(QCoreApplication::translate("SponsorWindow", "Status", nullptr));
+        search1->setText(QString());
+        search1->setPlaceholderText(QCoreApplication::translate("SponsorWindow", "Entrer ID a recherch\303\251", nullptr));
+        search1_2->setText(QCoreApplication::translate("SponsorWindow", "\360\237\224\215Search", nullptr));
+        pdfexport->setText(QCoreApplication::translate("SponsorWindow", "\360\237\223\245Exporter PDF", nullptr));
+        deleteButton->setText(QCoreApplication::translate("SponsorWindow", "\360\237\227\221Delete ", nullptr));
+        label->setText(QCoreApplication::translate("SponsorWindow", "Gestion Sposoring Management", nullptr));
+        sort->setText(QCoreApplication::translate("SponsorWindow", "\360\237\224\204Sort by ID", nullptr));
+        afficherButton->setText(QCoreApplication::translate("SponsorWindow", "Afficher", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_2), QCoreApplication::translate("SponsorWindow", "\360\237\214\220Display", nullptr));
+        label_7->setText(QCoreApplication::translate("SponsorWindow", "Email", nullptr));
+        label_4->setText(QCoreApplication::translate("SponsorWindow", "Date-D\303\251but", nullptr));
+        label_3->setText(QCoreApplication::translate("SponsorWindow", "Nom-Sponsor", nullptr));
+        label_2->setText(QCoreApplication::translate("SponsorWindow", "ID-SPONSOR", nullptr));
+        ID->setText(QString());
+        label_5->setText(QCoreApplication::translate("SponsorWindow", " Status :", nullptr));
+        label_9->setText(QCoreApplication::translate("SponsorWindow", "Date-Fin", nullptr));
+        addButton->setText(QCoreApplication::translate("SponsorWindow", "\342\236\225 Add", nullptr));
+        Nom->setText(QString());
+        EM->setText(QString());
+        STS->setItemText(0, QCoreApplication::translate("SponsorWindow", "Selectionner...", nullptr));
+        STS->setItemText(1, QCoreApplication::translate("SponsorWindow", "Active", nullptr));
+        STS->setItemText(2, QCoreApplication::translate("SponsorWindow", "Non Active", nullptr));
+
+        updateButton->setText(QCoreApplication::translate("SponsorWindow", "\342\234\250Modify ", nullptr));
+        clear->setText(QCoreApplication::translate("SponsorWindow", "\342\234\250Clear", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab), QCoreApplication::translate("SponsorWindow", "\342\236\225Add", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_3), QCoreApplication::translate("SponsorWindow", "\360\237\223\212Statistique", nullptr));
+        menuG_SPONSORING->setTitle(QCoreApplication::translate("SponsorWindow", "G SPONSORING", nullptr));
     } // retranslateUi
 
 };
 
 namespace Ui {
-    class SponsorWidget: public Ui_SponsorWidget {};
+    class SponsorWindow: public Ui_SponsorWindow {};
 } // namespace Ui
 
 QT_END_NAMESPACE

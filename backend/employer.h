@@ -4,6 +4,29 @@
 #include <QString>
 #include <QDate>
 #include <QVector>
+#include <QMap>
+
+/**
+ * @brief EmployerStatistics - Structure to hold employer statistics
+ */
+struct EmployerStatistics
+{
+    int totalEmployees = 0;
+    int activeEmployees = 0;
+    int newEmployeesThisMonth = 0;
+    int newEmployeesThisYear = 0;
+    double averageSalary = 0.0;
+    double minSalary = 0.0;
+    double maxSalary = 0.0;
+    QString mostCommonRole;
+    int departmentCount = 0;
+    double retentionRate = 0.0;  // Percentage
+    QMap<int,int> hiresPerYear;
+    QMap<int,int> hiresPerMonth;  // Current year
+    QMap<QString,int> roleDistribution;
+    QMap<QString,int> topProjects;  // Project name -> count
+    QMap<QString,int> topResources;  // Resource name -> count
+};
 
 /**
  * @brief Employer - Unified employer class combining data and CRUD operations
@@ -56,6 +79,18 @@ public:
     
     // Read - Get single employer by ID
     static bool fetchById(qint64 id, Employer &employer);
+
+    // Backwards-compatible helper: return a pointer to an Employer object
+    // Returns nullptr if not found. Caller does not own the pointer (but
+    // historically code did not delete it). For simplicity this helper
+    // creates a new object when found.
+    static Employer* getEmployer(qint64 id)
+    {
+        Employer *e = new Employer();
+        if (fetchById(id, *e)) return e;
+        delete e;
+        return nullptr;
+    }
     
     // Update - Modify existing employer
     static bool update(qint64 employerId, const Employer &employer, 
@@ -69,6 +104,12 @@ public:
     
     // Check if employer has foreign key dependencies
     static bool hasRelatedRecords(qint64 employerId, QString *details = nullptr);
+    // Compute aggregated statistics about employers
+    static EmployerStatistics computeStatistics();
+
+    // Export all employers and calculated statistics to a PDF file. Returns true on
+    // success and optionally writes an error message to errorMessage.
+    static bool exportToPdf(const QString &filePath, QString *errorMessage = nullptr);
     
 private:
     // Helper function to hash passwords

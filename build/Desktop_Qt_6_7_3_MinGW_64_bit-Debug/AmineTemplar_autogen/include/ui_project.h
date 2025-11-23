@@ -9,10 +9,11 @@
 #ifndef UI_PROJECT_H
 #define UI_PROJECT_H
 
+#include <QtCore/QDate>
 #include <QtCore/QVariant>
 #include <QtGui/QIcon>
 #include <QtWidgets/QApplication>
-#include <QtWidgets/QComboBox>
+#include <QtWidgets/QDateEdit>
 #include <QtWidgets/QFormLayout>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
@@ -35,47 +36,61 @@ class Ui_ProjectWidget
 public:
     QWidget *centralwidget;
     QVBoxLayout *mainLayout;
-    QTabWidget *clientTabWidget;
-    QWidget *serviceManagementTab;
-    QVBoxLayout *serviceManagementLayout;
+    QTabWidget *projectTabWidget;
+    QWidget *projectManagementTab;
+    QVBoxLayout *projectManagementLayout;
     QLabel *headerTitle;
     QHBoxLayout *topControlsLayout;
     QLineEdit *searchServices;
     QSpacerItem *topControlsSpacer;
-    QPushButton *exportCsvBtn;
     QPushButton *btnSortByName;
-    QTableWidget *clientsTable;
-    QHBoxLayout *serviceButtonsLayout;
-    QSpacerItem *serviceButtonsSpacer;
+    QTableWidget *projectTableWidget;
+    QHBoxLayout *projectButtonsLayout;
+    QSpacerItem *projectButtonsSpacer;
     QPushButton *btnEditService;
     QPushButton *btnDeleteService;
     QWidget *addTab;
     QVBoxLayout *addLayout;
     QLabel *addLabel;
     QFormLayout *addFormLayout;
+    QLabel *addTitleLabel;
+    QLineEdit *addTitleEdit;
+    QLabel *addDescriptionLabel;
+    QTextEdit *addDescriptionEdit;
+    QLabel *addClientIdLabel;
+    QLineEdit *addClientIdEdit;
     QLabel *addServiceIdLabel;
     QLineEdit *addServiceIdEdit;
-    QLabel *addServiceNameLabel;
-    QLineEdit *addNameEdit;
-    QLabel *addServiceDescLabel;
-    QTextEdit *addDescriptionEdit;
-    QLabel *addServiceCategoryLabel;
-    QComboBox *addCategoryCombo;
+    QLabel *addCreationDateLabel;
+    QDateEdit *addCreationDateEdit;
+    QLabel *addModificationDateLabel;
+    QDateEdit *addModificationDateEdit;
     QHBoxLayout *addButtonLayout;
     QSpacerItem *addButtonSpacer;
     QPushButton *addServiceBtn;
     QSpacerItem *addVerticalSpacer;
-    QWidget *voiceChatTab;
-    QVBoxLayout *voiceChatLayout;
-    QHBoxLayout *voiceControlLayout;
-    QTextEdit *addDescriptionEdit_2;
     QWidget *modifyTab;
     QVBoxLayout *modifyLayout;
-    QLineEdit *searchServices_2;
-    QPushButton *exportCsvBtn_2;
-    QSpacerItem *verticalSpacer;
-    QLabel *label;
-    QTextEdit *addDescriptionEdit_3;
+    QLabel *modifyLabel;
+    QFormLayout *modifyFormLayout;
+    QLabel *modifyIdLabel;
+    QLineEdit *modifyIdEdit;
+    QLabel *modifyTitleLabel;
+    QLineEdit *modifyTitleEdit;
+    QLabel *modifyDescriptionLabel;
+    QTextEdit *modifyDescriptionEdit;
+    QLabel *modifyClientIdLabel;
+    QLineEdit *modifyClientIdEdit;
+    QLabel *modifyServiceIdLabel;
+    QLineEdit *modifyServiceIdEdit;
+    QLabel *modifyCreationDateLabel;
+    QDateEdit *modifyCreationDateEdit;
+    QLabel *modifyModificationDateLabel;
+    QDateEdit *modifyModificationDateEdit;
+    QHBoxLayout *modifyButtonLayout;
+    QSpacerItem *modifyButtonSpacer;
+    QPushButton *modifyServiceBtn;
+    QSpacerItem *modifyVerticalSpacer;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -91,23 +106,23 @@ public:
         mainLayout->setSpacing(20);
         mainLayout->setObjectName("mainLayout");
         mainLayout->setContentsMargins(30, 20, 30, 20);
-        clientTabWidget = new QTabWidget(centralwidget);
-        clientTabWidget->setObjectName("clientTabWidget");
-        serviceManagementTab = new QWidget();
-        serviceManagementTab->setObjectName("serviceManagementTab");
-        serviceManagementLayout = new QVBoxLayout(serviceManagementTab);
-        serviceManagementLayout->setSpacing(15);
-        serviceManagementLayout->setObjectName("serviceManagementLayout");
-        serviceManagementLayout->setContentsMargins(20, 20, 20, 20);
-        headerTitle = new QLabel(serviceManagementTab);
+        projectTabWidget = new QTabWidget(centralwidget);
+        projectTabWidget->setObjectName("projectTabWidget");
+        projectManagementTab = new QWidget();
+        projectManagementTab->setObjectName("projectManagementTab");
+        projectManagementLayout = new QVBoxLayout(projectManagementTab);
+        projectManagementLayout->setSpacing(10);
+        projectManagementLayout->setObjectName("projectManagementLayout");
+        projectManagementLayout->setContentsMargins(10, 10, 10, 10);
+        headerTitle = new QLabel(projectManagementTab);
         headerTitle->setObjectName("headerTitle");
         headerTitle->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
-        serviceManagementLayout->addWidget(headerTitle);
+        projectManagementLayout->addWidget(headerTitle);
 
         topControlsLayout = new QHBoxLayout();
         topControlsLayout->setObjectName("topControlsLayout");
-        searchServices = new QLineEdit(serviceManagementTab);
+        searchServices = new QLineEdit(projectManagementTab);
         searchServices->setObjectName("searchServices");
         searchServices->setMinimumSize(QSize(250, 0));
         searchServices->setClearButtonEnabled(true);
@@ -118,79 +133,82 @@ public:
 
         topControlsLayout->addItem(topControlsSpacer);
 
-        exportCsvBtn = new QPushButton(serviceManagementTab);
-        exportCsvBtn->setObjectName("exportCsvBtn");
-        QIcon icon;
-        icon.addFile(QString::fromUtf8(":/resources/icons/export.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        exportCsvBtn->setIcon(icon);
-        exportCsvBtn->setIconSize(QSize(16, 16));
-
-        topControlsLayout->addWidget(exportCsvBtn);
-
-        btnSortByName = new QPushButton(serviceManagementTab);
+        btnSortByName = new QPushButton(projectManagementTab);
         btnSortByName->setObjectName("btnSortByName");
-        QIcon icon1;
-        icon1.addFile(QString::fromUtf8(":/resources/icons/sort.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        btnSortByName->setIcon(icon1);
+        QIcon icon;
+        icon.addFile(QString::fromUtf8(":/resources/icons/sort.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        btnSortByName->setIcon(icon);
         btnSortByName->setIconSize(QSize(16, 16));
 
         topControlsLayout->addWidget(btnSortByName);
 
 
-        serviceManagementLayout->addLayout(topControlsLayout);
+        projectManagementLayout->addLayout(topControlsLayout);
 
-        clientsTable = new QTableWidget(serviceManagementTab);
-        if (clientsTable->columnCount() < 4)
-            clientsTable->setColumnCount(4);
+        projectTableWidget = new QTableWidget(projectManagementTab);
+        if (projectTableWidget->columnCount() < 8)
+            projectTableWidget->setColumnCount(8);
         QFont font;
         font.setBold(true);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
         __qtablewidgetitem->setFont(font);
-        clientsTable->setHorizontalHeaderItem(0, __qtablewidgetitem);
+        projectTableWidget->setHorizontalHeaderItem(0, __qtablewidgetitem);
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
         __qtablewidgetitem1->setFont(font);
-        clientsTable->setHorizontalHeaderItem(1, __qtablewidgetitem1);
+        projectTableWidget->setHorizontalHeaderItem(1, __qtablewidgetitem1);
         QTableWidgetItem *__qtablewidgetitem2 = new QTableWidgetItem();
         __qtablewidgetitem2->setFont(font);
-        clientsTable->setHorizontalHeaderItem(2, __qtablewidgetitem2);
+        projectTableWidget->setHorizontalHeaderItem(2, __qtablewidgetitem2);
         QTableWidgetItem *__qtablewidgetitem3 = new QTableWidgetItem();
         __qtablewidgetitem3->setFont(font);
-        clientsTable->setHorizontalHeaderItem(3, __qtablewidgetitem3);
-        clientsTable->setObjectName("clientsTable");
-        clientsTable->setColumnCount(4);
+        projectTableWidget->setHorizontalHeaderItem(3, __qtablewidgetitem3);
+        QTableWidgetItem *__qtablewidgetitem4 = new QTableWidgetItem();
+        __qtablewidgetitem4->setFont(font);
+        projectTableWidget->setHorizontalHeaderItem(4, __qtablewidgetitem4);
+        QTableWidgetItem *__qtablewidgetitem5 = new QTableWidgetItem();
+        __qtablewidgetitem5->setFont(font);
+        projectTableWidget->setHorizontalHeaderItem(5, __qtablewidgetitem5);
+        QTableWidgetItem *__qtablewidgetitem6 = new QTableWidgetItem();
+        __qtablewidgetitem6->setFont(font);
+        projectTableWidget->setHorizontalHeaderItem(6, __qtablewidgetitem6);
+        QTableWidgetItem *__qtablewidgetitem7 = new QTableWidgetItem();
+        __qtablewidgetitem7->setFont(font);
+        projectTableWidget->setHorizontalHeaderItem(7, __qtablewidgetitem7);
+        projectTableWidget->setObjectName("projectTableWidget");
+        projectTableWidget->setColumnCount(8);
 
-        serviceManagementLayout->addWidget(clientsTable);
+        projectManagementLayout->addWidget(projectTableWidget);
 
-        serviceButtonsLayout = new QHBoxLayout();
-        serviceButtonsLayout->setObjectName("serviceButtonsLayout");
-        serviceButtonsSpacer = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+        projectButtonsLayout = new QHBoxLayout();
+        projectButtonsLayout->setObjectName("projectButtonsLayout");
+        projectButtonsSpacer = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
 
-        serviceButtonsLayout->addItem(serviceButtonsSpacer);
+        projectButtonsLayout->addItem(projectButtonsSpacer);
 
-        btnEditService = new QPushButton(serviceManagementTab);
+        btnEditService = new QPushButton(projectManagementTab);
         btnEditService->setObjectName("btnEditService");
-        QIcon icon2;
-        icon2.addFile(QString::fromUtf8(":/resources/icons/modify.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        btnEditService->setIcon(icon2);
+        QIcon icon1;
+        icon1.addFile(QString::fromUtf8(":/resources/icons/modify.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        btnEditService->setIcon(icon1);
         btnEditService->setIconSize(QSize(16, 16));
 
-        serviceButtonsLayout->addWidget(btnEditService);
+        projectButtonsLayout->addWidget(btnEditService);
 
-        btnDeleteService = new QPushButton(serviceManagementTab);
+        btnDeleteService = new QPushButton(projectManagementTab);
         btnDeleteService->setObjectName("btnDeleteService");
-        QIcon icon3;
-        icon3.addFile(QString::fromUtf8(":/resources/icons/delete.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        btnDeleteService->setIcon(icon3);
+        QIcon icon2;
+        icon2.addFile(QString::fromUtf8(":/resources/icons/delete.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        btnDeleteService->setIcon(icon2);
         btnDeleteService->setIconSize(QSize(16, 16));
 
-        serviceButtonsLayout->addWidget(btnDeleteService);
+        projectButtonsLayout->addWidget(btnDeleteService);
 
 
-        serviceManagementLayout->addLayout(serviceButtonsLayout);
+        projectManagementLayout->addLayout(projectButtonsLayout);
 
-        QIcon icon4;
-        icon4.addFile(QString::fromUtf8(":/resources/icons/clients.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        clientTabWidget->addTab(serviceManagementTab, icon4, QString());
+        QIcon icon3;
+        icon3.addFile(QString::fromUtf8(":/resources/icons/clients.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        projectTabWidget->addTab(projectManagementTab, icon3, QString());
         addTab = new QWidget();
         addTab->setObjectName("addTab");
         addLayout = new QVBoxLayout(addTab);
@@ -205,48 +223,67 @@ public:
 
         addFormLayout = new QFormLayout();
         addFormLayout->setObjectName("addFormLayout");
-        addServiceIdLabel = new QLabel(addTab);
-        addServiceIdLabel->setObjectName("addServiceIdLabel");
+        addTitleLabel = new QLabel(addTab);
+        addTitleLabel->setObjectName("addTitleLabel");
 
-        addFormLayout->setWidget(0, QFormLayout::LabelRole, addServiceIdLabel);
+        addFormLayout->setWidget(0, QFormLayout::LabelRole, addTitleLabel);
 
-        addServiceIdEdit = new QLineEdit(addTab);
-        addServiceIdEdit->setObjectName("addServiceIdEdit");
-        addServiceIdEdit->setReadOnly(true);
+        addTitleEdit = new QLineEdit(addTab);
+        addTitleEdit->setObjectName("addTitleEdit");
 
-        addFormLayout->setWidget(0, QFormLayout::FieldRole, addServiceIdEdit);
+        addFormLayout->setWidget(0, QFormLayout::FieldRole, addTitleEdit);
 
-        addServiceNameLabel = new QLabel(addTab);
-        addServiceNameLabel->setObjectName("addServiceNameLabel");
+        addDescriptionLabel = new QLabel(addTab);
+        addDescriptionLabel->setObjectName("addDescriptionLabel");
 
-        addFormLayout->setWidget(1, QFormLayout::LabelRole, addServiceNameLabel);
-
-        addNameEdit = new QLineEdit(addTab);
-        addNameEdit->setObjectName("addNameEdit");
-
-        addFormLayout->setWidget(1, QFormLayout::FieldRole, addNameEdit);
-
-        addServiceDescLabel = new QLabel(addTab);
-        addServiceDescLabel->setObjectName("addServiceDescLabel");
-
-        addFormLayout->setWidget(2, QFormLayout::LabelRole, addServiceDescLabel);
+        addFormLayout->setWidget(1, QFormLayout::LabelRole, addDescriptionLabel);
 
         addDescriptionEdit = new QTextEdit(addTab);
         addDescriptionEdit->setObjectName("addDescriptionEdit");
 
-        addFormLayout->setWidget(2, QFormLayout::FieldRole, addDescriptionEdit);
+        addFormLayout->setWidget(1, QFormLayout::FieldRole, addDescriptionEdit);
 
-        addServiceCategoryLabel = new QLabel(addTab);
-        addServiceCategoryLabel->setObjectName("addServiceCategoryLabel");
+        addClientIdLabel = new QLabel(addTab);
+        addClientIdLabel->setObjectName("addClientIdLabel");
 
-        addFormLayout->setWidget(3, QFormLayout::LabelRole, addServiceCategoryLabel);
+        addFormLayout->setWidget(2, QFormLayout::LabelRole, addClientIdLabel);
 
-        addCategoryCombo = new QComboBox(addTab);
-        addCategoryCombo->addItem(QString());
-        addCategoryCombo->addItem(QString());
-        addCategoryCombo->setObjectName("addCategoryCombo");
+        addClientIdEdit = new QLineEdit(addTab);
+        addClientIdEdit->setObjectName("addClientIdEdit");
 
-        addFormLayout->setWidget(3, QFormLayout::FieldRole, addCategoryCombo);
+        addFormLayout->setWidget(2, QFormLayout::FieldRole, addClientIdEdit);
+
+        addServiceIdLabel = new QLabel(addTab);
+        addServiceIdLabel->setObjectName("addServiceIdLabel");
+
+        addFormLayout->setWidget(3, QFormLayout::LabelRole, addServiceIdLabel);
+
+        addServiceIdEdit = new QLineEdit(addTab);
+        addServiceIdEdit->setObjectName("addServiceIdEdit");
+
+        addFormLayout->setWidget(3, QFormLayout::FieldRole, addServiceIdEdit);
+
+        addCreationDateLabel = new QLabel(addTab);
+        addCreationDateLabel->setObjectName("addCreationDateLabel");
+
+        addFormLayout->setWidget(4, QFormLayout::LabelRole, addCreationDateLabel);
+
+        addCreationDateEdit = new QDateEdit(addTab);
+        addCreationDateEdit->setObjectName("addCreationDateEdit");
+        addCreationDateEdit->setDate(QDate(2024, 11, 8));
+
+        addFormLayout->setWidget(4, QFormLayout::FieldRole, addCreationDateEdit);
+
+        addModificationDateLabel = new QLabel(addTab);
+        addModificationDateLabel->setObjectName("addModificationDateLabel");
+
+        addFormLayout->setWidget(5, QFormLayout::LabelRole, addModificationDateLabel);
+
+        addModificationDateEdit = new QDateEdit(addTab);
+        addModificationDateEdit->setObjectName("addModificationDateEdit");
+        addModificationDateEdit->setDate(QDate(2024, 11, 8));
+
+        addFormLayout->setWidget(5, QFormLayout::FieldRole, addModificationDateEdit);
 
 
         addLayout->addLayout(addFormLayout);
@@ -259,9 +296,9 @@ public:
 
         addServiceBtn = new QPushButton(addTab);
         addServiceBtn->setObjectName("addServiceBtn");
-        QIcon icon5;
-        icon5.addFile(QString::fromUtf8(":/resources/icons/add.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        addServiceBtn->setIcon(icon5);
+        QIcon icon4;
+        icon4.addFile(QString::fromUtf8(":/resources/icons/add.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        addServiceBtn->setIcon(icon4);
 
         addButtonLayout->addWidget(addServiceBtn);
 
@@ -272,65 +309,121 @@ public:
 
         addLayout->addItem(addVerticalSpacer);
 
-        clientTabWidget->addTab(addTab, icon5, QString());
-        voiceChatTab = new QWidget();
-        voiceChatTab->setObjectName("voiceChatTab");
-        voiceChatLayout = new QVBoxLayout(voiceChatTab);
-        voiceChatLayout->setSpacing(15);
-        voiceChatLayout->setObjectName("voiceChatLayout");
-        voiceChatLayout->setContentsMargins(20, 20, 20, 20);
-        voiceControlLayout = new QHBoxLayout();
-        voiceControlLayout->setObjectName("voiceControlLayout");
-        addDescriptionEdit_2 = new QTextEdit(voiceChatTab);
-        addDescriptionEdit_2->setObjectName("addDescriptionEdit_2");
-
-        voiceControlLayout->addWidget(addDescriptionEdit_2);
-
-
-        voiceChatLayout->addLayout(voiceControlLayout);
-
-        QIcon icon6;
-        icon6.addFile(QString::fromUtf8(":/resources/icons/undo.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        clientTabWidget->addTab(voiceChatTab, icon6, QString());
+        projectTabWidget->addTab(addTab, icon4, QString());
         modifyTab = new QWidget();
         modifyTab->setObjectName("modifyTab");
         modifyLayout = new QVBoxLayout(modifyTab);
         modifyLayout->setSpacing(15);
         modifyLayout->setObjectName("modifyLayout");
         modifyLayout->setContentsMargins(20, 20, 20, 20);
-        searchServices_2 = new QLineEdit(modifyTab);
-        searchServices_2->setObjectName("searchServices_2");
-        searchServices_2->setMinimumSize(QSize(250, 0));
-        searchServices_2->setClearButtonEnabled(true);
+        modifyLabel = new QLabel(modifyTab);
+        modifyLabel->setObjectName("modifyLabel");
+        modifyLabel->setAlignment(Qt::AlignmentFlag::AlignCenter);
 
-        modifyLayout->addWidget(searchServices_2);
+        modifyLayout->addWidget(modifyLabel);
 
-        exportCsvBtn_2 = new QPushButton(modifyTab);
-        exportCsvBtn_2->setObjectName("exportCsvBtn_2");
-        exportCsvBtn_2->setIcon(icon);
-        exportCsvBtn_2->setIconSize(QSize(16, 16));
+        modifyFormLayout = new QFormLayout();
+        modifyFormLayout->setObjectName("modifyFormLayout");
+        modifyIdLabel = new QLabel(modifyTab);
+        modifyIdLabel->setObjectName("modifyIdLabel");
 
-        modifyLayout->addWidget(exportCsvBtn_2);
+        modifyFormLayout->setWidget(0, QFormLayout::LabelRole, modifyIdLabel);
 
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
+        modifyIdEdit = new QLineEdit(modifyTab);
+        modifyIdEdit->setObjectName("modifyIdEdit");
 
-        modifyLayout->addItem(verticalSpacer);
+        modifyFormLayout->setWidget(0, QFormLayout::FieldRole, modifyIdEdit);
 
-        label = new QLabel(modifyTab);
-        label->setObjectName("label");
+        modifyTitleLabel = new QLabel(modifyTab);
+        modifyTitleLabel->setObjectName("modifyTitleLabel");
 
-        modifyLayout->addWidget(label);
+        modifyFormLayout->setWidget(1, QFormLayout::LabelRole, modifyTitleLabel);
 
-        addDescriptionEdit_3 = new QTextEdit(modifyTab);
-        addDescriptionEdit_3->setObjectName("addDescriptionEdit_3");
+        modifyTitleEdit = new QLineEdit(modifyTab);
+        modifyTitleEdit->setObjectName("modifyTitleEdit");
 
-        modifyLayout->addWidget(addDescriptionEdit_3);
+        modifyFormLayout->setWidget(1, QFormLayout::FieldRole, modifyTitleEdit);
 
-        QIcon icon7;
-        icon7.addFile(QString::fromUtf8(":/resources/icons/camera.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
-        clientTabWidget->addTab(modifyTab, icon7, QString());
+        modifyDescriptionLabel = new QLabel(modifyTab);
+        modifyDescriptionLabel->setObjectName("modifyDescriptionLabel");
 
-        mainLayout->addWidget(clientTabWidget);
+        modifyFormLayout->setWidget(2, QFormLayout::LabelRole, modifyDescriptionLabel);
+
+        modifyDescriptionEdit = new QTextEdit(modifyTab);
+        modifyDescriptionEdit->setObjectName("modifyDescriptionEdit");
+
+        modifyFormLayout->setWidget(2, QFormLayout::FieldRole, modifyDescriptionEdit);
+
+        modifyClientIdLabel = new QLabel(modifyTab);
+        modifyClientIdLabel->setObjectName("modifyClientIdLabel");
+
+        modifyFormLayout->setWidget(3, QFormLayout::LabelRole, modifyClientIdLabel);
+
+        modifyClientIdEdit = new QLineEdit(modifyTab);
+        modifyClientIdEdit->setObjectName("modifyClientIdEdit");
+
+        modifyFormLayout->setWidget(3, QFormLayout::FieldRole, modifyClientIdEdit);
+
+        modifyServiceIdLabel = new QLabel(modifyTab);
+        modifyServiceIdLabel->setObjectName("modifyServiceIdLabel");
+
+        modifyFormLayout->setWidget(4, QFormLayout::LabelRole, modifyServiceIdLabel);
+
+        modifyServiceIdEdit = new QLineEdit(modifyTab);
+        modifyServiceIdEdit->setObjectName("modifyServiceIdEdit");
+
+        modifyFormLayout->setWidget(4, QFormLayout::FieldRole, modifyServiceIdEdit);
+
+        modifyCreationDateLabel = new QLabel(modifyTab);
+        modifyCreationDateLabel->setObjectName("modifyCreationDateLabel");
+
+        modifyFormLayout->setWidget(5, QFormLayout::LabelRole, modifyCreationDateLabel);
+
+        modifyCreationDateEdit = new QDateEdit(modifyTab);
+        modifyCreationDateEdit->setObjectName("modifyCreationDateEdit");
+        modifyCreationDateEdit->setDate(QDate(2024, 11, 8));
+        modifyCreationDateEdit->setReadOnly(true);
+
+        modifyFormLayout->setWidget(5, QFormLayout::FieldRole, modifyCreationDateEdit);
+
+        modifyModificationDateLabel = new QLabel(modifyTab);
+        modifyModificationDateLabel->setObjectName("modifyModificationDateLabel");
+
+        modifyFormLayout->setWidget(6, QFormLayout::LabelRole, modifyModificationDateLabel);
+
+        modifyModificationDateEdit = new QDateEdit(modifyTab);
+        modifyModificationDateEdit->setObjectName("modifyModificationDateEdit");
+        modifyModificationDateEdit->setDate(QDate(2024, 11, 8));
+
+        modifyFormLayout->setWidget(6, QFormLayout::FieldRole, modifyModificationDateEdit);
+
+
+        modifyLayout->addLayout(modifyFormLayout);
+
+        modifyButtonLayout = new QHBoxLayout();
+        modifyButtonLayout->setObjectName("modifyButtonLayout");
+        modifyButtonSpacer = new QSpacerItem(40, 20, QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Minimum);
+
+        modifyButtonLayout->addItem(modifyButtonSpacer);
+
+        modifyServiceBtn = new QPushButton(modifyTab);
+        modifyServiceBtn->setObjectName("modifyServiceBtn");
+        modifyServiceBtn->setIcon(icon1);
+
+        modifyButtonLayout->addWidget(modifyServiceBtn);
+
+
+        modifyLayout->addLayout(modifyButtonLayout);
+
+        modifyVerticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
+
+        modifyLayout->addItem(modifyVerticalSpacer);
+
+        QIcon icon5;
+        icon5.addFile(QString::fromUtf8(":/resources/icons/calendar.svg"), QSize(), QIcon::Mode::Normal, QIcon::State::Off);
+        projectTabWidget->addTab(modifyTab, icon5, QString());
+
+        mainLayout->addWidget(projectTabWidget);
 
         menubar = new QMenuBar(ProjectWidget);
         menubar->setObjectName("menubar");
@@ -341,7 +434,7 @@ public:
 
         retranslateUi(ProjectWidget);
 
-        clientTabWidget->setCurrentIndex(3);
+        projectTabWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(ProjectWidget);
@@ -372,7 +465,7 @@ public:
 "    border-radius: 6px 6px 0 0;\n"
 "    padding: 12px 20px;\n"
 "    margin-right: 2px;\n"
-"    font-weight: 700; /* make tab text bold */\n"
+"    font-weight: 700;\n"
 "    color: #495057;\n"
 "    font-size: 14px;\n"
 "    min-width: 100px;\n"
@@ -390,18 +483,20 @@ public:
 "    background-color: #ffffff;\n"
 "    alternate-background-color: #f8f9fa;\n"
 "    border: 1px solid #dee2e6;\n"
-"    bo"
-                        "rder-radius: 6px;\n"
+"    border-radius: 6px;\n"
+"   "
+                        " color: #000000;\n"
 "}\n"
 "\n"
 "QTableWidget::item {\n"
 "    padding: 8px;\n"
 "    border-bottom: 1px solid #e9ecef;\n"
+"    color: #000000;\n"
 "}\n"
 "\n"
 "QTableWidget::item:selected {\n"
 "    background-color: #e3f2fd;\n"
-"    color: #1976d2;\n"
+"    color: #000000;\n"
 "}\n"
 "\n"
 "QHeaderView::section {\n"
@@ -410,7 +505,7 @@ public:
 "    border: none;\n"
 "    border-bottom: 2px solid #007bff;\n"
 "    font-weight: 600;\n"
-"    color: #495057;\n"
+"    color: #000000;\n"
 "}\n"
 "\n"
 "QPushButton {\n"
@@ -423,7 +518,6 @@ public:
 "    font-size: 14px;\n"
 "}\n"
 "\n"
-"/* Service Management Button Colors */\n"
 "QPushButton#exportCsvBtn {\n"
 "    background-color: #28a745;\n"
 "    color: white;\n"
@@ -439,12 +533,11 @@ public:
 "}\n"
 "\n"
 "QPushButton#btnSortByName:hover {\n"
-""
-                        "    background-color: #138496;\n"
+"    background-color"
+                        ": #138496;\n"
 "}\n"
 "\n"
 "QPushButton#btnEditService {\n"
-"    /* Modified to match reference: yellow/golden modify button */\n"
 "    background-color: #f5b400;\n"
 "    color: white;\n"
 "    font-weight: 600;\n"
@@ -477,12 +570,9 @@ public:
 "    color: #ffffff;\n"
 "}\n"
 "\n"
-"/* updateClientBtn removed from UI (Modify button removed from Clients tab) */\n"
-"\n"
 "QLineEdit, QTextEdit, QComboBox {\n"
 "    padding: 8px 12px;\n"
-"    border: 2"
-                        "px solid #d0d7dd;\n"
+"    border: 2px solid #d0d7dd;\n"
 "    border-radius: 12px;\n"
 "    background-color: #ffffff;\n"
 "    color: #000000;\n"
@@ -490,7 +580,8 @@ public:
 "}\n"
 "\n"
 "QLineEdit:hover {\n"
-"    border: 2px solid #4da3ff;\n"
+"    border:"
+                        " 2px solid #4da3ff;\n"
 "}\n"
 "\n"
 "QLineEdit:focus {\n"
@@ -510,56 +601,61 @@ public:
 "    color: #000000;\n"
 "    padding: 20px 0;\n"
 "}\n"
+"\n"
 "QLabel#headerTitle:hover {\n"
-"    color: #1e88ff; /* light blue text on hover */\n"
+"    color: #1e88ff;\n"
 "}\n"
 "", nullptr));
         headerTitle->setText(QCoreApplication::translate("ProjectWidget", "Project Management", nullptr));
         searchServices->setPlaceholderText(QCoreApplication::translate("ProjectWidget", "Search project...", nullptr));
-        exportCsvBtn->setText(QCoreApplication::translate("ProjectWidget", "Export CSV", nullptr));
-        btnSortByName->setText(QCoreApplication::translate("ProjectWidget", "Sort by Name", nullptr));
-        QTableWidgetItem *___qtablewidgetitem = clientsTable->horizontalHeaderItem(0);
-        ___qtablewidgetitem->setText(QCoreApplication::translate("ProjectWidget", "Project ID", nullptr));
-        QTableWidgetItem *___qtablewidgetitem1 = clientsTable->horizontalHeaderItem(1);
-        ___qtablewidgetitem1->setText(QCoreApplication::translate("ProjectWidget", "Titre", nullptr));
-        QTableWidgetItem *___qtablewidgetitem2 = clientsTable->horizontalHeaderItem(2);
+        btnSortByName->setText(QCoreApplication::translate("ProjectWidget", "Refresh", nullptr));
+        QTableWidgetItem *___qtablewidgetitem = projectTableWidget->horizontalHeaderItem(0);
+        ___qtablewidgetitem->setText(QCoreApplication::translate("ProjectWidget", "ID", nullptr));
+        QTableWidgetItem *___qtablewidgetitem1 = projectTableWidget->horizontalHeaderItem(1);
+        ___qtablewidgetitem1->setText(QCoreApplication::translate("ProjectWidget", "Title", nullptr));
+        QTableWidgetItem *___qtablewidgetitem2 = projectTableWidget->horizontalHeaderItem(2);
         ___qtablewidgetitem2->setText(QCoreApplication::translate("ProjectWidget", "Description", nullptr));
-        QTableWidgetItem *___qtablewidgetitem3 = clientsTable->horizontalHeaderItem(3);
-        ___qtablewidgetitem3->setText(QCoreApplication::translate("ProjectWidget", "Status", nullptr));
+        QTableWidgetItem *___qtablewidgetitem3 = projectTableWidget->horizontalHeaderItem(3);
+        ___qtablewidgetitem3->setText(QCoreApplication::translate("ProjectWidget", "Client ID", nullptr));
+        QTableWidgetItem *___qtablewidgetitem4 = projectTableWidget->horizontalHeaderItem(4);
+        ___qtablewidgetitem4->setText(QCoreApplication::translate("ProjectWidget", "Service ID", nullptr));
+        QTableWidgetItem *___qtablewidgetitem5 = projectTableWidget->horizontalHeaderItem(5);
+        ___qtablewidgetitem5->setText(QCoreApplication::translate("ProjectWidget", "Creation Date", nullptr));
+        QTableWidgetItem *___qtablewidgetitem6 = projectTableWidget->horizontalHeaderItem(6);
+        ___qtablewidgetitem6->setText(QCoreApplication::translate("ProjectWidget", "Modification Date", nullptr));
+        QTableWidgetItem *___qtablewidgetitem7 = projectTableWidget->horizontalHeaderItem(7);
+        ___qtablewidgetitem7->setText(QCoreApplication::translate("ProjectWidget", "Owner ID", nullptr));
         btnEditService->setText(QCoreApplication::translate("ProjectWidget", "Edit", nullptr));
         btnDeleteService->setText(QCoreApplication::translate("ProjectWidget", "Delete", nullptr));
-        clientTabWidget->setTabText(clientTabWidget->indexOf(serviceManagementTab), QCoreApplication::translate("ProjectWidget", "Project Management", nullptr));
+        projectTabWidget->setTabText(projectTabWidget->indexOf(projectManagementTab), QCoreApplication::translate("ProjectWidget", "Project Management", nullptr));
         addLabel->setText(QCoreApplication::translate("ProjectWidget", "Add New Project", nullptr));
-        addServiceIdLabel->setText(QCoreApplication::translate("ProjectWidget", "Project ID", nullptr));
-        addServiceNameLabel->setText(QCoreApplication::translate("ProjectWidget", "Titre", nullptr));
-        addServiceDescLabel->setText(QCoreApplication::translate("ProjectWidget", "Description:", nullptr));
-        addServiceCategoryLabel->setText(QCoreApplication::translate("ProjectWidget", "Status", nullptr));
-        addCategoryCombo->setItemText(0, QCoreApplication::translate("ProjectWidget", "Yes", nullptr));
-        addCategoryCombo->setItemText(1, QCoreApplication::translate("ProjectWidget", "No", nullptr));
-
-        addServiceBtn->setText(QCoreApplication::translate("ProjectWidget", "Add Project", nullptr));
-        clientTabWidget->setTabText(clientTabWidget->indexOf(addTab), QCoreApplication::translate("ProjectWidget", "Add", nullptr));
-        addDescriptionEdit_2->setHtml(QCoreApplication::translate("ProjectWidget", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><meta charset=\"utf-8\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"hr { height: 1px; border-width: 0; }\n"
-"li.unchecked::marker { content: \"\\2610\"; }\n"
-"li.checked::marker { content: \"\\2612\"; }\n"
-"</style></head><body style=\" font-family:'Segoe UI'; font-size:14px; font-weight:400; font-style:normal;\">\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Version 2.0 - 27 / 09 / 2025</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Mod Color</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; ma"
-                        "rgin-right:0px; -qt-block-indent:0; text-indent:0px;\">Version 1.5 - 20 / 09 /2025</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">New Item</p>\n"
-"<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\">Version 1.0 - 10 / 09 / 2025</p>\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><br /></p></body></html>", nullptr));
-        clientTabWidget->setTabText(clientTabWidget->indexOf(voiceChatTab), QCoreApplication::translate("ProjectWidget", "RollBack", nullptr));
-        searchServices_2->setPlaceholderText(QCoreApplication::translate("ProjectWidget", "Media Description...", nullptr));
-        exportCsvBtn_2->setText(QCoreApplication::translate("ProjectWidget", "Chose File to upload", nullptr));
-        label->setText(QCoreApplication::translate("ProjectWidget", "Preview :", nullptr));
-        clientTabWidget->setTabText(clientTabWidget->indexOf(modifyTab), QCoreApplication::translate("ProjectWidget", "Insertion of images and videos", nullptr));
+        addTitleLabel->setText(QCoreApplication::translate("ProjectWidget", "Title", nullptr));
+        addTitleEdit->setPlaceholderText(QCoreApplication::translate("ProjectWidget", "Enter project title", nullptr));
+        addDescriptionLabel->setText(QCoreApplication::translate("ProjectWidget", "Description", nullptr));
+        addDescriptionEdit->setPlaceholderText(QCoreApplication::translate("ProjectWidget", "Enter project description", nullptr));
+        addClientIdLabel->setText(QCoreApplication::translate("ProjectWidget", "Client ID", nullptr));
+        addClientIdEdit->setPlaceholderText(QCoreApplication::translate("ProjectWidget", "Enter client ID (optional)", nullptr));
+        addServiceIdLabel->setText(QCoreApplication::translate("ProjectWidget", "Service ID", nullptr));
+        addServiceIdEdit->setPlaceholderText(QCoreApplication::translate("ProjectWidget", "Enter service ID (optional)", nullptr));
+        addCreationDateLabel->setText(QCoreApplication::translate("ProjectWidget", "Creation Date", nullptr));
+        addModificationDateLabel->setText(QCoreApplication::translate("ProjectWidget", "Modification Date", nullptr));
+        addServiceBtn->setText(QCoreApplication::translate("ProjectWidget", "Add", nullptr));
+        projectTabWidget->setTabText(projectTabWidget->indexOf(addTab), QCoreApplication::translate("ProjectWidget", "Add", nullptr));
+        modifyLabel->setText(QCoreApplication::translate("ProjectWidget", "Modify Project", nullptr));
+        modifyIdLabel->setText(QCoreApplication::translate("ProjectWidget", "Project ID", nullptr));
+        modifyIdEdit->setPlaceholderText(QCoreApplication::translate("ProjectWidget", "Enter project ID", nullptr));
+        modifyTitleLabel->setText(QCoreApplication::translate("ProjectWidget", "Title", nullptr));
+        modifyTitleEdit->setPlaceholderText(QCoreApplication::translate("ProjectWidget", "Enter project title", nullptr));
+        modifyDescriptionLabel->setText(QCoreApplication::translate("ProjectWidget", "Description", nullptr));
+        modifyDescriptionEdit->setPlaceholderText(QCoreApplication::translate("ProjectWidget", "Enter project description", nullptr));
+        modifyClientIdLabel->setText(QCoreApplication::translate("ProjectWidget", "Client ID", nullptr));
+        modifyClientIdEdit->setPlaceholderText(QCoreApplication::translate("ProjectWidget", "Enter client ID (optional)", nullptr));
+        modifyServiceIdLabel->setText(QCoreApplication::translate("ProjectWidget", "Service ID", nullptr));
+        modifyServiceIdEdit->setPlaceholderText(QCoreApplication::translate("ProjectWidget", "Enter service ID (optional)", nullptr));
+        modifyCreationDateLabel->setText(QCoreApplication::translate("ProjectWidget", "Creation Date", nullptr));
+        modifyModificationDateLabel->setText(QCoreApplication::translate("ProjectWidget", "Modification Date", nullptr));
+        modifyServiceBtn->setText(QCoreApplication::translate("ProjectWidget", "Update", nullptr));
+        projectTabWidget->setTabText(projectTabWidget->indexOf(modifyTab), QCoreApplication::translate("ProjectWidget", "Modify", nullptr));
     } // retranslateUi
 
 };

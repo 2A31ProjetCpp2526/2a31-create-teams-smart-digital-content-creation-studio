@@ -18,6 +18,7 @@
 #include <QListWidgetItem>
 #include "backend/employer.h"
 #include "backend/project.h"
+#include "backend/facerecognizer.h"
 
 QT_BEGIN_NAMESPACE
 class QLineEdit;
@@ -27,9 +28,14 @@ class QString;
 class TemplateWidget;
 class ClientWidget;
 class SponsorWidget;
+class SponsorWindow;
 class RessourceWidget;
 class ProjectWidget;
 class Employer;
+class OpenAIChatbot;
+class FaceRecognitionLogin;
+class FaceRecognitionWidget;
+class QTimer;
 
 namespace Ui {
 class MainWindow;
@@ -206,8 +212,7 @@ public:
     static QVector<Employer> searchRecords(const QVector<Employer>& records, const QString& query);
     static QVector<Employer> sortRecords(const QVector<Employer>& records);
     
-    // Export
-    static bool exportToCsv(const QString& filePath, const QVector<Employer>& records, QString* errorMessage);
+    // Export helpers (CSV export removed - use PDF exporters instead from backend)
 
 private:
     EmployerUIHelper() = delete; // Static class - no instances
@@ -234,6 +239,7 @@ private slots:
     void onTemplatesClicked();
     void onAboutClicked();
     void onLoginClicked();
+    void onLoginBackClicked();
     
     // Dashboard animations
     void setupDashboardAnimations();
@@ -258,7 +264,9 @@ private slots:
     void onDeleteEmployerClicked();
     void onExportEmployersClicked();
     void onSearchEmployersClicked();
+    void onSearchInputChanged(const QString &text);
     void onSortEmployersClicked();
+    void onStatisticsClicked();
     void onEmployeeTableSelectionChanged();
     void onEmployeeTableItemClicked(QTableWidgetItem *item);
     void onCancelSelectionClicked();
@@ -272,12 +280,17 @@ private:
     void setupSponsorWidget();
     void setupRessourceWidget();
     void setupProjectWidget();
+    void setupFaceRecognitionWidget();
     void setupAnimations();
     void setupSidebarIcons();
     void setupCircularAvatar(QLabel* avatarLabel, const QString& initials);
     void setupEmployeeTable();
     void switchToPage(int pageIndex);
+    
+    // User session helper
+    void updateUserSessionDisplay();
     void addButtonHoverEffect(QPushButton* button);
+    bool eventFilter(QObject *watched, QEvent *event) override;
     void setupLoginFormConnections();
     void switchLoginFormWithAnimation(int formIndex);
     void showMainContent();
@@ -288,6 +301,7 @@ private:
     bool isValidEmail(const QString& email);
     bool isValidPassword(const QString& password);
     void showValidationError(const QString& message);
+    void showStyledValidationError(const QString& title, const QString& message);
     void setFieldError(QLineEdit* field, bool hasError);
     void addInputFieldEnhancements(QLineEdit* field);
     
@@ -295,8 +309,27 @@ private:
     void loadEmployers();
     void updateEmployerButtonStates();
     
+    // Chatbot slots
+    void onChatbotSendClicked();
+    void onChatbotClearClicked();
+    void onChatbotHistoryClicked();
+    void onChatbotResponseReceived(const QString &response);
+    void onChatbotErrorOccurred(const QString &errorMessage);
+    void onChatbotProcessingStatusChanged(bool isBusy);
+    
+    // Face Recognition AI slots (Local Offline)
+    void onFaceLoginClicked();
+    void onFaceEnrollmentClicked();
+    void onFaceRecognitionStatusChanged(const QString &status);
+    void onFaceDetected(const QImage &faceImage);
+    void onFaceNotDetected();
+    void onFaceProcessingError(const QString &error);
+    
     Ui::MainWindow *ui;
     QPixmap legionPixmap;
+
+    // Debounce timer for live search (search-as-you-type)
+    QTimer *m_searchDebounceTimer = nullptr;
 
     // Helper to scale legion pixmap proportionally into the label
     void updateLegionLogoScaled();
@@ -319,19 +352,35 @@ private:
     // Client, Sponsor, Ressource, Project widgets
     ClientWidget *clientWidget;
     SponsorWidget *sponsorWidget;
+    SponsorWindow *sponsorWindow;
     RessourceWidget *ressourceWidget;
     ProjectWidget *projectWidget;
     QVector<Employer> cachedEmployers;
+    
+    // Chatbot
+    OpenAIChatbot *chatbot;
+    // Face recognition instance (consolidated)
+    FaceRecognitionLogin *faceRecognitionAI;
+    // Face recognition widget (Real-time camera)
+    FaceRecognitionWidget *faceRecognitionWidget;
     
     // Login page widget and auth stacked widget reference
     QWidget *loginPageWidget;
     QStackedWidget *authStackedWidget;
     Ui::LoginPage *loginUI;
     
+    // Current connected user
+    int currentConnectedEmployeeId = -1;
+    QString currentConnectedUserRole = "";
+    QString currentConnectedUserName = "";
+    
     // Animation objects
     QPropertyAnimation *pageTransitionAnimation;
     QParallelAnimationGroup *animationGroup;
     QPropertyAnimation *loginFormTransitionAnimation;
+    
+    // Access control helper
+    bool checkAdminAccess(const QString &actionName);
     
     // Current page tracking
     int currentPageIndex;

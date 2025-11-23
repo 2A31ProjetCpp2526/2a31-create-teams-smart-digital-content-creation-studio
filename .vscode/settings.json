@@ -1,4 +1,16 @@
 {
+  "cmake.generator": "MinGW Makefiles",
+  "cmake.preferredGenerators": ["MinGW Makefiles", "Ninja"],
+  "cmake.configureArgs": [],
+  "cmake.buildDirectory": "${workspaceFolder}/build",
+  "cmake.ctestArgs": [],
+  "cmake.configureOnOpen": false,
+  "cmake.launchDebugTarget": {
+    "name": "AmineTemplar",
+    "program": "${workspaceFolder}/build/AmineTemplar.exe"
+  }
+}
+{
     "files.associations": {
         "qpropertyanimation": "cpp",
         "deque": "cpp",

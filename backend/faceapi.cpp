@@ -20,8 +20,8 @@ namespace FaceApi {
 namespace {
     constexpr const char *kDefaultEndpoint = "https://api-us.faceplusplus.com/facepp/v3/compare";
     constexpr double kDefaultConfidence = 75.0; // percent
-    constexpr const char *kDefaultApiKey = "Hj7Xj0dLfkXW2bZVmVAWh-WWZ21Cz9Bc";
-    constexpr const char *kDefaultApiSecret = "SFOPnQ5-iXF2KymcvK9SjiWTJfeiXa6_";
+    constexpr const char *kDefaultApiKey = "";
+    constexpr const char *kDefaultApiSecret = "";
 }
 
 Client::Client(QObject *parent)

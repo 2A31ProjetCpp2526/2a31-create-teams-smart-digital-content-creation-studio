@@ -25,7 +25,7 @@
 // variables or a secure secrets manager in production.
 // Default embedded configuration (moved from .env into code).
 // Replace these placeholders with your production values if desired.
-static const QString DEFAULT_COHERE_API_KEY = QStringLiteral("JXziQstzbhzxH8BiZG4ZH89Y1SO0KWn6uIMrrp9R");
+static const QString DEFAULT_COHERE_API_KEY = QStringLiteral("");
 // Use a live Cohere chat model by default. "command-a-03-2025" is a
 // recommended general-purpose chat model as of the 2025 model lineup.
 // If this model is ever deprecated, the code below will fall back to the

@@ -18,8 +18,7 @@
 #include "backend/employer.h"
 #include "backend/ressource.h"
 #include "backend/project.h"
-#include "backend/openai_chatbot.h"
-#include "backend/facerecognitionlogin.h"
+#include "backend/chatbot.h"
 #include "backend/faceapi.h"
 
 #include <QAbstractItemView>
@@ -1697,17 +1696,14 @@ MainWindow::MainWindow(QWidget *parent)
     connect(chatbot, &OpenAIChatbot::errorOccurred, this, &MainWindow::onChatbotErrorOccurred);
     connect(chatbot, &OpenAIChatbot::processingStatusChanged, this, &MainWindow::onChatbotProcessingStatusChanged);
 
-        // Setup face recognition (consolidated)
-        faceRecognitionAI = new FaceRecognitionLogin(this);
-        connect(faceRecognitionAI, &FaceRecognitionLogin::recognitionStatusChanged,
-            this, &MainWindow::onFaceRecognitionStatusChanged);
-        connect(faceRecognitionAI, &FaceRecognitionLogin::faceDetected,
-            this, &MainWindow::onFaceDetected);
-        connect(faceRecognitionAI, &FaceRecognitionLogin::faceNotDetected,
-            this, &MainWindow::onFaceNotDetected);
-        connect(faceRecognitionAI, &FaceRecognitionLogin::processingError,
+        // Setup Face++ cloud API client for recognition
+        faceApiClient = new FaceApi::Client(this);
+        faceApiClient->setConfidenceThreshold(75.0);
+        connect(faceApiClient, &FaceApi::Client::recognitionCompleted,
+            this, &MainWindow::onFaceRecognitionCompleted);
+        connect(faceApiClient, &FaceApi::Client::recognitionFailed,
             this, &MainWindow::onFaceProcessingError);
-    qDebug() << "[MainWindow] Face Recognition AI initialized (Local Offline - No Cloud Required).";
+    qDebug() << "[MainWindow] Face Recognition API client initialized (Face++).";
     
 
     addButtonHoverEffect(ui->profileBtn);
@@ -4657,7 +4653,9 @@ void MainWindow::onFaceLoginClicked()
     QPushButton *localEngineButton = new QPushButton(tr("Local AI Mode"), engineCard);
     localEngineButton->setProperty("btnRole", "engine");
     localEngineButton->setCheckable(true);
-    localEngineButton->setChecked(true);
+    localEngineButton->setChecked(false);
+    localEngineButton->setEnabled(false);
+    localEngineButton->setToolTip(tr("Local AI recognition removed; use Face++ API instead."));
     localEngineButton->setCursor(Qt::PointingHandCursor);
     localEngineButton->setIcon(QIcon(":/icons/camera.svg"));
     localEngineButton->setIconSize(QSize(20, 20));
@@ -4725,9 +4723,13 @@ void MainWindow::onFaceLoginClicked()
     QVideoSink *videoSink = new QVideoSink(faceLoginDialog);
     captureSession->setVideoSink(videoSink);
 
-    FaceRecognizer *faceRecognizer = new FaceRecognizer(faceLoginDialog);
-    FaceApi::Client *faceApiClient = new FaceApi::Client(faceLoginDialog);
-    faceApiClient->setConfidenceThreshold(75.0);
+    // Local recognizer removed; only faceApiClient is used for cloud-based recognition
+    // Use the member FaceApi client; ensure it exists
+    FaceApi::Client *dialogFaceApiClient = faceApiClient;
+    if (!dialogFaceApiClient) {
+        dialogFaceApiClient = new FaceApi::Client(faceLoginDialog);
+        dialogFaceApiClient->setConfidenceThreshold(75.0);
+    }
 
     QObject::connect(faceLoginDialog, &QDialog::finished, faceLoginDialog, [camera]() {
         if (camera && camera->isActive()) {
@@ -4735,19 +4737,18 @@ void MainWindow::onFaceLoginClicked()
         }
     });
 
-    enum class RecognitionEngine { Local, Api };
-    RecognitionEngine engineSelection = RecognitionEngine::Local;
+    enum class RecognitionEngine { Api };
+    RecognitionEngine engineSelection = RecognitionEngine::Api;
 
     QButtonGroup *engineGroup = new QButtonGroup(faceLoginDialog);
     engineGroup->setExclusive(true);
-    engineGroup->addButton(localEngineButton, 0);
-    engineGroup->addButton(apiEngineButton, 1);
+    // Only API engine supported - local engine removed
+    engineGroup->addButton(apiEngineButton, 0);
 
     connect(engineGroup, &QButtonGroup::idClicked, faceLoginDialog, [statusLabel, &engineSelection](int id) {
-        engineSelection = id == 0 ? RecognitionEngine::Local : RecognitionEngine::Api;
-        statusLabel->setText(id == 0
-            ? QObject::tr("Local AI mode selected. Ready when you are.")
-            : QObject::tr("API mode selected. Internet required."));
+        // Local engine removed; force API selection
+        engineSelection = RecognitionEngine::Api;
+        statusLabel->setText(QObject::tr("API mode selected. Internet required."));
     });
 
     connect(autoCaptureCheck, &QCheckBox::toggled, faceLoginDialog, [statusLabel, &autoCaptureEnabled](bool checked) {
@@ -4836,9 +4837,9 @@ void MainWindow::onFaceLoginClicked()
         }
     });
 
-    connect(startRecognitionButton, &QPushButton::clicked, faceLoginDialog,
-            [this, statusLabel, startRecognitionButton, captureButton, faceLoginDialog, faceRecognizer, faceApiClient,
-             &liveFrame, &lockedFrame, &engineSelection]() {
+        connect(startRecognitionButton, &QPushButton::clicked, faceLoginDialog,
+               [this, statusLabel, startRecognitionButton, captureButton, faceLoginDialog, dialogFaceApiClient,
+                   &liveFrame, &lockedFrame]() {
         QImage frameToUse = lockedFrame.isNull() ? liveFrame : lockedFrame;
         if (frameToUse.isNull()) {
             statusLabel->setText(tr("No frame captured. Capture a frame first."));
@@ -4848,43 +4849,15 @@ void MainWindow::onFaceLoginClicked()
         startRecognitionButton->setEnabled(false);
         captureButton->setEnabled(false);
 
-        if (engineSelection == RecognitionEngine::Local) {
-            statusLabel->setText(tr("Analyzing with Local AI…"));
-            faceRecognizer->recognizeFace(frameToUse);
-        } else {
+        // Only API mode is supported now
             statusLabel->setText(tr("Sending frame to API…"));
-            faceApiClient->recognizeAgainstEmployees(frameToUse);
+            dialogFaceApiClient->recognizeAgainstEmployees(frameToUse);
         }
     });
 
-    connect(faceRecognizer, &FaceRecognizer::recognitionResult,
-            [this, statusLabel, faceLoginDialog, startRecognitionButton, captureButton, camera](const FaceRecognizer::RecognitionResult &result) {
-        startRecognitionButton->setEnabled(true);
-        captureButton->setEnabled(true);
+    // Local recognition removed - API path will handle results via faceApiClient below
 
-        if (result.recognized) {
-            statusLabel->setText(tr("Face verified • Employee #%1").arg(result.employeeId));
-            QTimer::singleShot(900, [this, faceLoginDialog, result, camera]() {
-                if (camera && camera->isActive()) {
-                    camera->stop();
-                }
-                QMessageBox::information(this, tr("Login Successful"),
-                                         tr("Welcome Employee #%1! Facial recognition succeeded.").arg(result.employeeId));
-                faceLoginDialog->accept();
-            });
-        } else {
-            statusLabel->setText(tr("Face not recognized. Try again."));
-        }
-    });
-
-    connect(faceRecognizer, &FaceRecognizer::recognitionError,
-            [statusLabel, startRecognitionButton, captureButton](const QString &error) {
-        statusLabel->setText(QObject::tr("Local AI error: %1").arg(error));
-        startRecognitionButton->setEnabled(true);
-        captureButton->setEnabled(true);
-    });
-
-    connect(faceApiClient, &FaceApi::Client::recognitionCompleted,
+    connect(dialogFaceApiClient, &FaceApi::Client::recognitionCompleted,
             [this, statusLabel, faceLoginDialog, startRecognitionButton, captureButton, camera](const FaceApi::CloudResult &result) {
         startRecognitionButton->setEnabled(true);
         captureButton->setEnabled(true);
@@ -4907,7 +4880,7 @@ void MainWindow::onFaceLoginClicked()
         }
     });
 
-    connect(faceApiClient, &FaceApi::Client::recognitionFailed,
+    connect(dialogFaceApiClient, &FaceApi::Client::recognitionFailed,
             [statusLabel, startRecognitionButton, captureButton](const QString &error) {
         statusLabel->setText(QObject::tr("API error: %1").arg(error));
         startRecognitionButton->setEnabled(true);
@@ -4921,14 +4894,14 @@ void MainWindow::onFaceLoginClicked()
 
 void MainWindow::onFaceEnrollmentClicked()
 {
-    if (!faceRecognitionAI) {
-        QMessageBox::warning(this, "Face Enrollment", "Face recognition module not initialized");
+    if (!faceApiClient) {
+        QMessageBox::warning(this, "Face Enrollment", "Face recognition client not initialized (Face++ required)");
         return;
     }
     
     // Simple enrollment dialog
     QDialog *enrollDialog = new QDialog(this);
-    enrollDialog->setWindowTitle("📸 Enroll New Face - Local AI");
+    enrollDialog->setWindowTitle("📸 Enroll New Face - Cloud API (Face++)");
     enrollDialog->setModal(true);
     enrollDialog->setFixedSize(500, 500);
     
@@ -5014,5 +4987,17 @@ void MainWindow::onFaceNotDetected()
 void MainWindow::onFaceProcessingError(const QString &error)
 {
     qWarning() << "[Face AI Error]" << error;
+}
+
+void MainWindow::onFaceRecognitionCompleted(const FaceApi::CloudResult &result)
+{
+    qDebug() << "[Face AI] Recognition completed:" << result.employeeId << result.employeeName << result.confidence;
+    if (result.recognized && result.employeeId > 0) {
+        currentConnectedEmployeeId = result.employeeId;
+        QString displayName = result.employeeName.isEmpty() ? tr("Employee #%1").arg(result.employeeId) : result.employeeName;
+        QMessageBox::information(this, tr("Face++ Login Successful"), tr("Welcome %1! Cloud verification succeeded.").arg(displayName));
+    } else {
+        QMessageBox::warning(this, tr("Face++ Login"), tr("No match found for the provided face."));
+    }
 }
 

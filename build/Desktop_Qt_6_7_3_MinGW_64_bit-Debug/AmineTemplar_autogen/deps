@@ -2,6 +2,7 @@ AmineTemplar_autogen/timestamp: \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/QByteArray \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/QDate \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/QFlags \
+	C:/Qt/6.7.3/mingw_64/include/QtCore/QHash \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/QIODevice \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/QJsonArray \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/QJsonDocument \
@@ -766,6 +767,8 @@ AmineTemplar_autogen/timestamp: \
 	C:/Qt/Tools/mingw1120_64/x86_64-w64-mingw32/include/vadefs.h \
 	C:/Qt/Tools/mingw1120_64/x86_64-w64-mingw32/include/wchar.h \
 	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/CMakeLists.txt \
+	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/chatbot.cpp \
+	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/chatbot.h \
 	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/client.cpp \
 	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/client.h \
 	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/connection.cpp \
@@ -774,13 +777,6 @@ AmineTemplar_autogen/timestamp: \
 	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/employer.h \
 	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/faceapi.cpp \
 	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/faceapi.h \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/facerecognitionai.h \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/facerecognitionlogin.cpp \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/facerecognitionlogin.h \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/facerecognizer.cpp \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/facerecognizer.h \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/openai_chatbot.cpp \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/openai_chatbot.h \
 	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/project.cpp \
 	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/project.h \
 	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/ressource.cpp \

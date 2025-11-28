@@ -1,0 +1,229 @@
+[DEBUG] Application started - logging to debug_output.log
+[DEBUG] Poppins font loaded successfully: "Poppins Light"
+[DEBUG] Global stylesheet loaded successfully
+[DEBUG] [Login] Credentials validated successfully
+[DEBUG] [SponsorWidget::setupUi] UI setup complete
+[DEBUG] [MainWindow::setupRessourceWidget] CALLED - Creating RessourceWidget...
+[DEBUG] Table editability configured
+[DEBUG] RessourceWidget initialized successfully
+[DEBUG] [MainWindow::setupRessourceWidget] RessourceWidget created at: RessourceWidget(0x221397981d0, name="RessourceWidget")
+[DEBUG] [MainWindow::setupRessourceWidget] Found ressource page at index: 4
+[DEBUG] [MainWindow::setupRessourceWidget] ✅ RessourceWidget inserted into stacked widget
+[DEBUG] ProjectWidget::loadAllProjects() - Loading all projects...
+[DEBUG] [Project::selectAll] Fetching all projects...
+[DEBUG] [Project::selectAll] ERROR: Database not open
+[DEBUG] ProjectWidget::loadAllProjects() - Found 0 projects
+[DEBUG] ProjectWidget::loadAllProjects() - No projects found
+[DEBUG] ProjectWidget initialized successfully
+[DEBUG] [FaceRecognitionWidget] Camera setup complete
+[DEBUG] [FaceRecognizer] Initialized - API URL: "http://localhost:5000/api"
+[DEBUG] [FaceRecognitionWidget] Recognizer setup complete
+[DEBUG] [FaceRecognitionWidget] Initialized
+[DEBUG] [MainWindow::setupFaceRecognitionWidget] Added FaceRecognitionWidget at page index: 10
+[DEBUG] [MainWindow::setupFaceRecognitionWidget] Face Recognition Widget initialized
+[DEBUG] [MainWindow] .env removed; using embedded Cohere configuration.
+[DEBUG] Database not open, skipping face encodings table creation
+[DEBUG] [MainWindow] Face Recognition AI initialized (Local Offline - No Cloud Required).
+[DEBUG] === Configuring Database Connection ===
+[DEBUG] [Connection] Constructor called
+[DEBUG] [Connection] Singleton instance created
+[DEBUG] ========================================
+[DEBUG] [Connection] CREATE CONNECTION STARTED
+[DEBUG] ========================================
+[DEBUG] [Connection] Configuration:
+[DEBUG] [Connection]   Driver:  "QODBC"
+[DEBUG] [Connection]   DSN:     "InspiraStudio"
+[DEBUG] [Connection]   User:    "adminInspiraStudio"
+[DEBUG] [Connection] Available SQL drivers: QList("QSQLITE", "QMIMER", "QODBC", "QPSQL")
+[DEBUG] [Connection] ✓ QODBC driver is available
+[DEBUG] [Connection] ✓ Database driver added successfully
+[DEBUG] [Connection] Using DSN connection
+[DEBUG] [Connection] Connection parameters set
+[DEBUG] [Connection] Attempting to open database connection...
+[DEBUG] ========================================
+[DEBUG] [Connection] ✓✓✓ CONNECTION SUCCESSFUL! ✓✓✓
+[DEBUG] ========================================
+[DEBUG] [Connection] Database is OPEN and READY
+[DEBUG] [Connection] Driver name:       "QODBC"
+[DEBUG] [Connection] Database name:     "InspiraStudio"
+[DEBUG] [Connection] Connection valid:  true
+[DEBUG] [Connection] Connection open:   true
+[DEBUG] ========================================
+[DEBUG] SUCCESS: Database connection established!
+[DEBUG] ===================================
+[DEBUG] 
+[MainWindow::loadEmployers] ========== LOADING EMPLOYERS ==========
+[DEBUG] [MainWindow::loadEmployers] Calling Employer::selectAll()...
+[DEBUG] [MainWindow::loadEmployers] Retrieved 18 employers from database
+[DEBUG] [MainWindow::loadEmployers] Employers loaded successfully:
+[DEBUG]   [ 0 ] ID: 1 Name: "Aminelllll" "Helali" Email: "amine.helali@inspira.tn"
+[DEBUG]   [ 1 ] ID: 3 Name: "Sami" "Ben Amor" Email: "sami.benamor@inspirastudio.com"
+[DEBUG]   [ 2 ] ID: 4 Name: "Raniajjjjjjjjjjjj" "Kacem" Email: "rania.kacem@inspirastudio.com"
+[DEBUG]   [ 3 ] ID: 6 Name: "Sara" "Bennani" Email: "sara.bennani@inspirastudio.com"
+[DEBUG]   [ 4 ] ID: 10 Name: "Amine" "Helali" Email: "amine.helali@inspira.tn"
+[DEBUG]   [ 5 ] ID: 11 Name: "yhjbghgvjhg" "jhghjghj" Email: "ghjgjhg@jhfg.hj"
+[DEBUG]   [ 6 ] ID: 12 Name: "Leila" "Jlassi" Email: "leila.jlassi@inspirastudio.com"
+[DEBUG]   [ 7 ] ID: 13 Name: "Ahmed" "Bouazizi" Email: "ahmed.bouazizi@inspirastudio.com"
+[DEBUG]   [ 8 ] ID: 14 Name: "Sahar" "Masmoudi" Email: "sahar.masmoudi@inspirastudio.com"
+[DEBUG]   [ 9 ] ID: 15 Name: "Firas" "Belhaj" Email: "firas.belhaj@inspirastudio.com"
+[DEBUG]   [ 10 ] ID: 16 Name: "Dorsaf" "Heni" Email: "dorsaf.heni@inspirastudio.com"
+[DEBUG]   [ 11 ] ID: 17 Name: "Karim" "Dridi" Email: "karim.dridi@inspirastudio.com"
+[DEBUG]   [ 12 ] ID: 19 Name: "Hatemhhhhhhhhhhhhhhhhhhh" "Louati" Email: "hatem.louati@inspirastudio.com"
+[DEBUG]   [ 13 ] ID: 25 Name: "jjjj" "jjjjjj" Email: "jjjjjj@ff.ff"
+[DEBUG]   [ 14 ] ID: 26 Name: "SS" "PP" Email: "amine.ee@gmail.com"
+[DEBUG]   [ 15 ] ID: 27 Name: "ojpj" "ijij" Email: "ijij@hgjg.hj"
+[DEBUG]   [ 16 ] ID: 28 Name: "ZBI" "ZBOU" Email: "zbi.zbou@5rta.com"
+[DEBUG]   [ 17 ] ID: 29 Name: "mmm" "fff" Email: "mmm@g.gg"
+[DEBUG] [MainWindow::loadEmployers] Populating table...
+[DEBUG] [EmployerUIHelper::populateTable] CALLED with 18 records
+[DEBUG] [EmployerUIHelper::populateTable] Row 0 - ID: 1 Name: "Aminelllll" "Helali"
+[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 1
+[DEBUG] ✅ Found 0 resources for employer 1
+[DEBUG] [Project::getProjectsByEmployer] Fetching projects for employer 1
+[DEBUG] [Project::getProjectsByEmployer] SQL: "SELECT p.ID_PROJECT, p.ID_CLIENT, p.ID_SERVICE, p.TITLE, p.DESCRIPTION, p.CREATION_DATE, p.MODIFICATION_DATE, p.OWNER_ID FROM PROJECTS p INNER JOIN GERER g ON p.ID_PROJECT = g.ID_PROJECT WHERE g.ID_EMP = 1"
+[DEBUG] [Project::getProjectsByEmployer] Found 9 projects
+[DEBUG] [EmployerUIHelper::populateTable] Employer 1 has 9 projects: "Maintenance sécurité, kkkkkkkkkkVidéo-surveillance, Supervision Modbus, Audit sécurité, Remplacement centrale, Formation client, Projet pilote IA, l, kk"
+[DEBUG] [EmployerUIHelper::populateTable] Row 1 - ID: 3 Name: "Sami" "Ben Amor"
+[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 3
+[DEBUG] ✅ Found 0 resources for employer 3
+[DEBUG] [Project::getProjectsByEmployer] Fetching projects for employer 3
+[DEBUG] [Project::getProjectsByEmployer] SQL: "SELECT p.ID_PROJECT, p.ID_CLIENT, p.ID_SERVICE, p.TITLE, p.DESCRIPTION, p.CREATION_DATE, p.MODIFICATION_DATE, p.OWNER_ID FROM PROJECTS p INNER JOIN GERER g ON p.ID_PROJECT = g.ID_PROJECT WHERE g.ID_EMP = 3"
+[DEBUG] [Project::getProjectsByEmployer] Found 6 projects
+[DEBUG] [EmployerUIHelper::populateTable] Employer 3 has 6 projects: "Maintenance sécurité, kkkkkkkkkkVidéo-surveillance, Supervision Modbus, Audit sécurité, Remplacement centrale, Formation client"
+[DEBUG] [EmployerUIHelper::populateTable] Row 2 - ID: 4 Name: "Raniajjjjjjjjjjjj" "Kacem"
+[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 4
+[DEBUG] ✅ Found 0 resources for employer 4
+[DEBUG] [Project::getProjectsByEmployer] Fetching projects for employer 4
+[DEBUG] [Project::getProjectsByEmployer] SQL: "SELECT p.ID_PROJECT, p.ID_CLIENT, p.ID_SERVICE, p.TITLE, p.DESCRIPTION, p.CREATION_DATE, p.MODIFICATION_DATE, p.OWNER_ID FROM PROJECTS p INNER JOIN GERER g ON p.ID_PROJECT = g.ID_PROJECT WHERE g.ID_EMP = 4"
+[DEBUG] [Project::getProjectsByEmployer] Found 4 projects
+[DEBUG] [EmployerUIHelper::populateTable] Employer 4 has 4 projects: "Maintenance sécurité, kkkkkkkkkkVidéo-surveillance, Supervision Modbus, Audit sécurité"
+[DEBUG] [EmployerUIHelper::populateTable] Row 3 - ID: 6 Name: "Sara" "Bennani"
+[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 6
+[DEBUG] ✅ Found 0 resources for employer 6
+[DEBUG] [Project::getProjectsByEmployer] Fetching projects for employer 6
+[DEBUG] [Project::getProjectsByEmployer] SQL: "SELECT p.ID_PROJECT, p.ID_CLIENT, p.ID_SERVICE, p.TITLE, p.DESCRIPTION, p.CREATION_DATE, p.MODIFICATION_DATE, p.OWNER_ID FROM PROJECTS p INNER JOIN GERER g ON p.ID_PROJECT = g.ID_PROJECT WHERE g.ID_EMP = 6"
+[DEBUG] [Project::getProjectsByEmployer] Found 2 projects
+[DEBUG] [EmployerUIHelper::populateTable] Employer 6 has 2 projects: "Formation client, Projet pilote IA"
+[DEBUG] [EmployerUIHelper::populateTable] Row 4 - ID: 10 Name: "Amine" "Helali"
+[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 10
+[DEBUG] ✅ Found 0 resources for employer 10
+[DEBUG] [Project::getProjectsByEmployer] Fetching projects for employer 10
+[DEBUG] [Project::getProjectsByEmployer] SQL: "SELECT p.ID_PROJECT, p.ID_CLIENT, p.ID_SERVICE, p.TITLE, p.DESCRIPTION, p.CREATION_DATE, p.MODIFICATION_DATE, p.OWNER_ID FROM PROJECTS p INNER JOIN GERER g ON p.ID_PROJECT = g.ID_PROJECT WHERE g.ID_EMP = 10"
+[DEBUG] [Project::getProjectsByEmployer] Found 0 projects
+[DEBUG] [EmployerUIHelper::populateTable] Row 5 - ID: 11 Name: "yhjbghgvjhg" "jhghjghj"
+[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 11
+[DEBUG] ✅ Found 0 resources for employer 11
+[DEBUG] [Project::getProjectsByEmployer] Fetching projects for employer 11
+[DEBUG] [Project::getProjectsByEmployer] SQL: "SELECT p.ID_PROJECT, p.ID_CLIENT, p.ID_SERVICE, p.TITLE, p.DESCRIPTION, p.CREATION_DATE, p.MODIFICATION_DATE, p.OWNER_ID FROM PROJECTS p INNER JOIN GERER g ON p.ID_PROJECT = g.ID_PROJECT WHERE g.ID_EMP = 11"
+[DEBUG] [Project::getProjectsByEmployer] Found 0 projects
+[DEBUG] [EmployerUIHelper::populateTable] Row 6 - ID: 12 Name: "Leila" "Jlassi"
+[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 12
+[DEBUG] ✅ Found 0 resources for employer 12
+[DEBUG] [Project::getProjectsByEmployer] Fetching projects for employer 12
+[DEBUG] [Project::getProjectsByEmployer] SQL: "SELECT p.ID_PROJECT, p.ID_CLIENT, p.ID_SERVICE, p.TITLE, p.DESCRIPTION, p.CREATION_DATE, p.MODIFICATION_DATE, p.OWNER_ID FROM PROJECTS p INNER JOIN GERER g ON p.ID_PROJECT = g.ID_PROJECT WHERE g.ID_EMP = 12"
+[DEBUG] [Project::getProjectsByEmployer] Found 0 projects
+[DEBUG] [EmployerUIHelper::populateTable] Row 7 - ID: 13 Name: "Ahmed" "Bouazizi"
+[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 13
+[DEBUG] ✅ Found 0 resources for employer 13
+[DEBUG] [Project::getProjectsByEmployer] Fetching projects for employer 13
+[DEBUG] [Project::getProjectsByEmployer] SQL: "SELECT p.ID_PROJECT, p.ID_CLIENT, p.ID_SERVICE, p.TITLE, p.DESCRIPTION, p.CREATION_DATE, p.MODIFICATION_DATE, p.OWNER_ID FROM PROJECTS p INNER JOIN GERER g ON p.ID_PROJECT = g.ID_PROJECT WHERE g.ID_EMP = 13"
+[DEBUG] [Project::getProjectsByEmployer] Found 0 projects
+[DEBUG] [EmployerUIHelper::populateTable] Row 8 - ID: 14 Name: "Sahar" "Masmoudi"
+[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 14
+[DEBUG] ✅ Found 0 resources for employer 14
+[DEBUG] [Project::getProjectsByEmployer] Fetching projects for employer 14
+[DEBUG] [Project::getProjectsByEmployer] SQL: "SELECT p.ID_PROJECT, p.ID_CLIENT, p.ID_SERVICE, p.TITLE, p.DESCRIPTION, p.CREATION_DATE, p.MODIFICATION_DATE, p.OWNER_ID FROM PROJECTS p INNER JOIN GERER g ON p.ID_PROJECT = g.ID_PROJECT WHERE g.ID_EMP = 14"
+[DEBUG] [Project::getProjectsByEmployer] Found 0 projects
+[DEBUG] [EmployerUIHelper::populateTable] Row 9 - ID: 15 Name: "Firas" "Belhaj"
+[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 15
+[DEBUG] ✅ Found 0 resources for employer 15
+[DEBUG] [Project::getProjectsByEmployer] Fetching projects for employer 15
+[DEBUG] [Project::getProjectsByEmployer] SQL: "SELECT p.ID_PROJECT, p.ID_CLIENT, p.ID_SERVICE, p.TITLE, p.DESCRIPTION, p.CREATION_DATE, p.MODIFICATION_DATE, p.OWNER_ID FROM PROJECTS p INNER JOIN GERER g ON p.ID_PROJECT = g.ID_PROJECT WHERE g.ID_EMP = 15"
+[DEBUG] [Project::getProjectsByEmployer] Found 0 projects
+[DEBUG] [EmployerUIHelper::populateTable] Row 10 - ID: 16 Name: "Dorsaf" "Heni"
+[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 16
+[DEBUG] ✅ Found 0 resources for employer 16
+[DEBUG] [Project::getProjectsByEmployer] Fetching projects for employer 16
+[DEBUG] [Project::getProjectsByEmployer] SQL: "SELECT p.ID_PROJECT, p.ID_CLIENT, p.ID_SERVICE, p.TITLE, p.DESCRIPTION, p.CREATION_DATE, p.MODIFICATION_DATE, p.OWNER_ID FROM PROJECTS p INNER JOIN GERER g ON p.ID_PROJECT = g.ID_PROJECT WHERE g.ID_EMP = 16"
+[DEBUG] [Project::getProjectsByEmployer] Found 0 projects
+[DEBUG] [EmployerUIHelper::populateTable] Row 11 - ID: 17 Name: "Karim" "Dridi"
+[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 17
+[DEBUG] ✅ Found 0 resources for employer 17
+[DEBUG] [Project::getProjectsByEmployer] Fetching projects for employer 17
+[DEBUG] [Project::getProjectsByEmployer] SQL: "SELECT p.ID_PROJECT, p.ID_CLIENT, p.ID_SERVICE, p.TITLE, p.DESCRIPTION, p.CREATION_DATE, p.MODIFICATION_DATE, p.OWNER_ID FROM PROJECTS p INNER JOIN GERER g ON p.ID_PROJECT = g.ID_PROJECT WHERE g.ID_EMP = 17"
+[DEBUG] [Project::getProjectsByEmployer] Found 10 projects
+[DEBUG] [EmployerUIHelper::populateTable] Employer 17 has 10 projects: "Maintenance sécurité, kkkkkkkkkkVidéo-surveillance, Supervision Modbus, Audit sécurité, Remplacement centrale, Formation client, Projet pilote IA, Maintenance préventive, l, kk"
+[DEBUG] [EmployerUIHelper::populateTable] Row 12 - ID: 19 Name: "Hatemhhhhhhhhhhhhhhhhhhh" "Louati"
+[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 19
+[DEBUG] ✅ Found 0 resources for employer 19
+[DEBUG] [Project::getProjectsByEmployer] Fetching projects for employer 19
+[DEBUG] [Project::getProjectsByEmployer] SQL: "SELECT p.ID_PROJECT, p.ID_CLIENT, p.ID_SERVICE, p.TITLE, p.DESCRIPTION, p.CREATION_DATE, p.MODIFICATION_DATE, p.OWNER_ID FROM PROJECTS p INNER JOIN GERER g ON p.ID_PROJECT = g.ID_PROJECT WHERE g.ID_EMP = 19"
+[DEBUG] [Project::getProjectsByEmployer] Found 8 projects
+[DEBUG] [EmployerUIHelper::populateTable] Employer 19 has 8 projects: "Installation alarme, Maintenance sécurité, kkkkkkkkkkVidéo-surveillance, Supervision Modbus, Audit sécurité, Remplacement centrale, Formation client, Projet pilote IA"
+[DEBUG] [EmployerUIHelper::populateTable] Row 13 - ID: 25 Name: "jjjj" "jjjjjj"
+[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 25
+[DEBUG] ✅ Found 0 resources for employer 25
+[DEBUG] [Project::getProjectsByEmployer] Fetching projects for employer 25
+[DEBUG] [Project::getProjectsByEmployer] SQL: "SELECT p.ID_PROJECT, p.ID_CLIENT, p.ID_SERVICE, p.TITLE, p.DESCRIPTION, p.CREATION_DATE, p.MODIFICATION_DATE, p.OWNER_ID FROM PROJECTS p INNER JOIN GERER g ON p.ID_PROJECT = g.ID_PROJECT WHERE g.ID_EMP = 25"
+[DEBUG] [Project::getProjectsByEmployer] Found 0 projects
+[DEBUG] [EmployerUIHelper::populateTable] Row 14 - ID: 26 Name: "SS" "PP"
+[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 26
+[DEBUG] ✅ Found 0 resources for employer 26
+[DEBUG] [Project::getProjectsByEmployer] Fetching projects for employer 26
+[DEBUG] [Project::getProjectsByEmployer] SQL: "SELECT p.ID_PROJECT, p.ID_CLIENT, p.ID_SERVICE, p.TITLE, p.DESCRIPTION, p.CREATION_DATE, p.MODIFICATION_DATE, p.OWNER_ID FROM PROJECTS p INNER JOIN GERER g ON p.ID_PROJECT = g.ID_PROJECT WHERE g.ID_EMP = 26"
+[DEBUG] [Project::getProjectsByEmployer] Found 9 projects
+[DEBUG] [EmployerUIHelper::populateTable] Employer 26 has 9 projects: "Maintenance sécurité, kkkkkkkkkkVidéo-surveillance, Supervision Modbus, Audit sécurité, Remplacement centrale, Formation client, Projet pilote IA, l, kk"
+[DEBUG] [EmployerUIHelper::populateTable] Row 15 - ID: 27 Name: "ojpj" "ijij"
+[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 27
+[DEBUG] ✅ Found 0 resources for employer 27
+[DEBUG] [Project::getProjectsByEmployer] Fetching projects for employer 27
+[DEBUG] [Project::getProjectsByEmployer] SQL: "SELECT p.ID_PROJECT, p.ID_CLIENT, p.ID_SERVICE, p.TITLE, p.DESCRIPTION, p.CREATION_DATE, p.MODIFICATION_DATE, p.OWNER_ID FROM PROJECTS p INNER JOIN GERER g ON p.ID_PROJECT = g.ID_PROJECT WHERE g.ID_EMP = 27"
+[DEBUG] [Project::getProjectsByEmployer] Found 9 projects
+[DEBUG] [EmployerUIHelper::populateTable] Employer 27 has 9 projects: "Maintenance sécurité, kkkkkkkkkkVidéo-surveillance, Supervision Modbus, Audit sécurité, Remplacement centrale, Formation client, Projet pilote IA, l, kk"
+[DEBUG] [EmployerUIHelper::populateTable] Row 16 - ID: 28 Name: "ZBI" "ZBOU"
+[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 28
+[DEBUG] ✅ Found 0 resources for employer 28
+[DEBUG] [Project::getProjectsByEmployer] Fetching projects for employer 28
+[DEBUG] [Project::getProjectsByEmployer] SQL: "SELECT p.ID_PROJECT, p.ID_CLIENT, p.ID_SERVICE, p.TITLE, p.DESCRIPTION, p.CREATION_DATE, p.MODIFICATION_DATE, p.OWNER_ID FROM PROJECTS p INNER JOIN GERER g ON p.ID_PROJECT = g.ID_PROJECT WHERE g.ID_EMP = 28"
+[DEBUG] [Project::getProjectsByEmployer] Found 3 projects
+[DEBUG] [EmployerUIHelper::populateTable] Employer 28 has 3 projects: "Installation alarme, kkkkkkkkkkVidéo-surveillance, Supervision Modbus"
+[DEBUG] [EmployerUIHelper::populateTable] Row 17 - ID: 29 Name: "mmm" "fff"
+[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 29
+[DEBUG] ✅ Found 0 resources for employer 29
+[DEBUG] [Project::getProjectsByEmployer] Fetching projects for employer 29
+[DEBUG] [Project::getProjectsByEmployer] SQL: "SELECT p.ID_PROJECT, p.ID_CLIENT, p.ID_SERVICE, p.TITLE, p.DESCRIPTION, p.CREATION_DATE, p.MODIFICATION_DATE, p.OWNER_ID FROM PROJECTS p INNER JOIN GERER g ON p.ID_PROJECT = g.ID_PROJECT WHERE g.ID_EMP = 29"
+[DEBUG] [Project::getProjectsByEmployer] Found 3 projects
+[DEBUG] [EmployerUIHelper::populateTable] Employer 29 has 3 projects: "Installation alarme, Maintenance sécurité, kkkkkkkkkkVidéo-surveillance"
+[DEBUG] [EmployerUIHelper::populateTable] Table populated successfully
+[DEBUG] [MainWindow::loadEmployers] Updating button states...
+[DEBUG] [EmployerUIHelper::getSelectedEmployerId] CALLED
+[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Table has 18 rows
+[DEBUG] [EmployerUIHelper::getSelectedEmployerId] currentRow(): -1
+[DEBUG] [EmployerUIHelper::getSelectedEmployerId] No currentRow, searching for selected symbol...
+[DEBUG] [EmployerUIHelper::getSelectedEmployerId] ERROR: No row selected!
+[DEBUG] [MainWindow::loadEmployers] ========== LOAD COMPLETE ==========
+
+[DEBUG] [MainWindow::setupUI] ressourceWidget pointer: RessourceWidget(0x221397981d0, name="RessourceWidget")
+[DEBUG] [MainWindow::setupUI] Calling ressourceWidget->loadRessources()...
+[DEBUG] ================================================
+[DEBUG] [RessourceWidget::loadRessources] CALLED
+[DEBUG] ================================================
+[DEBUG] ========================================
+[DEBUG] [Ressource::selectAll] Executing SQL: "SELECT ID_MEDIA, TITLE, PATH, OWNER, FORMAT, ACCESS_LEVEL, UPLOAD_DATE FROM RESSOURCES ORDER BY ID_MEDIA"
+[DEBUG] [Ressource::selectAll] Fetching resources...
+[DEBUG]   Resource: 9 "mm"
+[DEBUG]   Resource: 10 "jfjhg"
+[DEBUG] ✅ selectAll() returned 2 records
+[DEBUG] ========================================
+[DEBUG] [RessourceWidget::loadRessources] Retrieved 2 resources from DB
+[DEBUG] [RessourceWidget::loadRessources] Clearing table...
+[DEBUG] [RessourceWidget::loadRessources] Table headers set
+[DEBUG] [RessourceWidget::loadRessources] Populating table with 2 rows...
+[DEBUG] [RessourceWidget::loadRessources] Row 0 - ID: 9 Title: "mm"
+[DEBUG] [RessourceWidget::loadRessources] Row 1 - ID: 10 Title: "jfjhg"
+[DEBUG] [RessourceWidget::loadRessources] ✅ Table population COMPLETE
+[DEBUG] [RessourceWidget::loadRessources] Table now has 2 rows
+[DEBUG] ================================================
+[DEBUG] [MainWindow::setupUI] ✅ Ressources loaded successfully!
+[DEBUG] [FaceRecognitionWidget] Destroyed
+[DEBUG] [FaceRecognizer] Destroyed

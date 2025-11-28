@@ -18,7 +18,7 @@
 #include <QListWidgetItem>
 #include "backend/employer.h"
 #include "backend/project.h"
-#include "backend/facerecognizer.h"
+#include "backend/faceapi.h"
 
 QT_BEGIN_NAMESPACE
 class QLineEdit;
@@ -33,7 +33,9 @@ class RessourceWidget;
 class ProjectWidget;
 class Employer;
 class OpenAIChatbot;
+#if 0
 class FaceRecognitionLogin;
+#endif
 class FaceRecognitionWidget;
 class QTimer;
 
@@ -324,6 +326,7 @@ private:
     void onFaceDetected(const QImage &faceImage);
     void onFaceNotDetected();
     void onFaceProcessingError(const QString &error);
+    void onFaceRecognitionCompleted(const FaceApi::CloudResult &result);
     
     Ui::MainWindow *ui;
     QPixmap legionPixmap;
@@ -359,8 +362,8 @@ private:
     
     // Chatbot
     OpenAIChatbot *chatbot;
-    // Face recognition instance (consolidated)
-    FaceRecognitionLogin *faceRecognitionAI;
+    // Face recognition API client
+    FaceApi::Client *faceApiClient;
     // Face recognition widget (Real-time camera)
     FaceRecognitionWidget *faceRecognitionWidget;
     

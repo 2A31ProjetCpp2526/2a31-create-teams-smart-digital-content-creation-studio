@@ -25,9 +25,7 @@ SOURCES += \
     backend/ressource.cpp \
     backend/project.cpp \
     backend/sponsor.cpp \
-    backend/openai_chatbot.cpp \
-    backend/facerecognitionlogin.cpp \
-    backend/facerecognizer.cpp
+    backend/openai_chatbot.cpp
 
 # Header files
 HEADERS += \
@@ -45,10 +43,7 @@ HEADERS += \
     backend/ressource.h \
     backend/project.h \
     backend/sponsor.h \
-    backend/openai_chatbot.h \
-    backend/facerecognitionlogin.h \
-    backend/facerecognitionai.h \
-    backend/facerecognizer.h
+    backend/openai_chatbot.h
 
 # UI forms
 FORMS += \

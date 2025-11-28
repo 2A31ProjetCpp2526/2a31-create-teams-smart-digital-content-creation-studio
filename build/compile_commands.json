@@ -55,21 +55,9 @@
 },
 {
   "directory": "C:/Users/user/Documents/Qt - Test/AmineTemplar/build",
-  "command": "C:\\Qt\\Tools\\mingw1310_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_DISABLE_DEPRECATED_BEFORE=0x060000 -DQT_GUI_LIB -DQT_MULTIMEDIA_LIB -DQT_NEEDS_QMAIN -DQT_NETWORK_LIB -DQT_PRINTSUPPORT_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/AmineTemplar.dir/includes_CXX.rsp  -std=gnu++17 -DQT_QML_DEBUG -DQT_DECLARATIVE_DEBUG -g -std=gnu++17 -fno-keep-inline-dllexport -g -o CMakeFiles\\AmineTemplar.dir\\backend\\openai_chatbot.cpp.obj -c \"C:\\Users\\user\\Documents\\Qt - Test\\AmineTemplar\\backend\\openai_chatbot.cpp\"",
-  "file": "C:/Users/user/Documents/Qt - Test/AmineTemplar/backend/openai_chatbot.cpp",
-  "output": "CMakeFiles/AmineTemplar.dir/backend/openai_chatbot.cpp.obj"
-},
-{
-  "directory": "C:/Users/user/Documents/Qt - Test/AmineTemplar/build",
-  "command": "C:\\Qt\\Tools\\mingw1310_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_DISABLE_DEPRECATED_BEFORE=0x060000 -DQT_GUI_LIB -DQT_MULTIMEDIA_LIB -DQT_NEEDS_QMAIN -DQT_NETWORK_LIB -DQT_PRINTSUPPORT_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/AmineTemplar.dir/includes_CXX.rsp  -std=gnu++17 -DQT_QML_DEBUG -DQT_DECLARATIVE_DEBUG -g -std=gnu++17 -fno-keep-inline-dllexport -g -o CMakeFiles\\AmineTemplar.dir\\backend\\facerecognitionlogin.cpp.obj -c \"C:\\Users\\user\\Documents\\Qt - Test\\AmineTemplar\\backend\\facerecognitionlogin.cpp\"",
-  "file": "C:/Users/user/Documents/Qt - Test/AmineTemplar/backend/facerecognitionlogin.cpp",
-  "output": "CMakeFiles/AmineTemplar.dir/backend/facerecognitionlogin.cpp.obj"
-},
-{
-  "directory": "C:/Users/user/Documents/Qt - Test/AmineTemplar/build",
-  "command": "C:\\Qt\\Tools\\mingw1310_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_DISABLE_DEPRECATED_BEFORE=0x060000 -DQT_GUI_LIB -DQT_MULTIMEDIA_LIB -DQT_NEEDS_QMAIN -DQT_NETWORK_LIB -DQT_PRINTSUPPORT_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/AmineTemplar.dir/includes_CXX.rsp  -std=gnu++17 -DQT_QML_DEBUG -DQT_DECLARATIVE_DEBUG -g -std=gnu++17 -fno-keep-inline-dllexport -g -o CMakeFiles\\AmineTemplar.dir\\backend\\facerecognizer.cpp.obj -c \"C:\\Users\\user\\Documents\\Qt - Test\\AmineTemplar\\backend\\facerecognizer.cpp\"",
-  "file": "C:/Users/user/Documents/Qt - Test/AmineTemplar/backend/facerecognizer.cpp",
-  "output": "CMakeFiles/AmineTemplar.dir/backend/facerecognizer.cpp.obj"
+  "command": "C:\\Qt\\Tools\\mingw1310_64\\bin\\g++.exe -DMINGW_HAS_SECURE_API=1 -DQT_CORE_LIB -DQT_DISABLE_DEPRECATED_BEFORE=0x060000 -DQT_GUI_LIB -DQT_MULTIMEDIA_LIB -DQT_NEEDS_QMAIN -DQT_NETWORK_LIB -DQT_PRINTSUPPORT_LIB -DQT_SQL_LIB -DQT_WIDGETS_LIB -DUNICODE -DWIN32 -DWIN64 -D_ENABLE_EXTENDED_ALIGNED_STORAGE -D_UNICODE -D_WIN64 @CMakeFiles/AmineTemplar.dir/includes_CXX.rsp  -std=gnu++17 -DQT_QML_DEBUG -DQT_DECLARATIVE_DEBUG -g -std=gnu++17 -fno-keep-inline-dllexport -g -o CMakeFiles\\AmineTemplar.dir\\backend\\chatbot.cpp.obj -c \"C:\\Users\\user\\Documents\\Qt - Test\\AmineTemplar\\backend\\chatbot.cpp\"",
+  "file": "C:/Users/user/Documents/Qt - Test/AmineTemplar/backend/chatbot.cpp",
+  "output": "CMakeFiles/AmineTemplar.dir/backend/chatbot.cpp.obj"
 },
 {
   "directory": "C:/Users/user/Documents/Qt - Test/AmineTemplar/build",

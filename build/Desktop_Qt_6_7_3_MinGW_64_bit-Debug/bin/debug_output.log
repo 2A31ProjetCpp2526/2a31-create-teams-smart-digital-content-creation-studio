@@ -6,7 +6,7 @@
 [DEBUG] [MainWindow::setupRessourceWidget] CALLED - Creating RessourceWidget...
 [DEBUG] Table editability configured
 [DEBUG] RessourceWidget initialized successfully
-[DEBUG] [MainWindow::setupRessourceWidget] RessourceWidget created at: RessourceWidget(0x235908ef0b0, name="RessourceWidget")
+[DEBUG] [MainWindow::setupRessourceWidget] RessourceWidget created at: RessourceWidget(0x1b3f47a3b30, name="RessourceWidget")
 [DEBUG] [MainWindow::setupRessourceWidget] Found ressource page at index: 4
 [DEBUG] [MainWindow::setupRessourceWidget] ✅ RessourceWidget inserted into stacked widget
 [DEBUG] ProjectWidget::loadAllProjects() - Loading all projects...
@@ -54,7 +54,7 @@
 [DEBUG] 
 [MainWindow::loadEmployers] ========== LOADING EMPLOYERS ==========
 [DEBUG] [MainWindow::loadEmployers] Calling Employer::selectAll()...
-[DEBUG] [MainWindow::loadEmployers] Retrieved 20 employers from database
+[DEBUG] [MainWindow::loadEmployers] Retrieved 21 employers from database
 [DEBUG] [MainWindow::loadEmployers] Employers loaded successfully:
 [DEBUG]   [ 0 ] ID: 1 Name: "Amine" "Helali" Email: "amine.helali@inspira.tn"
 [DEBUG]   [ 1 ] ID: 3 Name: "Sami" "Ben Amor" Email: "sami.benamor@inspirastudio.com"
@@ -76,8 +76,9 @@
 [DEBUG]   [ 17 ] ID: 32 Name: "Admin" "User" Email: "admin@example.com"
 [DEBUG]   [ 18 ] ID: 33 Name: "Surrahbil" "KINDI" Email: "ssss@ss.com"
 [DEBUG]   [ 19 ] ID: 34 Name: "Mo5" "Lebhi" Email: "amine@gg.cvom"
+[DEBUG]   [ 20 ] ID: 35 Name: "oo" "o" Email: "ooooooooooooooooo@gg.gg"
 [DEBUG] [MainWindow::loadEmployers] Populating table...
-[DEBUG] [EmployerUIHelper::populateTable] CALLED with 20 records
+[DEBUG] [EmployerUIHelper::populateTable] CALLED with 21 records
 [DEBUG] [EmployerUIHelper::populateTable] Row 0 - ID: 1 Name: "Amine" "Helali"
 [DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 1
 [DEBUG] ✅ Found 0 resources for employer 1
@@ -207,11 +208,17 @@
 [DEBUG] [Project::getProjectsByEmployer] Fetching projects for employer 34
 [DEBUG] [Project::getProjectsByEmployer] SQL: "SELECT p.ID_PROJECT, p.ID_CLIENT, p.ID_SERVICE, p.TITLE, p.DESCRIPTION, p.CREATION_DATE, p.MODIFICATION_DATE, p.OWNER_ID FROM PROJECTS p INNER JOIN GERER g ON p.ID_PROJECT = g.ID_PROJECT WHERE g.ID_EMP = 34"
 [DEBUG] [Project::getProjectsByEmployer] Found 0 projects
+[DEBUG] [EmployerUIHelper::populateTable] Row 20 - ID: 35 Name: "oo" "o"
+[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 35
+[DEBUG] ✅ Found 0 resources for employer 35
+[DEBUG] [Project::getProjectsByEmployer] Fetching projects for employer 35
+[DEBUG] [Project::getProjectsByEmployer] SQL: "SELECT p.ID_PROJECT, p.ID_CLIENT, p.ID_SERVICE, p.TITLE, p.DESCRIPTION, p.CREATION_DATE, p.MODIFICATION_DATE, p.OWNER_ID FROM PROJECTS p INNER JOIN GERER g ON p.ID_PROJECT = g.ID_PROJECT WHERE g.ID_EMP = 35"
+[DEBUG] [Project::getProjectsByEmployer] Found 0 projects
 [DEBUG] [EmployerUIHelper::populateTable] Table populated successfully
 [DEBUG] [MainWindow::loadEmployers] Updating button states...
 [DEBUG] [MainWindow::loadEmployers] ========== LOAD COMPLETE ==========
 
-[DEBUG] [MainWindow::setupUI] ressourceWidget pointer: RessourceWidget(0x235908ef0b0, name="RessourceWidget")
+[DEBUG] [MainWindow::setupUI] ressourceWidget pointer: RessourceWidget(0x1b3f47a3b30, name="RessourceWidget")
 [DEBUG] [MainWindow::setupUI] Calling ressourceWidget->loadRessources()...
 [DEBUG] ================================================
 [DEBUG] [RessourceWidget::loadRessources] CALLED

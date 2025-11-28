@@ -392,6 +392,12 @@
 	"HEADERS" : 
 	[
 		[
+			"C:/Users/user/Documents/Qt - Test/AmineTemplar/backend/chatbot.h",
+			"MU",
+			"FVSNT77ZGO/moc_chatbot.cpp",
+			null
+		],
+		[
 			"C:/Users/user/Documents/Qt - Test/AmineTemplar/backend/client.h",
 			"MU",
 			"FVSNT77ZGO/moc_client.cpp",
@@ -413,30 +419,6 @@
 			"C:/Users/user/Documents/Qt - Test/AmineTemplar/backend/faceapi.h",
 			"MU",
 			"FVSNT77ZGO/moc_faceapi.cpp",
-			null
-		],
-		[
-			"C:/Users/user/Documents/Qt - Test/AmineTemplar/backend/facerecognitionai.h",
-			"MU",
-			"FVSNT77ZGO/moc_facerecognitionai.cpp",
-			null
-		],
-		[
-			"C:/Users/user/Documents/Qt - Test/AmineTemplar/backend/facerecognitionlogin.h",
-			"MU",
-			"FVSNT77ZGO/moc_facerecognitionlogin.cpp",
-			null
-		],
-		[
-			"C:/Users/user/Documents/Qt - Test/AmineTemplar/backend/facerecognizer.h",
-			"MU",
-			"FVSNT77ZGO/moc_facerecognizer.cpp",
-			null
-		],
-		[
-			"C:/Users/user/Documents/Qt - Test/AmineTemplar/backend/openai_chatbot.h",
-			"MU",
-			"FVSNT77ZGO/moc_openai_chatbot.cpp",
 			null
 		],
 		[
@@ -590,6 +572,11 @@
 	"SOURCES" : 
 	[
 		[
+			"C:/Users/user/Documents/Qt - Test/AmineTemplar/backend/chatbot.cpp",
+			"MU",
+			null
+		],
+		[
 			"C:/Users/user/Documents/Qt - Test/AmineTemplar/backend/client.cpp",
 			"MU",
 			null
@@ -606,21 +593,6 @@
 		],
 		[
 			"C:/Users/user/Documents/Qt - Test/AmineTemplar/backend/faceapi.cpp",
-			"MU",
-			null
-		],
-		[
-			"C:/Users/user/Documents/Qt - Test/AmineTemplar/backend/facerecognitionlogin.cpp",
-			"MU",
-			null
-		],
-		[
-			"C:/Users/user/Documents/Qt - Test/AmineTemplar/backend/facerecognizer.cpp",
-			"MU",
-			null
-		],
-		[
-			"C:/Users/user/Documents/Qt - Test/AmineTemplar/backend/openai_chatbot.cpp",
 			"MU",
 			null
 		],

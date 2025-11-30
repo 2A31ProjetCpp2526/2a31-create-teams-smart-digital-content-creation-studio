@@ -1,0 +1,6 @@
+# Qt Creator project configuration
+# This file helps Qt Creator recognize the project structure
+
+[General]
+ProjectType=CMake
+BuildDir=build

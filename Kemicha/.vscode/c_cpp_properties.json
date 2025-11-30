@@ -1,0 +1,31 @@
+{
+    "configurations": [
+        {
+            "name": "Qt AmineTemplar",
+            "includePath": [
+                "${workspaceFolder}",
+                "C:/Qt/6.7.3/mingw_64/include",
+                "C:/Qt/6.7.3/mingw_64/include/QtCore",
+                "C:/Qt/6.7.3/mingw_64/include/QtGui", 
+                "C:/Qt/6.7.3/mingw_64/include/QtWidgets",
+                "C:/Qt/6.7.3/mingw_64/mkspecs/win32-g++"
+            ],
+            "defines": [
+                "UNICODE",
+                "_UNICODE", 
+                "WIN32",
+                "MINGW_HAS_SECURE_API=1",
+                "QT_DISABLE_DEPRECATED_BEFORE=0x060000",
+                "QT_WIDGETS_LIB",
+                "QT_GUI_LIB", 
+                "QT_CORE_LIB",
+                "QT_NEEDS_QMAIN"
+            ],
+            "compilerPath": "C:/Qt/Tools/mingw1310_64/bin/g++.exe",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x64"
+        }
+    ],
+    "version": 4
+}

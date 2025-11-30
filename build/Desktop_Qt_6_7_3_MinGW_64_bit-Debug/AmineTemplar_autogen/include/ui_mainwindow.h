@@ -1045,8 +1045,8 @@ public:
         displayLayout->addWidget(searchAndActionsWidget);
 
         employeeTable = new QTableWidget(displayTab);
-        if (employeeTable->columnCount() < 9)
-            employeeTable->setColumnCount(9);
+        if (employeeTable->columnCount() < 10)
+            employeeTable->setColumnCount(10);
         QTableWidgetItem *__qtablewidgetitem = new QTableWidgetItem();
         employeeTable->setHorizontalHeaderItem(0, __qtablewidgetitem);
         QTableWidgetItem *__qtablewidgetitem1 = new QTableWidgetItem();
@@ -1065,6 +1065,8 @@ public:
         employeeTable->setHorizontalHeaderItem(7, __qtablewidgetitem7);
         QTableWidgetItem *__qtablewidgetitem8 = new QTableWidgetItem();
         employeeTable->setHorizontalHeaderItem(8, __qtablewidgetitem8);
+        QTableWidgetItem *__qtablewidgetitem9 = new QTableWidgetItem();
+        employeeTable->setHorizontalHeaderItem(9, __qtablewidgetitem9);
         if (employeeTable->rowCount() < 1)
             employeeTable->setRowCount(1);
         QBrush brush(QColor(0, 0, 0, 255));
@@ -1072,29 +1074,29 @@ public:
         QFont font6;
         font6.setPointSize(16);
         font6.setBold(true);
-        QTableWidgetItem *__qtablewidgetitem9 = new QTableWidgetItem();
-        __qtablewidgetitem9->setTextAlignment(Qt::AlignCenter);
-        __qtablewidgetitem9->setFont(font6);
-        __qtablewidgetitem9->setForeground(brush);
-        employeeTable->setItem(0, 0, __qtablewidgetitem9);
         QTableWidgetItem *__qtablewidgetitem10 = new QTableWidgetItem();
         __qtablewidgetitem10->setTextAlignment(Qt::AlignCenter);
-        __qtablewidgetitem10->setIcon(icon1);
-        employeeTable->setItem(0, 1, __qtablewidgetitem10);
+        __qtablewidgetitem10->setFont(font6);
+        __qtablewidgetitem10->setForeground(brush);
+        employeeTable->setItem(0, 0, __qtablewidgetitem10);
         QTableWidgetItem *__qtablewidgetitem11 = new QTableWidgetItem();
-        employeeTable->setItem(0, 2, __qtablewidgetitem11);
+        __qtablewidgetitem11->setTextAlignment(Qt::AlignCenter);
+        __qtablewidgetitem11->setIcon(icon1);
+        employeeTable->setItem(0, 1, __qtablewidgetitem11);
+        QTableWidgetItem *__qtablewidgetitem12 = new QTableWidgetItem();
+        employeeTable->setItem(0, 2, __qtablewidgetitem12);
         QFont font7;
         font7.setPointSize(11);
         font7.setWeight(QFont::DemiBold);
-        QTableWidgetItem *__qtablewidgetitem12 = new QTableWidgetItem();
-        __qtablewidgetitem12->setFont(font7);
-        employeeTable->setItem(0, 3, __qtablewidgetitem12);
         QTableWidgetItem *__qtablewidgetitem13 = new QTableWidgetItem();
-        employeeTable->setItem(0, 4, __qtablewidgetitem13);
+        __qtablewidgetitem13->setFont(font7);
+        employeeTable->setItem(0, 3, __qtablewidgetitem13);
         QTableWidgetItem *__qtablewidgetitem14 = new QTableWidgetItem();
-        employeeTable->setItem(0, 5, __qtablewidgetitem14);
+        employeeTable->setItem(0, 4, __qtablewidgetitem14);
         QTableWidgetItem *__qtablewidgetitem15 = new QTableWidgetItem();
-        employeeTable->setItem(0, 6, __qtablewidgetitem15);
+        employeeTable->setItem(0, 5, __qtablewidgetitem15);
+        QTableWidgetItem *__qtablewidgetitem16 = new QTableWidgetItem();
+        employeeTable->setItem(0, 6, __qtablewidgetitem16);
         employeeTable->setObjectName("employeeTable");
         employeeTable->setMinimumSize(QSize(1200, 200));
         employeeTable->setStyleSheet(QString::fromUtf8("QTableWidget {\n"
@@ -1224,27 +1226,27 @@ public:
 "\n"
 "/* Avatar Column Styling - New Position at Column 1 */\n"
 "QTableWidget::item[column=\"1\"] {\n"
-"    padding: 8px;\n"
+"    padding: 4px;\n"
 "    text-align: center;\n"
 "    background-color: rgba(255, 255, 255, 0.05);\n"
-"    border-radius: 50px;\n"
-"    border: 3px solid rgba(255, 255, 255, 0.2);\n"
-"    margin: 6px;\n"
-"    min-width: 80px;\n"
-"    min-height: 80px;\n"
-"    max-width: 80px;\n"
-"    max-height: 80px;\n"
+"    border-radius: 0px;\n"
+"    border: 2px solid rgba(255, 255, 255, 0.2);\n"
+"    margin: 4px;\n"
+"    min-width: 48px;\n"
+"    min-height: 48px;\n"
+"    max-width: 48px;\n"
+"    max-height: 48px;\n"
 "    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;\n"
 "    font-weight: 300;\n"
-" "
-                        "   color: #ffffff;\n"
+"  "
+                        "  color: #ffffff;\n"
 "}\n"
 "\n"
 "QTableWidget::item[column=\"1\"]:hover {\n"
 "    background-color: rgba(255, 255, 255, 0.1);\n"
-"    border: 3px solid rgba(255, 255, 255, 0.4);\n"
-"    transform: scale(1.05);\n"
-"    box-shadow: 0 4px 12px rgba(255, 255, 255, 0.15);\n"
+"    border: 2px solid rgba(255, 255, 255, 0.4);\n"
+"    transform: scale(1.02);\n"
+"    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.12);\n"
 "}\n"
 "\n"
 "/* Name Column Bold Styling - Updated Position */\n"
@@ -1270,8 +1272,8 @@ public:
 "/* Email Column Styling - Updated Position */\n"
 "QTableWidget::item[column=\"4\"] {\n"
 "    color: #ffffff;\n"
-"    font-"
-                        "style: normal;\n"
+"    font-st"
+                        "yle: normal;\n"
 "    font-size: 14px;\n"
 "    font-weight: 300;\n"
 "    font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;\n"
@@ -1309,8 +1311,8 @@ public:
 "\n"
 "QScrollBar::handle:vertical {\n"
 "    background: #1da1f2;\n"
-"    bo"
-                        "rder-radius: 6px;\n"
+"    bord"
+                        "er-radius: 6px;\n"
 "    min-height: 20px;\n"
 "}\n"
 "\n"
@@ -1357,7 +1359,7 @@ public:
         employeeTable->setWordWrap(false);
         employeeTable->setCornerButtonEnabled(false);
         employeeTable->setRowCount(1);
-        employeeTable->setColumnCount(9);
+        employeeTable->setColumnCount(10);
         employeeTable->horizontalHeader()->setVisible(true);
         employeeTable->horizontalHeader()->setMinimumSectionSize(80);
         employeeTable->horizontalHeader()->setDefaultSectionSize(120);
@@ -2442,7 +2444,7 @@ public:
         sponsorScrollArea->setWidgetResizable(true);
         sponsorContainer = new QWidget();
         sponsorContainer->setObjectName("sponsorContainer");
-        sponsorContainer->setGeometry(QRect(0, 0, 900, 600));
+        sponsorContainer->setGeometry(QRect(0, 0, 1288, 733));
         sponsorContainerLayout = new QVBoxLayout(sponsorContainer);
         sponsorContainerLayout->setObjectName("sponsorContainerLayout");
         sponsorContainerLayout->setContentsMargins(24, 24, 24, 24);
@@ -2703,7 +2705,7 @@ public:
         retranslateUi(MainWindow);
 
         mainStackedWidget->setCurrentIndex(0);
-        stackedWidget->setCurrentIndex(0);
+        stackedWidget->setCurrentIndex(5);
         employerTabWidget->setCurrentIndex(0);
         profileTabWidget->setCurrentIndex(0);
         authStackedWidget->setCurrentIndex(-1);
@@ -2748,21 +2750,23 @@ public:
         ___qtablewidgetitem7->setText(QCoreApplication::translate("MainWindow", "Start Date", nullptr));
         QTableWidgetItem *___qtablewidgetitem8 = employeeTable->horizontalHeaderItem(8);
         ___qtablewidgetitem8->setText(QCoreApplication::translate("MainWindow", "Resources", nullptr));
+        QTableWidgetItem *___qtablewidgetitem9 = employeeTable->horizontalHeaderItem(9);
+        ___qtablewidgetitem9->setText(QCoreApplication::translate("MainWindow", "Projects", nullptr));
 
         const bool __sortingEnabled = employeeTable->isSortingEnabled();
         employeeTable->setSortingEnabled(false);
-        QTableWidgetItem *___qtablewidgetitem9 = employeeTable->item(0, 0);
-        ___qtablewidgetitem9->setText(QCoreApplication::translate("MainWindow", "\342\230\220", nullptr));
-        QTableWidgetItem *___qtablewidgetitem10 = employeeTable->item(0, 2);
-        ___qtablewidgetitem10->setText(QCoreApplication::translate("MainWindow", "001", nullptr));
-        QTableWidgetItem *___qtablewidgetitem11 = employeeTable->item(0, 3);
-        ___qtablewidgetitem11->setText(QCoreApplication::translate("MainWindow", "AmineTemplar", nullptr));
-        QTableWidgetItem *___qtablewidgetitem12 = employeeTable->item(0, 4);
-        ___qtablewidgetitem12->setText(QCoreApplication::translate("MainWindow", "amine@templar.dev", nullptr));
-        QTableWidgetItem *___qtablewidgetitem13 = employeeTable->item(0, 5);
-        ___qtablewidgetitem13->setText(QCoreApplication::translate("MainWindow", "Administrator", nullptr));
-        QTableWidgetItem *___qtablewidgetitem14 = employeeTable->item(0, 6);
-        ___qtablewidgetitem14->setText(QCoreApplication::translate("MainWindow", "+216 00 000 000", nullptr));
+        QTableWidgetItem *___qtablewidgetitem10 = employeeTable->item(0, 0);
+        ___qtablewidgetitem10->setText(QCoreApplication::translate("MainWindow", "\342\230\220", nullptr));
+        QTableWidgetItem *___qtablewidgetitem11 = employeeTable->item(0, 2);
+        ___qtablewidgetitem11->setText(QCoreApplication::translate("MainWindow", "001", nullptr));
+        QTableWidgetItem *___qtablewidgetitem12 = employeeTable->item(0, 3);
+        ___qtablewidgetitem12->setText(QCoreApplication::translate("MainWindow", "AmineTemplar", nullptr));
+        QTableWidgetItem *___qtablewidgetitem13 = employeeTable->item(0, 4);
+        ___qtablewidgetitem13->setText(QCoreApplication::translate("MainWindow", "amine@templar.dev", nullptr));
+        QTableWidgetItem *___qtablewidgetitem14 = employeeTable->item(0, 5);
+        ___qtablewidgetitem14->setText(QCoreApplication::translate("MainWindow", "Administrator", nullptr));
+        QTableWidgetItem *___qtablewidgetitem15 = employeeTable->item(0, 6);
+        ___qtablewidgetitem15->setText(QCoreApplication::translate("MainWindow", "+216 00 000 000", nullptr));
         employeeTable->setSortingEnabled(__sortingEnabled);
 
         modifyBtn->setText(QCoreApplication::translate("MainWindow", "Modify", nullptr));

@@ -16,7 +16,8 @@ if(WIN32)
 endif()
 
 # Find Qt6 components with better error handling
-find_package(Qt6 REQUIRED COMPONENTS Core Widgets Sql)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets Sql Multimedia MultimediaWidgets PrintSupport)
+
 
 # Verify Qt6 was found correctly
 if(NOT Qt6_FOUND)
@@ -45,10 +46,13 @@ set(SOURCES
     ui/sponsorwidget.cpp
     ui/ressourcewidget.cpp
     ui/projectwidget.cpp
+    ui/projectinsertion.cpp
+    ui/projectrollback.cpp
     backend/connection.cpp
     backend/employer.cpp
     backend/client.cpp
     backend/ressource.cpp
+    backend/project.cpp
 )
 
 # Header files
@@ -59,10 +63,13 @@ set(HEADERS
     ui/sponsorwidget.h
     ui/ressourcewidget.h
     ui/projectwidget.h
+    ui/projectinsertion.h
+    ui/projectrollback.h
     backend/connection.h
     backend/employer.h
     backend/client.h
     backend/ressource.h
+    backend/project.h
 )
 
 # UI form files
@@ -76,6 +83,7 @@ set(UI_FILES
     ui/ressource.ui
     ui/project.ui
     ui/employerform.ui
+    ui/projectform.ui
 )
 
 # Resource files
@@ -90,6 +98,15 @@ add_executable(AmineTemplar
     ${UI_FILES}
     ${RESOURCES}
     style.qss
+    backend/sponsor.h
+    backend/sponsor.cpp
+    ui/smtpclient.h
+    ui/todo.h
+    ui/todo_dialog.h
+
+    backend/todo.cpp
+    backend/todo_dialog.cpp
+    backend/smtpclient.cpp
 )
 
 # Add include directories for new folder structure
@@ -103,7 +120,10 @@ target_include_directories(AmineTemplar PRIVATE
 target_link_libraries(AmineTemplar
     Qt6::Core
     Qt6::Widgets
+    Qt6::Multimedia
+    Qt6::MultimediaWidgets
     Qt6::Sql
+    Qt6::PrintSupport
     Threads::Threads
 )
 

@@ -1,5 +1,5 @@
-C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/UYX5XTB5RZ/moc_sponsorwidget.cpp: C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/ui/sponsorwidget.h \
-  C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/moc_predefs.h \
+C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/UYX5XTB5RZ/moc_sponsorwidget.cpp: C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/sponsorwidget.h \
+  C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/moc_predefs.h \
   C:/Qt/6.7.3/mingw_64/include/QtCore/q20functional.h \
   C:/Qt/6.7.3/mingw_64/include/QtCore/q20memory.h \
   C:/Qt/6.7.3/mingw_64/include/QtCore/q20type_traits.h \

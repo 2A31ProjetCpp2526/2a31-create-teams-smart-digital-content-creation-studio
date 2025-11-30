@@ -1,8 +1,12 @@
-C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/EWIEGA46WW/moc_mainwindow.cpp: C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/mainwindow.h \
-  C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/moc_predefs.h \
+C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/EWIEGA46WW/moc_mainwindow.cpp: C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/mainwindow.h \
+  C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/moc_predefs.h \
   C:/Qt/6.7.3/mingw_64/include/QtCore/QDate \
+  C:/Qt/6.7.3/mingw_64/include/QtCore/QMap \
+  C:/Qt/6.7.3/mingw_64/include/QtCore/QModelIndex \
+  C:/Qt/6.7.3/mingw_64/include/QtCore/QPair \
   C:/Qt/6.7.3/mingw_64/include/QtCore/QParallelAnimationGroup \
   C:/Qt/6.7.3/mingw_64/include/QtCore/QPropertyAnimation \
+  C:/Qt/6.7.3/mingw_64/include/QtCore/QSize \
   C:/Qt/6.7.3/mingw_64/include/QtCore/QString \
   C:/Qt/6.7.3/mingw_64/include/QtCore/QVector \
   C:/Qt/6.7.3/mingw_64/include/QtCore/q20functional.h \
@@ -162,6 +166,11 @@ C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64
   C:/Qt/6.7.3/mingw_64/include/QtGui/qvalidator.h \
   C:/Qt/6.7.3/mingw_64/include/QtGui/qwindowdefs.h \
   C:/Qt/6.7.3/mingw_64/include/QtGui/qwindowdefs_win.h \
+  C:/Qt/6.7.3/mingw_64/include/QtSql/QSqlDatabase \
+  C:/Qt/6.7.3/mingw_64/include/QtSql/qsqldatabase.h \
+  C:/Qt/6.7.3/mingw_64/include/QtSql/qtsql-config.h \
+  C:/Qt/6.7.3/mingw_64/include/QtSql/qtsqlexports.h \
+  C:/Qt/6.7.3/mingw_64/include/QtSql/qtsqlglobal.h \
   C:/Qt/6.7.3/mingw_64/include/QtWidgets/QComboBox \
   C:/Qt/6.7.3/mingw_64/include/QtWidgets/QDialog \
   C:/Qt/6.7.3/mingw_64/include/QtWidgets/QFormLayout \
@@ -406,4 +415,5 @@ C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64
   C:/Qt/Tools/mingw1120_64/x86_64-w64-mingw32/include/time.h \
   C:/Qt/Tools/mingw1120_64/x86_64-w64-mingw32/include/vadefs.h \
   C:/Qt/Tools/mingw1120_64/x86_64-w64-mingw32/include/wchar.h \
-  C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/employer.h
+  C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/backend/employer.h \
+  C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/backend/project.h

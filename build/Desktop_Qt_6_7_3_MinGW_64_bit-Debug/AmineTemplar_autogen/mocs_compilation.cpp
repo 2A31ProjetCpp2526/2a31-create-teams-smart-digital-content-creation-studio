@@ -3,5 +3,7 @@
 #include "UYX5XTB5RZ/moc_clientwidget.cpp"
 #include "UYX5XTB5RZ/moc_projectwidget.cpp"
 #include "UYX5XTB5RZ/moc_ressourcewidget.cpp"
+#include "UYX5XTB5RZ/moc_smtpclient.cpp"
 #include "UYX5XTB5RZ/moc_sponsorwidget.cpp"
 #include "UYX5XTB5RZ/moc_templatewidget.cpp"
+#include "UYX5XTB5RZ/moc_todo_dialog.cpp"

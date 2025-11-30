@@ -1,8 +1,17 @@
 AmineTemplar_autogen/timestamp: \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/QDate \
+	C:/Qt/6.7.3/mingw_64/include/QtCore/QDateTime \
+	C:/Qt/6.7.3/mingw_64/include/QtCore/QFlags \
+	C:/Qt/6.7.3/mingw_64/include/QtCore/QJsonObject \
+	C:/Qt/6.7.3/mingw_64/include/QtCore/QMap \
+	C:/Qt/6.7.3/mingw_64/include/QtCore/QModelIndex \
+	C:/Qt/6.7.3/mingw_64/include/QtCore/QObject \
+	C:/Qt/6.7.3/mingw_64/include/QtCore/QPair \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/QParallelAnimationGroup \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/QPropertyAnimation \
+	C:/Qt/6.7.3/mingw_64/include/QtCore/QSize \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/QString \
+	C:/Qt/6.7.3/mingw_64/include/QtCore/QStringList \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/QVector \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/q20functional.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/q20memory.h \
@@ -26,6 +35,8 @@ AmineTemplar_autogen/timestamp: \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qbytearraylist.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qbytearrayview.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qcalendar.h \
+	C:/Qt/6.7.3/mingw_64/include/QtCore/qcborcommon.h \
+	C:/Qt/6.7.3/mingw_64/include/QtCore/qcborvalue.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qchar.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qcompare.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qcompare_impl.h \
@@ -37,6 +48,7 @@ AmineTemplar_autogen/timestamp: \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qcontainerinfo.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qcontainertools_impl.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qcontiguouscache.h \
+	C:/Qt/6.7.3/mingw_64/include/QtCore/qcryptographichash.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qdarwinhelpers.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qdatastream.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qdatetime.h \
@@ -54,10 +66,13 @@ AmineTemplar_autogen/timestamp: \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qglobalstatic.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qhash.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qhashfunctions.h \
+	C:/Qt/6.7.3/mingw_64/include/QtCore/qiodevice.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qiodevicebase.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qitemselectionmodel.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qiterable.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qiterator.h \
+	C:/Qt/6.7.3/mingw_64/include/QtCore/qjsonobject.h \
+	C:/Qt/6.7.3/mingw_64/include/QtCore/qjsonvalue.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qlatin1stringview.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qline.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qlist.h \
@@ -68,6 +83,7 @@ AmineTemplar_autogen/timestamp: \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qmargins.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qmath.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qmetacontainer.h \
+	C:/Qt/6.7.3/mingw_64/include/QtCore/qmetaobject.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qmetatype.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qminmax.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qnamespace.h \
@@ -126,7 +142,9 @@ AmineTemplar_autogen/timestamp: \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qtversionchecks.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qtypeinfo.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qtypes.h \
+	C:/Qt/6.7.3/mingw_64/include/QtCore/qurl.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qutf8stringview.h \
+	C:/Qt/6.7.3/mingw_64/include/QtCore/quuid.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qvariant.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qvariantanimation.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qvarlengtharray.h \
@@ -134,10 +152,12 @@ AmineTemplar_autogen/timestamp: \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qversiontagging.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qxptype_traits.h \
 	C:/Qt/6.7.3/mingw_64/include/QtCore/qyieldcpu.h \
+	C:/Qt/6.7.3/mingw_64/include/QtGui/QClipboard \
 	C:/Qt/6.7.3/mingw_64/include/QtGui/QPixmap \
 	C:/Qt/6.7.3/mingw_64/include/QtGui/qaction.h \
 	C:/Qt/6.7.3/mingw_64/include/QtGui/qbitmap.h \
 	C:/Qt/6.7.3/mingw_64/include/QtGui/qbrush.h \
+	C:/Qt/6.7.3/mingw_64/include/QtGui/qclipboard.h \
 	C:/Qt/6.7.3/mingw_64/include/QtGui/qcolor.h \
 	C:/Qt/6.7.3/mingw_64/include/QtGui/qcursor.h \
 	C:/Qt/6.7.3/mingw_64/include/QtGui/qfont.h \
@@ -161,6 +181,33 @@ AmineTemplar_autogen/timestamp: \
 	C:/Qt/6.7.3/mingw_64/include/QtGui/qvalidator.h \
 	C:/Qt/6.7.3/mingw_64/include/QtGui/qwindowdefs.h \
 	C:/Qt/6.7.3/mingw_64/include/QtGui/qwindowdefs_win.h \
+	C:/Qt/6.7.3/mingw_64/include/QtMultimedia/QAudioOutput \
+	C:/Qt/6.7.3/mingw_64/include/QtMultimedia/QMediaPlayer \
+	C:/Qt/6.7.3/mingw_64/include/QtMultimedia/qaudio.h \
+	C:/Qt/6.7.3/mingw_64/include/QtMultimedia/qaudiooutput.h \
+	C:/Qt/6.7.3/mingw_64/include/QtMultimedia/qmediaenumdebug.h \
+	C:/Qt/6.7.3/mingw_64/include/QtMultimedia/qmediaplayer.h \
+	C:/Qt/6.7.3/mingw_64/include/QtMultimedia/qtaudio.h \
+	C:/Qt/6.7.3/mingw_64/include/QtMultimedia/qtmultimedia-config.h \
+	C:/Qt/6.7.3/mingw_64/include/QtMultimedia/qtmultimediaexports.h \
+	C:/Qt/6.7.3/mingw_64/include/QtMultimedia/qtmultimediaglobal.h \
+	C:/Qt/6.7.3/mingw_64/include/QtMultimediaWidgets/QVideoWidget \
+	C:/Qt/6.7.3/mingw_64/include/QtMultimediaWidgets/qtmultimediawidgetsexports.h \
+	C:/Qt/6.7.3/mingw_64/include/QtMultimediaWidgets/qtmultimediawidgetsglobal.h \
+	C:/Qt/6.7.3/mingw_64/include/QtMultimediaWidgets/qvideowidget.h \
+	C:/Qt/6.7.3/mingw_64/include/QtNetwork/QSslSocket \
+	C:/Qt/6.7.3/mingw_64/include/QtNetwork/QTcpSocket \
+	C:/Qt/6.7.3/mingw_64/include/QtNetwork/qabstractsocket.h \
+	C:/Qt/6.7.3/mingw_64/include/QtNetwork/qhostaddress.h \
+	C:/Qt/6.7.3/mingw_64/include/QtNetwork/qssl.h \
+	C:/Qt/6.7.3/mingw_64/include/QtNetwork/qsslcertificate.h \
+	C:/Qt/6.7.3/mingw_64/include/QtNetwork/qsslerror.h \
+	C:/Qt/6.7.3/mingw_64/include/QtNetwork/qsslsocket.h \
+	C:/Qt/6.7.3/mingw_64/include/QtNetwork/qtcpsocket.h \
+	C:/Qt/6.7.3/mingw_64/include/QtNetwork/qtnetwork-config.h \
+	C:/Qt/6.7.3/mingw_64/include/QtNetwork/qtnetworkexports.h \
+	C:/Qt/6.7.3/mingw_64/include/QtNetwork/qtnetworkglobal.h \
+	C:/Qt/6.7.3/mingw_64/include/QtSql/QSqlDatabase \
 	C:/Qt/6.7.3/mingw_64/include/QtSql/QSqlQueryModel \
 	C:/Qt/6.7.3/mingw_64/include/QtSql/qsqldatabase.h \
 	C:/Qt/6.7.3/mingw_64/include/QtSql/qsqlquerymodel.h \
@@ -176,7 +223,9 @@ AmineTemplar_autogen/timestamp: \
 	C:/Qt/6.7.3/mingw_64/include/QtWidgets/QListWidgetItem \
 	C:/Qt/6.7.3/mingw_64/include/QtWidgets/QMainWindow \
 	C:/Qt/6.7.3/mingw_64/include/QtWidgets/QPushButton \
+	C:/Qt/6.7.3/mingw_64/include/QtWidgets/QSlider \
 	C:/Qt/6.7.3/mingw_64/include/QtWidgets/QStackedWidget \
+	C:/Qt/6.7.3/mingw_64/include/QtWidgets/QTableWidget \
 	C:/Qt/6.7.3/mingw_64/include/QtWidgets/QTableWidgetItem \
 	C:/Qt/6.7.3/mingw_64/include/QtWidgets/QWidget \
 	C:/Qt/6.7.3/mingw_64/include/QtWidgets/qabstractbutton.h \
@@ -351,6 +400,65 @@ AmineTemplar_autogen/timestamp: \
 	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsTargets-relwithdebinfo.cmake \
 	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsTargets.cmake \
 	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6GuiTools/Qt6GuiToolsVersionlessTargets.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Multimedia/Qt6MultimediaAdditionalTargetInfo.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Multimedia/Qt6MultimediaConfig.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Multimedia/Qt6MultimediaConfigVersion.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Multimedia/Qt6MultimediaConfigVersionImpl.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Multimedia/Qt6MultimediaDependencies.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Multimedia/Qt6MultimediaPlugins.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Multimedia/Qt6MultimediaTargets-relwithdebinfo.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Multimedia/Qt6MultimediaTargets.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Multimedia/Qt6MultimediaVersionlessTargets.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Multimedia/Qt6QFFmpegMediaPluginAdditionalTargetInfo.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Multimedia/Qt6QFFmpegMediaPluginConfig.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Multimedia/Qt6QFFmpegMediaPluginTargets-relwithdebinfo.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Multimedia/Qt6QFFmpegMediaPluginTargets.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Multimedia/Qt6QWindowsMediaPluginAdditionalTargetInfo.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Multimedia/Qt6QWindowsMediaPluginConfig.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Multimedia/Qt6QWindowsMediaPluginTargets-relwithdebinfo.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Multimedia/Qt6QWindowsMediaPluginTargets.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6MultimediaWidgets/Qt6MultimediaWidgetsAdditionalTargetInfo.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6MultimediaWidgets/Qt6MultimediaWidgetsConfig.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6MultimediaWidgets/Qt6MultimediaWidgetsConfigVersion.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6MultimediaWidgets/Qt6MultimediaWidgetsConfigVersionImpl.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6MultimediaWidgets/Qt6MultimediaWidgetsDependencies.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6MultimediaWidgets/Qt6MultimediaWidgetsTargets-relwithdebinfo.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6MultimediaWidgets/Qt6MultimediaWidgetsTargets.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6MultimediaWidgets/Qt6MultimediaWidgetsVersionlessTargets.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6NetworkAdditionalTargetInfo.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6NetworkConfig.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6NetworkConfigVersion.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6NetworkConfigVersionImpl.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6NetworkDependencies.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6NetworkPlugins.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6NetworkTargets-relwithdebinfo.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6NetworkTargets.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6NetworkVersionlessTargets.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6QNLMNIPluginAdditionalTargetInfo.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6QNLMNIPluginConfig.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6QNLMNIPluginTargets-relwithdebinfo.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6QNLMNIPluginTargets.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6QSchannelBackendPluginAdditionalTargetInfo.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6QSchannelBackendPluginConfig.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6QSchannelBackendPluginTargets-relwithdebinfo.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6QSchannelBackendPluginTargets.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6QTlsBackendCertOnlyPluginAdditionalTargetInfo.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6QTlsBackendCertOnlyPluginConfig.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6QTlsBackendCertOnlyPluginTargets-relwithdebinfo.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6QTlsBackendCertOnlyPluginTargets.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginAdditionalTargetInfo.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginConfig.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginTargets-relwithdebinfo.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Network/Qt6QTlsBackendOpenSSLPluginTargets.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportAdditionalTargetInfo.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportConfig.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportConfigVersion.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportConfigVersionImpl.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportDependencies.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportPlugins.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportTargets-relwithdebinfo.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportTargets.cmake \
+	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6PrintSupport/Qt6PrintSupportVersionlessTargets.cmake \
 	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Sql/Qt6QMimerSQLDriverPluginAdditionalTargetInfo.cmake \
 	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Sql/Qt6QMimerSQLDriverPluginConfig.cmake \
 	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6Sql/Qt6QMimerSQLDriverPluginTargets-relwithdebinfo.cmake \
@@ -404,94 +512,31 @@ AmineTemplar_autogen/timestamp: \
 	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6ZlibPrivate/Qt6ZlibPrivateConfigVersionImpl.cmake \
 	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6ZlibPrivate/Qt6ZlibPrivateTargets.cmake \
 	C:/Qt/6.7.3/mingw_64/lib/cmake/Qt6ZlibPrivate/Qt6ZlibPrivateVersionlessTargets.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeCXXCompiler.cmake.in \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeCXXCompilerABI.cpp \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeCXXInformation.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeCheckCompilerFlagCommonPatterns.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeCommonLanguageInclude.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeCompilerIdDetection.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeDetermineCXXCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeDetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeDetermineCompilerABI.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeDetermineCompilerId.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeDetermineCompilerSupport.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeDetermineRCCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeDetermineSystem.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindBinUtils.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeFindDependencyMacro.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeGenericSystem.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeInitializeConfigs.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeLanguageInformation.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeNinjaFindMake.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeParseImplicitIncludeInfo.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeParseImplicitLinkInfo.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeParseLibraryArchitecture.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeRCCompiler.cmake.in \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeRCInformation.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeSystem.cmake.in \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeSystemSpecificInformation.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeSystemSpecificInitialize.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeTestCXXCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeTestCompilerCommon.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CMakeTestRCCompiler.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CheckCXXCompilerFlag.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CheckCXXSourceCompiles.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CheckIncludeFileCXX.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/CheckLibraryExists.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/ADSP-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/ARMCC-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/ARMClang-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/AppleClang-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/Borland-DetermineCompiler.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/CMakeCommonCompilerMacros.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/Clang-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/Clang-DetermineCompilerInternal.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/Compaq-CXX-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/Cray-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/CrayClang-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/Embarcadero-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/Fujitsu-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/FujitsuClang-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/GHS-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/GNU-CXX-DetermineCompiler.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/GNU-CXX.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/GNU-FindBinUtils.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/GNU.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/HP-CXX-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/IAR-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/IBMCPP-CXX-DetermineVersionInternal.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/IBMClang-CXX-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/Intel-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/IntelLLVM-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/LCC-CXX-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/MSVC-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/NVHPC-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/NVIDIA-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/OpenWatcom-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/OrangeC-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/PGI-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/PathScale-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/SCO-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/SunPro-CXX-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/TI-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/TIClang-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/Tasking-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/VisualAge-CXX-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/Watcom-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/XL-CXX-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/XLClang-CXX-DetermineCompiler.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindPackageHandleStandardArgs.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindPackageMessage.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindThreads.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/FindVulkan.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/GNUInstallDirs.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Internal/CMakeDetermineLinkerId.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Internal/CheckCompilerFlag.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Internal/CheckFlagCommonConfig.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Internal/CheckSourceCompiles.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Internal/FeatureTesting.cmake \
-	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-Determine-CXX.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-GNU-CXX-ABI.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-GNU-CXX.cmake \
 	C:/Qt/Tools/CMake_64/share/cmake-3.30/Modules/Platform/Windows-GNU.cmake \
@@ -698,42 +743,57 @@ AmineTemplar_autogen/timestamp: \
 	C:/Qt/Tools/mingw1120_64/x86_64-w64-mingw32/include/time.h \
 	C:/Qt/Tools/mingw1120_64/x86_64-w64-mingw32/include/vadefs.h \
 	C:/Qt/Tools/mingw1120_64/x86_64-w64-mingw32/include/wchar.h \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/CMakeLists.txt \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/client.cpp \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/client.h \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/connection.cpp \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/connection.h \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/employer.cpp \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/employer.h \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/ressource.cpp \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/backend/ressource.h \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/.qtc/package-manager/auto-setup.cmake \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/.qtc/package-manager/maintenance_tool_provider.cmake \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/moc_predefs.h \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/CMakeFiles/3.30.5/CMakeRCCompiler.cmake \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/CMakeFiles/3.30.5/CMakeSystem.cmake \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/main.cpp \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/mainwindow.cpp \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/mainwindow.h \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/resources.qrc \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/ui/clientwidget.cpp \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/ui/clientwidget.h \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/ui/projectwidget.cpp \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/ui/projectwidget.h \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/ui/ressourcewidget.cpp \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/ui/ressourcewidget.h \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/ui/sponsorwidget.cpp \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/ui/sponsorwidget.h \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/ui/templatewidget.cpp \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/ui/templatewidget.h \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/mainwindow.ui \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/ui/Profile.ui \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/ui/client.ui \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/ui/employerform.ui \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/ui/login.ui \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/ui/project.ui \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/ui/ressource.ui \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/ui/sponsor.ui \
-	C:/Users/user/Documents/Qt\ -\ Test/AmineTemplar/ui/template.ui \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/CMakeLists.txt \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/backend/client.cpp \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/backend/client.h \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/backend/connection.cpp \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/backend/connection.h \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/backend/employer.cpp \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/backend/employer.h \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/backend/project.cpp \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/backend/project.h \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/backend/ressource.cpp \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/backend/ressource.h \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/backend/smtpclient.cpp \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/backend/sponsor.cpp \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/backend/sponsor.h \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/backend/todo.cpp \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/backend/todo_dialog.cpp \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/.qtc/package-manager/auto-setup.cmake \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/.qtc/package-manager/maintenance_tool_provider.cmake \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/AmineTemplar_autogen/moc_predefs.h \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/CMakeFiles/3.30.5/CMakeCXXCompiler.cmake \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/CMakeFiles/3.30.5/CMakeRCCompiler.cmake \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/CMakeFiles/3.30.5/CMakeSystem.cmake \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/main.cpp \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/mainwindow.cpp \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/mainwindow.h \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/resources.qrc \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/clientwidget.cpp \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/clientwidget.h \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/projectinsertion.cpp \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/projectinsertion.h \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/projectrollback.cpp \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/projectrollback.h \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/projectwidget.cpp \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/projectwidget.h \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/ressourcewidget.cpp \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/ressourcewidget.h \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/smtpclient.h \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/sponsorwidget.cpp \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/sponsorwidget.h \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/templatewidget.cpp \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/templatewidget.h \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/todo.h \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/todo_dialog.h \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/mainwindow.ui \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/Profile.ui \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/client.ui \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/employerform.ui \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/login.ui \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/project.ui \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/projectform.ui \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/ressource.ui \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/sponsor.ui \
+	C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/ui/template.ui \
 	C:/Qt/Tools/CMake_64/bin/cmake.exe

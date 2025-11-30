@@ -5,137 +5,41 @@
 [DEBUG] [MainWindow::setupRessourceWidget] CALLED - Creating RessourceWidget...
 [DEBUG] Table editability configured
 [DEBUG] RessourceWidget initialized successfully
-[DEBUG] [MainWindow::setupRessourceWidget] RessourceWidget created at: RessourceWidget(0x21e69acb690, name="RessourceWidget")
+[DEBUG] [MainWindow::setupRessourceWidget] RessourceWidget created at: RessourceWidget(0x2b11e33b8b0, name="RessourceWidget")
 [DEBUG] [MainWindow::setupRessourceWidget] Found ressource page at index: 4
 [DEBUG] [MainWindow::setupRessourceWidget] ✅ RessourceWidget inserted into stacked widget
+[DEBUG] ProjectInsertion::initializeFilePath() - Media list file path: "C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/bin/media_paths.txt"
+[DEBUG] ProjectRollback::initializeFilePath() - Rollback history file path: "C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/bin/rollback_history.txt"
+[DEBUG] ProjectWidget::loadAllProjects() - Loading all projects...
+[DEBUG] [Project::selectAll] Fetching all projects...
+[DEBUG] [Project::selectAll] ERROR: Database not open
+[DEBUG] ProjectWidget::loadAllProjects() - No projects found
+[DEBUG] ProjectInsertion::loadMediaListFromFile() - File does not exist yet: "C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/bin/media_paths.txt"
+[DEBUG] ProjectWidget::loadMediaListUI() - Loaded 0 media items
+[DEBUG] ProjectRollback::loadRollbackHistoryFromFile() - File does not exist yet: "C:/Users/Windows/Downloads/Kemicha-20251129T215859Z-1-001/Kemicha/build/Desktop_Qt_6_7_3_MinGW_64_bit-Debug/bin/rollback_history.txt"
+[DEBUG] ProjectWidget::loadRollbackHistoryUI() - Loaded 0 history entries
+[DEBUG] ProjectWidget initialized successfully
 [DEBUG] === Configuring Database Connection ===
-[DEBUG] [Connection] Constructor called
-[DEBUG] [Connection] Singleton instance created
-[DEBUG] ========================================
-[DEBUG] [Connection] CREATE CONNECTION STARTED
-[DEBUG] ========================================
-[DEBUG] [Connection] Configuration:
-[DEBUG] [Connection]   Driver:  "QODBC"
-[DEBUG] [Connection]   DSN:     "InspiraStudio"
-[DEBUG] [Connection]   User:    "adminInspiraStudio"
-[DEBUG] [Connection] Available SQL drivers: QList("QSQLITE", "QMIMER", "QODBC", "QPSQL")
-[DEBUG] [Connection] ✓ QODBC driver is available
-[DEBUG] [Connection] ✓ Database driver added successfully
-[DEBUG] [Connection] Using DSN connection
-[DEBUG] [Connection] Connection parameters set
-[DEBUG] [Connection] Attempting to open database connection...
-[DEBUG] ========================================
-[DEBUG] [Connection] ✓✓✓ CONNECTION SUCCESSFUL! ✓✓✓
-[DEBUG] ========================================
-[DEBUG] [Connection] Database is OPEN and READY
-[DEBUG] [Connection] Driver name:       "QODBC"
-[DEBUG] [Connection] Database name:     "InspiraStudio"
-[DEBUG] [Connection] Connection valid:  true
-[DEBUG] [Connection] Connection open:   true
-[DEBUG] ========================================
+[DEBUG] Connexion ODBC Oracle réussie !
 [DEBUG] SUCCESS: Database connection established!
 [DEBUG] ===================================
 [DEBUG] 
 [MainWindow::loadEmployers] ========== LOADING EMPLOYERS ==========
 [DEBUG] [MainWindow::loadEmployers] Calling Employer::selectAll()...
-[DEBUG] [MainWindow::loadEmployers] Retrieved 21 employers from database
-[DEBUG] [MainWindow::loadEmployers] Employers loaded successfully:
-[DEBUG]   [ 0 ] ID: 1 Name: "Aminelllll" "Helali" Email: "amine.helali@inspira.tn"
-[DEBUG]   [ 1 ] ID: 2 Name: "bbbbbbNour" "Trabelsi" Email: "nour.trabelsi@inspirastudio.com"
-[DEBUG]   [ 2 ] ID: 3 Name: "Sami" "Ben Amor" Email: "sami.benamor@inspirastudio.com"
-[DEBUG]   [ 3 ] ID: 4 Name: "Raniajjjjjjjjjjjj" "Kacem" Email: "rania.kacem@inspirastudio.com"
-[DEBUG]   [ 4 ] ID: 6 Name: "Sara" "Bennani" Email: "sara.bennani@inspirastudio.com"
-[DEBUG]   [ 5 ] ID: 7 Name: "Omar" "Zouari" Email: "omar.zouari@inspirastudio.com"
-[DEBUG]   [ 6 ] ID: 8 Name: "Meriem" "Saidi" Email: "meriemfgdhdfhdfhd.saidi@inspirastudio.com"
-[DEBUG]   [ 7 ] ID: 9 Name: "Khaliljjjjjj" "Ayari" Email: "khalil.ayari@inspirastudio.com"
-[DEBUG]   [ 8 ] ID: 10 Name: "Amine" "Helali" Email: "amine.helali@inspira.tn"
-[DEBUG]   [ 9 ] ID: 11 Name: "yhjbghgvjhg" "jhghjghj" Email: "ghjgjhg@jhfg.hj"
-[DEBUG]   [ 10 ] ID: 12 Name: "Leila" "Jlassi" Email: "leila.jlassi@inspirastudio.com"
-[DEBUG]   [ 11 ] ID: 13 Name: "Ahmed" "Bouazizi" Email: "ahmed.bouazizi@inspirastudio.com"
-[DEBUG]   [ 12 ] ID: 14 Name: "Sahar" "Masmoudi" Email: "sahar.masmoudi@inspirastudio.com"
-[DEBUG]   [ 13 ] ID: 15 Name: "Firas" "Belhaj" Email: "firas.belhaj@inspirastudio.com"
-[DEBUG]   [ 14 ] ID: 16 Name: "Dorsaf" "Heni" Email: "dorsaf.heni@inspirastudio.com"
-[DEBUG]   [ 15 ] ID: 17 Name: "Karim" "Dridi" Email: "karim.dridi@inspirastudio.com"
-[DEBUG]   [ 16 ] ID: 18 Name: "Nada" "Jebali" Email: "nada.jebali@inspirastudio.com"
-[DEBUG]   [ 17 ] ID: 19 Name: "Hatemhhhhhhhhhhhhhhhhhhh" "Louati" Email: "hatem.louati@inspirastudio.com"
-[DEBUG]   [ 18 ] ID: 20 Name: "bjhbgh" "ghghgh" Email: "ghghg@ce.vev"
-[DEBUG]   [ 19 ] ID: 24 Name: "mm" "mm" Email: "mm@es.ggg"
-[DEBUG]   [ 20 ] ID: 25 Name: "jjjj" "jjjjjj" Email: "jjjjjj@ff.ff"
+[DEBUG] [MainWindow::loadEmployers] Retrieved 0 employers from database
+[DEBUG] [MainWindow::loadEmployers] WARNING: No employers found or database error
 [DEBUG] [MainWindow::loadEmployers] Populating table...
-[DEBUG] [EmployerUIHelper::populateTable] CALLED with 21 records
-[DEBUG] [EmployerUIHelper::populateTable] Row 0 - ID: 1 Name: "Aminelllll" "Helali"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 1
-[DEBUG] ✅ Found 0 resources for employer 1
-[DEBUG] [EmployerUIHelper::populateTable] Row 1 - ID: 2 Name: "bbbbbbNour" "Trabelsi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 2
-[DEBUG] ✅ Found 0 resources for employer 2
-[DEBUG] [EmployerUIHelper::populateTable] Row 2 - ID: 3 Name: "Sami" "Ben Amor"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 3
-[DEBUG] ✅ Found 0 resources for employer 3
-[DEBUG] [EmployerUIHelper::populateTable] Row 3 - ID: 4 Name: "Raniajjjjjjjjjjjj" "Kacem"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 4
-[DEBUG] ✅ Found 0 resources for employer 4
-[DEBUG] [EmployerUIHelper::populateTable] Row 4 - ID: 6 Name: "Sara" "Bennani"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 6
-[DEBUG] ✅ Found 0 resources for employer 6
-[DEBUG] [EmployerUIHelper::populateTable] Row 5 - ID: 7 Name: "Omar" "Zouari"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 7
-[DEBUG] ✅ Found 0 resources for employer 7
-[DEBUG] [EmployerUIHelper::populateTable] Row 6 - ID: 8 Name: "Meriem" "Saidi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 8
-[DEBUG] ✅ Found 0 resources for employer 8
-[DEBUG] [EmployerUIHelper::populateTable] Row 7 - ID: 9 Name: "Khaliljjjjjj" "Ayari"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 9
-[DEBUG] ✅ Found 0 resources for employer 9
-[DEBUG] [EmployerUIHelper::populateTable] Row 8 - ID: 10 Name: "Amine" "Helali"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 10
-[DEBUG] ✅ Found 0 resources for employer 10
-[DEBUG] [EmployerUIHelper::populateTable] Row 9 - ID: 11 Name: "yhjbghgvjhg" "jhghjghj"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 11
-[DEBUG] ✅ Found 0 resources for employer 11
-[DEBUG] [EmployerUIHelper::populateTable] Row 10 - ID: 12 Name: "Leila" "Jlassi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 12
-[DEBUG] ✅ Found 0 resources for employer 12
-[DEBUG] [EmployerUIHelper::populateTable] Row 11 - ID: 13 Name: "Ahmed" "Bouazizi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 13
-[DEBUG] ✅ Found 0 resources for employer 13
-[DEBUG] [EmployerUIHelper::populateTable] Row 12 - ID: 14 Name: "Sahar" "Masmoudi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 14
-[DEBUG] ✅ Found 0 resources for employer 14
-[DEBUG] [EmployerUIHelper::populateTable] Row 13 - ID: 15 Name: "Firas" "Belhaj"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 15
-[DEBUG] ✅ Found 0 resources for employer 15
-[DEBUG] [EmployerUIHelper::populateTable] Row 14 - ID: 16 Name: "Dorsaf" "Heni"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 16
-[DEBUG] ✅ Found 0 resources for employer 16
-[DEBUG] [EmployerUIHelper::populateTable] Row 15 - ID: 17 Name: "Karim" "Dridi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 17
-[DEBUG] ✅ Found 0 resources for employer 17
-[DEBUG] [EmployerUIHelper::populateTable] Row 16 - ID: 18 Name: "Nada" "Jebali"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 18
-[DEBUG] ✅ Found 0 resources for employer 18
-[DEBUG] [EmployerUIHelper::populateTable] Row 17 - ID: 19 Name: "Hatemhhhhhhhhhhhhhhhhhhh" "Louati"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 19
-[DEBUG] ✅ Found 0 resources for employer 19
-[DEBUG] [EmployerUIHelper::populateTable] Row 18 - ID: 20 Name: "bjhbgh" "ghghgh"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 20
-[DEBUG] ✅ Found 0 resources for employer 20
-[DEBUG] [EmployerUIHelper::populateTable] Row 19 - ID: 24 Name: "mm" "mm"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 24
-[DEBUG] ✅ Found 0 resources for employer 24
-[DEBUG] [EmployerUIHelper::populateTable] Row 20 - ID: 25 Name: "jjjj" "jjjjjj"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 25
-[DEBUG] ✅ Found 0 resources for employer 25
+[DEBUG] [EmployerUIHelper::populateTable] CALLED with 0 records
 [DEBUG] [EmployerUIHelper::populateTable] Table populated successfully
 [DEBUG] [MainWindow::loadEmployers] Updating button states...
 [DEBUG] [EmployerUIHelper::getSelectedEmployerId] CALLED
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Table has 21 rows
+[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Table has 0 rows
 [DEBUG] [EmployerUIHelper::getSelectedEmployerId] currentRow(): -1
 [DEBUG] [EmployerUIHelper::getSelectedEmployerId] No currentRow, searching for selected symbol...
 [DEBUG] [EmployerUIHelper::getSelectedEmployerId] ERROR: No row selected!
 [DEBUG] [MainWindow::loadEmployers] ========== LOAD COMPLETE ==========
 
-[DEBUG] [MainWindow::setupUI] ressourceWidget pointer: RessourceWidget(0x21e69acb690, name="RessourceWidget")
+[DEBUG] [MainWindow::setupUI] ressourceWidget pointer: RessourceWidget(0x2b11e33b8b0, name="RessourceWidget")
 [DEBUG] [MainWindow::setupUI] Calling ressourceWidget->loadRessources()...
 [DEBUG] ================================================
 [DEBUG] [RessourceWidget::loadRessources] CALLED
@@ -143,522 +47,87 @@
 [DEBUG] ========================================
 [DEBUG] [Ressource::selectAll] Executing SQL: "SELECT ID_MEDIA, TITLE, PATH, OWNER, FORMAT, ACCESS_LEVEL, UPLOAD_DATE FROM RESSOURCES ORDER BY ID_MEDIA"
 [DEBUG] [Ressource::selectAll] Fetching resources...
-[DEBUG]   Resource: 2 "ll"
-[DEBUG]   Resource: 5 "Test Resource 2"
-[DEBUG]   Resource: 6 "Test Resource 3jjjjjjj"
-[DEBUG] ✅ selectAll() returned 3 records
+[DEBUG] ✅ selectAll() returned 0 records
 [DEBUG] ========================================
-[DEBUG] [RessourceWidget::loadRessources] Retrieved 3 resources from DB
+[DEBUG] [RessourceWidget::loadRessources] Retrieved 0 resources from DB
 [DEBUG] [RessourceWidget::loadRessources] Clearing table...
 [DEBUG] [RessourceWidget::loadRessources] Table headers set
-[DEBUG] [RessourceWidget::loadRessources] Populating table with 3 rows...
-[DEBUG] [RessourceWidget::loadRessources] Row 0 - ID: 2 Title: "ll"
-[DEBUG] [RessourceWidget::loadRessources] Row 1 - ID: 5 Title: "Test Resource 2"
-[DEBUG] [RessourceWidget::loadRessources] Row 2 - ID: 6 Title: "Test Resource 3jjjjjjj"
+[DEBUG] [RessourceWidget::loadRessources] Populating table with 0 rows...
 [DEBUG] [RessourceWidget::loadRessources] ✅ Table population COMPLETE
-[DEBUG] [RessourceWidget::loadRessources] Table now has 3 rows
+[DEBUG] [RessourceWidget::loadRessources] Table now has 0 rows
 [DEBUG] ================================================
 [DEBUG] [MainWindow::setupUI] ✅ Ressources loaded successfully!
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] CALLED
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Table has 21 rows
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] currentRow(): 0
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Selected row: 0
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data type: qlonglong
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data value: QVariant(qlonglong, 1)
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Extracted ID: 1
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Returning ID: 1 valid: true
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] CALLED
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Table has 21 rows
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] currentRow(): 0
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Selected row: 0
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data type: qlonglong
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data value: QVariant(qlonglong, 1)
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Extracted ID: 1
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Returning ID: 1 valid: true
-[DEBUG] 
-========== MODIFY EMPLOYER CLICKED ==========
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] CALLED
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Table has 21 rows
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] currentRow(): 0
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Selected row: 0
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data type: qlonglong
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data value: QVariant(qlonglong, 1)
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Extracted ID: 1
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Returning ID: 1 valid: true
-[DEBUG] [MainWindow::onModifyEmployerClicked] getSelectedEmployerId returned: 1
-[DEBUG] [MainWindow::onModifyEmployerClicked] Selection valid (ok): true
-[DEBUG] [MainWindow::onModifyEmployerClicked] Calling Employer::fetchById with ID: 1
-[DEBUG] [MainWindow::onModifyEmployerClicked] fetchById SUCCESS! Found: "Aminelllll" "Helali"
-[DEBUG] [MainWindow::onModifyEmployerClicked] Opening edit form...
-[DEBUG] ✅ Found 0 resources for employer 1
-[DEBUG] Loaded 0 resources for employer 1
-[DEBUG] ✅ Found 0 resources for employer 1
-[DEBUG] Add resource clicked
-[DEBUG] ✅ Found 0 resources for employer 1
+[DEBUG] SERVER: "220 smtp.gmail.com ESMTP ffacd0b85a97d-42e1c5c30b8sm21369728f8f.7 - gsmtp\r\n"
+[DEBUG] CLIENT: "EHLO localhost"
+[DEBUG] SERVER: "250-smtp.gmail.com at your service, [2c0f:f698:c138:a28d:8d52:ca9b:6b95:61c2]\r\n250-SIZE 35882577\r\n250-8BITMIME\r\n250-AUTH LOGIN PLAIN XOAUTH2 PLAIN-CLIENTTOKEN OAUTHBEARER XOAUTH\r\n250-ENHANCEDSTATUSCODES\r\n250-PIPELINING\r\n250-CHUNKING\r\n250 SMTPUTF8\r\n"
+[DEBUG] CLIENT: "AUTH LOGIN"
+[DEBUG] SERVER: "334 VXNlcm5hbWU6\r\n"
+[DEBUG] CLIENT: "ZGFvdWRlbW5hNEBnbWFpbC5jb20="
+[DEBUG] SERVER: "334 UGFzc3dvcmQ6\r\n"
+[DEBUG] CLIENT: "YWxkeiBjaWtmIGpmdGYgbnZwag=="
+[DEBUG] SERVER: "235 2.7.0 Accepted\r\n"
+[DEBUG] CLIENT: "MAIL FROM:<daoudemna4@gmail.com>"
+[DEBUG] SERVER: "250 2.1.0 OK ffacd0b85a97d-42e1c5c30b8sm21369728f8f.7 - gsmtp\r\n"
+[DEBUG] CLIENT: "RCPT TO:<daoudemna4@gmail.com>"
+[DEBUG] SERVER: "250 2.1.5 OK ffacd0b85a97d-42e1c5c30b8sm21369728f8f.7 - gsmtp\r\n"
+[DEBUG] CLIENT: "DATA"
+[DEBUG] SERVER: "354 Go ahead ffacd0b85a97d-42e1c5c30b8sm21369728f8f.7 - gsmtp\r\n"
+[DEBUG] CLIENT: "From: <daoudemna4@gmail.com>\r\nTo: <daoudemna4@gmail.com>\r\nSubject: Bienvenue parmi nos sponsors\r\n\r\nBonjour nnnn,\n\nMerci d'avoir rejoint nos sponsors.\nCordialement.\r\n."
+[DEBUG] SERVER: "250 2.0.0 OK  1764525418 ffacd0b85a97d-42e1c5c30b8sm21369728f8f.7 - gsmtp\r\n"
+[DEBUG] CLIENT: "QUIT"
+[DEBUG] SERVER: "221 2.0.0 closing connection ffacd0b85a97d-42e1c5c30b8sm21369728f8f.7 - gsmtp\r\n"
+[DEBUG] ProjectWidget::onRefreshProjectsClicked()
+[DEBUG] ProjectWidget::refreshTable()
+[DEBUG] ProjectWidget::loadAllProjects() - Loading all projects...
+[DEBUG] [Project::selectAll] Fetching all projects...
+[DEBUG] [Project::selectAll] ERROR: "[Oracle][ODBC][Ora]ORA-00904: \"ID_SERVICE\": invalid identifier\n\u0000Ѐ\u0000\u0000\u0000\u0001\u0000\u0000\u0000ჸ⼊ʱ\u0000薸\u2EFAʱ\u0000\u0000\u0000\u0000\u0000컹⟇ʱ\u0000\u0000\u0000Ϳ\u0000ᑀ᩹ʱ\u0000ʴ᩹ʱ\u0000\u0000\u0000\u0000耀\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000P\u0000\u0000\u0000\u0000\u0000\u0000\u0000ೀ᩹ʱ\u0000\u0000 [Oracle][ODBC][Ora]ORA-00904: \"ID_SERVICE\": invalid identifier\n\u0000Ѐ\u0000\u0000\u0000\u0001\u0000\u0000\u0000ჸ⼊ʱ\u0000薸\u2EFAʱ\u0000\u0000\u0000\u0000\u0000컹⟇ʱ\u0000\u0000\u0000Ϳ\u0000ᑀ᩹ʱ\u0000ʴ᩹ʱ\u0000\u0000\u0000\u0000耀\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000P\u0000\u0000\u0000\u0000\u0000\u0000\u0000ೀ᩹ʱ\u0000\u0000, S0022;S0022 QODBC: Unable to execute statement"
+[DEBUG] ProjectWidget::loadAllProjects() - No projects found
+[DEBUG] ProjectWidget::onRefreshProjectsClicked()
+[DEBUG] ProjectWidget::refreshTable()
+[DEBUG] ProjectWidget::loadAllProjects() - Loading all projects...
+[DEBUG] [Project::selectAll] Fetching all projects...
+[DEBUG] [Project::selectAll] ERROR: "[Oracle][ODBC][Ora]ORA-00904: \"ID_SERVICE\": invalid identifier\n\u0000Ѐ\u0000\u0000\u0000\u0001\u0000\u0000\u0000ﭨ⼉ʱ\u0000薸\u2EFAʱ\u0000\u0000\u0000\u0000\u0000컹⟇ʱ\u0000\u0000\u0000Ϳ\u0000ᑀ᩹ʱ\u0000ʴ᩹ʱ\u0000\u0000\u0000\u0000耀\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000P\u0000\u0000\u0000\u0000\u0000\u0000\u0000ೀ᩹ʱ\u0000\u0000 [Oracle][ODBC][Ora]ORA-00904: \"ID_SERVICE\": invalid identifier\n\u0000Ѐ\u0000\u0000\u0000\u0001\u0000\u0000\u0000ﭨ⼉ʱ\u0000薸\u2EFAʱ\u0000\u0000\u0000\u0000\u0000컹⟇ʱ\u0000\u0000\u0000Ϳ\u0000ᑀ᩹ʱ\u0000ʴ᩹ʱ\u0000\u0000\u0000\u0000耀\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000P\u0000\u0000\u0000\u0000\u0000\u0000\u0000ೀ᩹ʱ\u0000\u0000, S0022;S0022 QODBC: Unable to execute statement"
+[DEBUG] ProjectWidget::loadAllProjects() - No projects found
+[DEBUG] [Project::search] Searching for: "1"
+[DEBUG] [Project::search] ERROR: "[Oracle][ODBC][Ora]ORA-00904: \"ID_SERVICE\": invalid identifier\n\u0000Ѐ\u0000\u0000\u0000\u0001\u0000\u0000\u0000ﾸ⼉ʱ\u0000薸\u2EFAʱ\u0000\u0000\u0000\u0000\u0000컹⟇ʱ\u0000\u0000\u0000Ϳ\u0000ᑀ᩹ʱ\u0000ʴ᩹ʱ\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000P\u0000\u0000\u0000\u0000\u0000\u0000\u0000ೀ᩹ʱ\u0000\u0000 [Oracle][ODBC][Ora]ORA-00904: \"ID_SERVICE\": invalid identifier\n\u0000Ѐ\u0000\u0000\u0000\u0001\u0000\u0000\u0000ﾸ⼉ʱ\u0000薸\u2EFAʱ\u0000\u0000\u0000\u0000\u0000컹⟇ʱ\u0000\u0000\u0000Ϳ\u0000ᑀ᩹ʱ\u0000ʴ᩹ʱ\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000P\u0000\u0000\u0000\u0000\u0000\u0000\u0000ೀ᩹ʱ\u0000\u0000, S0022;S0022 QODBC: Unable to execute statement"
+[DEBUG] ProjectWidget::populateProjectTable - Populating 0 projects
+[DEBUG] [Project::search] Searching for: "1"
+[DEBUG] [Project::search] ERROR: "[Oracle][ODBC][Ora]ORA-00904: \"ID_SERVICE\": invalid identifier\n\u0000Ѐ\u0000\u0000\u0000\u0001\u0000\u0000\u0000⫘⼊ʱ\u0000薸\u2EFAʱ\u0000\u0000\u0000\u0000\u0000컹⟇ʱ\u0000\u0000\u0000Ϳ\u0000ᑀ᩹ʱ\u0000ʴ᩹ʱ\u0000\u0000\u0000\u0000耀\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000P\u0000\u0000\u0000\u0000\u0000\u0000\u0000ೀ᩹ʱ\u0000\u0000 [Oracle][ODBC][Ora]ORA-00904: \"ID_SERVICE\": invalid identifier\n\u0000Ѐ\u0000\u0000\u0000\u0001\u0000\u0000\u0000⫘⼊ʱ\u0000薸\u2EFAʱ\u0000\u0000\u0000\u0000\u0000컹⟇ʱ\u0000\u0000\u0000Ϳ\u0000ᑀ᩹ʱ\u0000ʴ᩹ʱ\u0000\u0000\u0000\u0000耀\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000P\u0000\u0000\u0000\u0000\u0000\u0000\u0000ೀ᩹ʱ\u0000\u0000, S0022;S0022 QODBC: Unable to execute statement"
+[DEBUG] ProjectWidget::populateProjectTable - Populating 0 projects
+[DEBUG] Adding new ressource...
 [DEBUG] ========================================
 [DEBUG] [Ressource::selectAll] Executing SQL: "SELECT ID_MEDIA, TITLE, PATH, OWNER, FORMAT, ACCESS_LEVEL, UPLOAD_DATE FROM RESSOURCES ORDER BY ID_MEDIA"
 [DEBUG] [Ressource::selectAll] Fetching resources...
-[DEBUG]   Resource: 2 "ll"
-[DEBUG]   Resource: 5 "Test Resource 2"
-[DEBUG]   Resource: 6 "Test Resource 3jjjjjjj"
-[DEBUG] ✅ selectAll() returned 3 records
+[DEBUG] ✅ selectAll() returned 0 records
 [DEBUG] ========================================
-[DEBUG] ✅ All resources cleared for employer 1
-[DEBUG] ✅ Resource 6 added to employer 1
-[DEBUG] ✅ Found 1 resources for employer 1
-[DEBUG] Loaded 1 resources for employer 1
-[DEBUG] [MainWindow::onModifyEmployerClicked] Form accepted, getting updates...
-[DEBUG] [MainWindow::onModifyEmployerClicked] Calling Employer::update with ID: 1
-[DEBUG] [MainWindow::onModifyEmployerClicked] Updated data: "Aminelllll" "Helali" "amine.helali@inspira.tn"
-[DEBUG] [MainWindow::onModifyEmployerClicked] Update SUCCESS! Now updating resources...
-[DEBUG] [MainWindow::onModifyEmployerClicked] Current resources: 0
-[DEBUG] [MainWindow::onModifyEmployerClicked] New resources selected: 0
-[DEBUG] ✅ All resources cleared for employer 1
-[DEBUG] [MainWindow::onModifyEmployerClicked] Cleared old resources
-[DEBUG] [MainWindow::onModifyEmployerClicked] All resources updated: 0 resources assigned
-[DEBUG] [MainWindow::onModifyEmployerClicked] Reloading employers...
-[DEBUG] 
-[MainWindow::loadEmployers] ========== LOADING EMPLOYERS ==========
-[DEBUG] [MainWindow::loadEmployers] Calling Employer::selectAll()...
-[DEBUG] [MainWindow::loadEmployers] Retrieved 21 employers from database
-[DEBUG] [MainWindow::loadEmployers] Employers loaded successfully:
-[DEBUG]   [ 0 ] ID: 1 Name: "Aminelllll" "Helali" Email: "amine.helali@inspira.tn"
-[DEBUG]   [ 1 ] ID: 2 Name: "bbbbbbNour" "Trabelsi" Email: "nour.trabelsi@inspirastudio.com"
-[DEBUG]   [ 2 ] ID: 3 Name: "Sami" "Ben Amor" Email: "sami.benamor@inspirastudio.com"
-[DEBUG]   [ 3 ] ID: 4 Name: "Raniajjjjjjjjjjjj" "Kacem" Email: "rania.kacem@inspirastudio.com"
-[DEBUG]   [ 4 ] ID: 6 Name: "Sara" "Bennani" Email: "sara.bennani@inspirastudio.com"
-[DEBUG]   [ 5 ] ID: 7 Name: "Omar" "Zouari" Email: "omar.zouari@inspirastudio.com"
-[DEBUG]   [ 6 ] ID: 8 Name: "Meriem" "Saidi" Email: "meriemfgdhdfhdfhd.saidi@inspirastudio.com"
-[DEBUG]   [ 7 ] ID: 9 Name: "Khaliljjjjjj" "Ayari" Email: "khalil.ayari@inspirastudio.com"
-[DEBUG]   [ 8 ] ID: 10 Name: "Amine" "Helali" Email: "amine.helali@inspira.tn"
-[DEBUG]   [ 9 ] ID: 11 Name: "yhjbghgvjhg" "jhghjghj" Email: "ghjgjhg@jhfg.hj"
-[DEBUG]   [ 10 ] ID: 12 Name: "Leila" "Jlassi" Email: "leila.jlassi@inspirastudio.com"
-[DEBUG]   [ 11 ] ID: 13 Name: "Ahmed" "Bouazizi" Email: "ahmed.bouazizi@inspirastudio.com"
-[DEBUG]   [ 12 ] ID: 14 Name: "Sahar" "Masmoudi" Email: "sahar.masmoudi@inspirastudio.com"
-[DEBUG]   [ 13 ] ID: 15 Name: "Firas" "Belhaj" Email: "firas.belhaj@inspirastudio.com"
-[DEBUG]   [ 14 ] ID: 16 Name: "Dorsaf" "Heni" Email: "dorsaf.heni@inspirastudio.com"
-[DEBUG]   [ 15 ] ID: 17 Name: "Karim" "Dridi" Email: "karim.dridi@inspirastudio.com"
-[DEBUG]   [ 16 ] ID: 18 Name: "Nada" "Jebali" Email: "nada.jebali@inspirastudio.com"
-[DEBUG]   [ 17 ] ID: 19 Name: "Hatemhhhhhhhhhhhhhhhhhhh" "Louati" Email: "hatem.louati@inspirastudio.com"
-[DEBUG]   [ 18 ] ID: 20 Name: "bjhbgh" "ghghgh" Email: "ghghg@ce.vev"
-[DEBUG]   [ 19 ] ID: 24 Name: "mm" "mm" Email: "mm@es.ggg"
-[DEBUG]   [ 20 ] ID: 25 Name: "jjjj" "jjjjjj" Email: "jjjjjj@ff.ff"
-[DEBUG] [MainWindow::loadEmployers] Populating table...
-[DEBUG] [EmployerUIHelper::populateTable] CALLED with 21 records
-[DEBUG] [EmployerUIHelper::populateTable] Row 0 - ID: 1 Name: "Aminelllll" "Helali"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 1
-[DEBUG] ✅ Found 0 resources for employer 1
-[DEBUG] [EmployerUIHelper::populateTable] Row 1 - ID: 2 Name: "bbbbbbNour" "Trabelsi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 2
-[DEBUG] ✅ Found 0 resources for employer 2
-[DEBUG] [EmployerUIHelper::populateTable] Row 2 - ID: 3 Name: "Sami" "Ben Amor"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 3
-[DEBUG] ✅ Found 0 resources for employer 3
-[DEBUG] [EmployerUIHelper::populateTable] Row 3 - ID: 4 Name: "Raniajjjjjjjjjjjj" "Kacem"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 4
-[DEBUG] ✅ Found 0 resources for employer 4
-[DEBUG] [EmployerUIHelper::populateTable] Row 4 - ID: 6 Name: "Sara" "Bennani"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 6
-[DEBUG] ✅ Found 0 resources for employer 6
-[DEBUG] [EmployerUIHelper::populateTable] Row 5 - ID: 7 Name: "Omar" "Zouari"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 7
-[DEBUG] ✅ Found 0 resources for employer 7
-[DEBUG] [EmployerUIHelper::populateTable] Row 6 - ID: 8 Name: "Meriem" "Saidi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 8
-[DEBUG] ✅ Found 0 resources for employer 8
-[DEBUG] [EmployerUIHelper::populateTable] Row 7 - ID: 9 Name: "Khaliljjjjjj" "Ayari"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 9
-[DEBUG] ✅ Found 0 resources for employer 9
-[DEBUG] [EmployerUIHelper::populateTable] Row 8 - ID: 10 Name: "Amine" "Helali"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 10
-[DEBUG] ✅ Found 0 resources for employer 10
-[DEBUG] [EmployerUIHelper::populateTable] Row 9 - ID: 11 Name: "yhjbghgvjhg" "jhghjghj"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 11
-[DEBUG] ✅ Found 0 resources for employer 11
-[DEBUG] [EmployerUIHelper::populateTable] Row 10 - ID: 12 Name: "Leila" "Jlassi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 12
-[DEBUG] ✅ Found 0 resources for employer 12
-[DEBUG] [EmployerUIHelper::populateTable] Row 11 - ID: 13 Name: "Ahmed" "Bouazizi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 13
-[DEBUG] ✅ Found 0 resources for employer 13
-[DEBUG] [EmployerUIHelper::populateTable] Row 12 - ID: 14 Name: "Sahar" "Masmoudi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 14
-[DEBUG] ✅ Found 0 resources for employer 14
-[DEBUG] [EmployerUIHelper::populateTable] Row 13 - ID: 15 Name: "Firas" "Belhaj"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 15
-[DEBUG] ✅ Found 0 resources for employer 15
-[DEBUG] [EmployerUIHelper::populateTable] Row 14 - ID: 16 Name: "Dorsaf" "Heni"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 16
-[DEBUG] ✅ Found 0 resources for employer 16
-[DEBUG] [EmployerUIHelper::populateTable] Row 15 - ID: 17 Name: "Karim" "Dridi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 17
-[DEBUG] ✅ Found 0 resources for employer 17
-[DEBUG] [EmployerUIHelper::populateTable] Row 16 - ID: 18 Name: "Nada" "Jebali"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 18
-[DEBUG] ✅ Found 0 resources for employer 18
-[DEBUG] [EmployerUIHelper::populateTable] Row 17 - ID: 19 Name: "Hatemhhhhhhhhhhhhhhhhhhh" "Louati"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 19
-[DEBUG] ✅ Found 0 resources for employer 19
-[DEBUG] [EmployerUIHelper::populateTable] Row 18 - ID: 20 Name: "bjhbgh" "ghghgh"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 20
-[DEBUG] ✅ Found 0 resources for employer 20
-[DEBUG] [EmployerUIHelper::populateTable] Row 19 - ID: 24 Name: "mm" "mm"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 24
-[DEBUG] ✅ Found 0 resources for employer 24
-[DEBUG] [EmployerUIHelper::populateTable] Row 20 - ID: 25 Name: "jjjj" "jjjjjj"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 25
-[DEBUG] ✅ Found 0 resources for employer 25
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] CALLED
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Table has 21 rows
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] currentRow(): 0
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Selected row: 0
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data type: qlonglong
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data value: QVariant(qlonglong, 1)
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Extracted ID: 1
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Returning ID: 1 valid: true
-[DEBUG] [EmployerUIHelper::populateTable] Table populated successfully
-[DEBUG] [MainWindow::loadEmployers] Updating button states...
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] CALLED
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Table has 21 rows
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] currentRow(): 0
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Selected row: 0
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data type: qlonglong
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data value: QVariant(qlonglong, 1)
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Extracted ID: 1
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Returning ID: 1 valid: true
-[DEBUG] [MainWindow::loadEmployers] ========== LOAD COMPLETE ==========
-
-[DEBUG] ========== MODIFY EMPLOYER COMPLETED ==========
-
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] CALLED
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Table has 21 rows
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] currentRow(): 1
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Selected row: 1
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data type: qlonglong
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data value: QVariant(qlonglong, 2)
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Extracted ID: 2
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Returning ID: 2 valid: true
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] CALLED
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Table has 21 rows
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] currentRow(): 1
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Selected row: 1
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data type: qlonglong
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data value: QVariant(qlonglong, 2)
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Extracted ID: 2
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Returning ID: 2 valid: true
-[DEBUG] 
-========== ADD EMPLOYER CLICKED ==========
-[DEBUG] [MainWindow::onAddEmployerClicked] Opening form in Create mode...
-[DEBUG] Add resource clicked
+[DEBUG] [isTitleUnique] Executing: "SELECT COUNT(*) FROM RESSOURCES WHERE UPPER(TITLE) = UPPER('aaa')"
+[DEBUG] Title uniqueness check result: count= 0 , isUnique= true
+[DEBUG] ========================================
+[DEBUG] [Ressource::insert] Attempting insertion...
+[DEBUG]   Title: "aaa"
+[DEBUG]   Path: "MP4"
+[DEBUG]   Owner: "aaa"
+[DEBUG]   Format: ""
+[DEBUG]   Access: "aaa"
+[DEBUG]   SQL: "INSERT INTO RESSOURCES (ID_MEDIA, TITLE, PATH, OWNER, FORMAT, ACCESS_LEVEL, UPLOAD_DATE) VALUES (SEQ_RESSOURCES.NEXTVAL, 'aaa', 'MP4', 'aaa', '', 'aaa', SYSDATE)"
+[DEBUG] ✅ Ressource insérée avec succès: "aaa"
+[DEBUG] ========================================
+[DEBUG] Add form cleared
+[DEBUG] Refreshing table...
+[DEBUG] ================================================
+[DEBUG] [RessourceWidget::loadRessources] CALLED
+[DEBUG] ================================================
 [DEBUG] ========================================
 [DEBUG] [Ressource::selectAll] Executing SQL: "SELECT ID_MEDIA, TITLE, PATH, OWNER, FORMAT, ACCESS_LEVEL, UPLOAD_DATE FROM RESSOURCES ORDER BY ID_MEDIA"
 [DEBUG] [Ressource::selectAll] Fetching resources...
-[DEBUG]   Resource: 2 "ll"
-[DEBUG]   Resource: 5 "Test Resource 2"
-[DEBUG]   Resource: 6 "Test Resource 3jjjjjjj"
-[DEBUG] ✅ selectAll() returned 3 records
+[DEBUG]   Resource: 2 "aaa"
+[DEBUG] ✅ selectAll() returned 1 records
 [DEBUG] ========================================
-[DEBUG] [MainWindow::onAddEmployerClicked] Form accepted, getting data...
-[DEBUG] [MainWindow::onAddEmployerClicked] New employer data:
-[DEBUG]   Name: "llll" "llll"
-[DEBUG]   Email: "llll@juj.ll"
-[DEBUG]   Phone: "44444444444"
-[DEBUG]   Role: "Project Lead"
-[DEBUG]   Hire Date: QDate("2025-11-06")
-[DEBUG] [MainWindow::onAddEmployerClicked] Calling Employer::insert()...
-[DEBUG] [MainWindow::onAddEmployerClicked] Insert SUCCESS!
-[DEBUG] [MainWindow::onAddEmployerClicked] New employer ID: 26
-[DEBUG] [MainWindow::onAddEmployerClicked] Selected resources count: 0
-[DEBUG] [MainWindow::onAddEmployerClicked] No resources selected for this employer.
-[DEBUG] 
-[MainWindow::loadEmployers] ========== LOADING EMPLOYERS ==========
-[DEBUG] [MainWindow::loadEmployers] Calling Employer::selectAll()...
-[DEBUG] [MainWindow::loadEmployers] Retrieved 22 employers from database
-[DEBUG] [MainWindow::loadEmployers] Employers loaded successfully:
-[DEBUG]   [ 0 ] ID: 1 Name: "Aminelllll" "Helali" Email: "amine.helali@inspira.tn"
-[DEBUG]   [ 1 ] ID: 2 Name: "bbbbbbNour" "Trabelsi" Email: "nour.trabelsi@inspirastudio.com"
-[DEBUG]   [ 2 ] ID: 3 Name: "Sami" "Ben Amor" Email: "sami.benamor@inspirastudio.com"
-[DEBUG]   [ 3 ] ID: 4 Name: "Raniajjjjjjjjjjjj" "Kacem" Email: "rania.kacem@inspirastudio.com"
-[DEBUG]   [ 4 ] ID: 6 Name: "Sara" "Bennani" Email: "sara.bennani@inspirastudio.com"
-[DEBUG]   [ 5 ] ID: 7 Name: "Omar" "Zouari" Email: "omar.zouari@inspirastudio.com"
-[DEBUG]   [ 6 ] ID: 8 Name: "Meriem" "Saidi" Email: "meriemfgdhdfhdfhd.saidi@inspirastudio.com"
-[DEBUG]   [ 7 ] ID: 9 Name: "Khaliljjjjjj" "Ayari" Email: "khalil.ayari@inspirastudio.com"
-[DEBUG]   [ 8 ] ID: 10 Name: "Amine" "Helali" Email: "amine.helali@inspira.tn"
-[DEBUG]   [ 9 ] ID: 11 Name: "yhjbghgvjhg" "jhghjghj" Email: "ghjgjhg@jhfg.hj"
-[DEBUG]   [ 10 ] ID: 12 Name: "Leila" "Jlassi" Email: "leila.jlassi@inspirastudio.com"
-[DEBUG]   [ 11 ] ID: 13 Name: "Ahmed" "Bouazizi" Email: "ahmed.bouazizi@inspirastudio.com"
-[DEBUG]   [ 12 ] ID: 14 Name: "Sahar" "Masmoudi" Email: "sahar.masmoudi@inspirastudio.com"
-[DEBUG]   [ 13 ] ID: 15 Name: "Firas" "Belhaj" Email: "firas.belhaj@inspirastudio.com"
-[DEBUG]   [ 14 ] ID: 16 Name: "Dorsaf" "Heni" Email: "dorsaf.heni@inspirastudio.com"
-[DEBUG]   [ 15 ] ID: 17 Name: "Karim" "Dridi" Email: "karim.dridi@inspirastudio.com"
-[DEBUG]   [ 16 ] ID: 18 Name: "Nada" "Jebali" Email: "nada.jebali@inspirastudio.com"
-[DEBUG]   [ 17 ] ID: 19 Name: "Hatemhhhhhhhhhhhhhhhhhhh" "Louati" Email: "hatem.louati@inspirastudio.com"
-[DEBUG]   [ 18 ] ID: 20 Name: "bjhbgh" "ghghgh" Email: "ghghg@ce.vev"
-[DEBUG]   [ 19 ] ID: 24 Name: "mm" "mm" Email: "mm@es.ggg"
-[DEBUG]   [ 20 ] ID: 25 Name: "jjjj" "jjjjjj" Email: "jjjjjj@ff.ff"
-[DEBUG]   [ 21 ] ID: 26 Name: "llll" "llll" Email: "llll@juj.ll"
-[DEBUG] [MainWindow::loadEmployers] Populating table...
-[DEBUG] [EmployerUIHelper::populateTable] CALLED with 22 records
-[DEBUG] [EmployerUIHelper::populateTable] Row 0 - ID: 1 Name: "Aminelllll" "Helali"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 1
-[DEBUG] ✅ Found 0 resources for employer 1
-[DEBUG] [EmployerUIHelper::populateTable] Row 1 - ID: 2 Name: "bbbbbbNour" "Trabelsi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 2
-[DEBUG] ✅ Found 0 resources for employer 2
-[DEBUG] [EmployerUIHelper::populateTable] Row 2 - ID: 3 Name: "Sami" "Ben Amor"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 3
-[DEBUG] ✅ Found 0 resources for employer 3
-[DEBUG] [EmployerUIHelper::populateTable] Row 3 - ID: 4 Name: "Raniajjjjjjjjjjjj" "Kacem"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 4
-[DEBUG] ✅ Found 0 resources for employer 4
-[DEBUG] [EmployerUIHelper::populateTable] Row 4 - ID: 6 Name: "Sara" "Bennani"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 6
-[DEBUG] ✅ Found 0 resources for employer 6
-[DEBUG] [EmployerUIHelper::populateTable] Row 5 - ID: 7 Name: "Omar" "Zouari"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 7
-[DEBUG] ✅ Found 0 resources for employer 7
-[DEBUG] [EmployerUIHelper::populateTable] Row 6 - ID: 8 Name: "Meriem" "Saidi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 8
-[DEBUG] ✅ Found 0 resources for employer 8
-[DEBUG] [EmployerUIHelper::populateTable] Row 7 - ID: 9 Name: "Khaliljjjjjj" "Ayari"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 9
-[DEBUG] ✅ Found 0 resources for employer 9
-[DEBUG] [EmployerUIHelper::populateTable] Row 8 - ID: 10 Name: "Amine" "Helali"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 10
-[DEBUG] ✅ Found 0 resources for employer 10
-[DEBUG] [EmployerUIHelper::populateTable] Row 9 - ID: 11 Name: "yhjbghgvjhg" "jhghjghj"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 11
-[DEBUG] ✅ Found 0 resources for employer 11
-[DEBUG] [EmployerUIHelper::populateTable] Row 10 - ID: 12 Name: "Leila" "Jlassi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 12
-[DEBUG] ✅ Found 0 resources for employer 12
-[DEBUG] [EmployerUIHelper::populateTable] Row 11 - ID: 13 Name: "Ahmed" "Bouazizi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 13
-[DEBUG] ✅ Found 0 resources for employer 13
-[DEBUG] [EmployerUIHelper::populateTable] Row 12 - ID: 14 Name: "Sahar" "Masmoudi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 14
-[DEBUG] ✅ Found 0 resources for employer 14
-[DEBUG] [EmployerUIHelper::populateTable] Row 13 - ID: 15 Name: "Firas" "Belhaj"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 15
-[DEBUG] ✅ Found 0 resources for employer 15
-[DEBUG] [EmployerUIHelper::populateTable] Row 14 - ID: 16 Name: "Dorsaf" "Heni"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 16
-[DEBUG] ✅ Found 0 resources for employer 16
-[DEBUG] [EmployerUIHelper::populateTable] Row 15 - ID: 17 Name: "Karim" "Dridi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 17
-[DEBUG] ✅ Found 0 resources for employer 17
-[DEBUG] [EmployerUIHelper::populateTable] Row 16 - ID: 18 Name: "Nada" "Jebali"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 18
-[DEBUG] ✅ Found 0 resources for employer 18
-[DEBUG] [EmployerUIHelper::populateTable] Row 17 - ID: 19 Name: "Hatemhhhhhhhhhhhhhhhhhhh" "Louati"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 19
-[DEBUG] ✅ Found 0 resources for employer 19
-[DEBUG] [EmployerUIHelper::populateTable] Row 18 - ID: 20 Name: "bjhbgh" "ghghgh"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 20
-[DEBUG] ✅ Found 0 resources for employer 20
-[DEBUG] [EmployerUIHelper::populateTable] Row 19 - ID: 24 Name: "mm" "mm"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 24
-[DEBUG] ✅ Found 0 resources for employer 24
-[DEBUG] [EmployerUIHelper::populateTable] Row 20 - ID: 25 Name: "jjjj" "jjjjjj"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 25
-[DEBUG] ✅ Found 0 resources for employer 25
-[DEBUG] [EmployerUIHelper::populateTable] Row 21 - ID: 26 Name: "llll" "llll"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 26
-[DEBUG] ✅ Found 0 resources for employer 26
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] CALLED
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Table has 22 rows
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] currentRow(): 1
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Selected row: 1
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data type: qlonglong
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data value: QVariant(qlonglong, 2)
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Extracted ID: 2
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Returning ID: 2 valid: true
-[DEBUG] [EmployerUIHelper::populateTable] Table populated successfully
-[DEBUG] [MainWindow::loadEmployers] Updating button states...
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] CALLED
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Table has 22 rows
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] currentRow(): 1
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Selected row: 1
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data type: qlonglong
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data value: QVariant(qlonglong, 2)
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Extracted ID: 2
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Returning ID: 2 valid: true
-[DEBUG] [MainWindow::loadEmployers] ========== LOAD COMPLETE ==========
-
-[DEBUG] ========== ADD EMPLOYER COMPLETED ==========
-
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] CALLED
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Table has 22 rows
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] currentRow(): 21
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Selected row: 21
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data type: qlonglong
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data value: QVariant(qlonglong, 26)
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Extracted ID: 26
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Returning ID: 26 valid: true
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] CALLED
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Table has 22 rows
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] currentRow(): 21
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Selected row: 21
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data type: qlonglong
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data value: QVariant(qlonglong, 26)
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Extracted ID: 26
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Returning ID: 26 valid: true
-[DEBUG] 
-========== MODIFY EMPLOYER CLICKED ==========
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] CALLED
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Table has 22 rows
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] currentRow(): 21
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Selected row: 21
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data type: qlonglong
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data value: QVariant(qlonglong, 26)
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Extracted ID: 26
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Returning ID: 26 valid: true
-[DEBUG] [MainWindow::onModifyEmployerClicked] getSelectedEmployerId returned: 26
-[DEBUG] [MainWindow::onModifyEmployerClicked] Selection valid (ok): true
-[DEBUG] [MainWindow::onModifyEmployerClicked] Calling Employer::fetchById with ID: 26
-[DEBUG] [MainWindow::onModifyEmployerClicked] fetchById SUCCESS! Found: "llll" "llll"
-[DEBUG] [MainWindow::onModifyEmployerClicked] Opening edit form...
-[DEBUG] ✅ Found 0 resources for employer 26
-[DEBUG] Loaded 0 resources for employer 26
-[DEBUG] ✅ Found 0 resources for employer 26
-[DEBUG] Add resource clicked
-[DEBUG] ✅ Found 0 resources for employer 26
-[DEBUG] ========================================
-[DEBUG] [Ressource::selectAll] Executing SQL: "SELECT ID_MEDIA, TITLE, PATH, OWNER, FORMAT, ACCESS_LEVEL, UPLOAD_DATE FROM RESSOURCES ORDER BY ID_MEDIA"
-[DEBUG] [Ressource::selectAll] Fetching resources...
-[DEBUG]   Resource: 2 "ll"
-[DEBUG]   Resource: 5 "Test Resource 2"
-[DEBUG]   Resource: 6 "Test Resource 3jjjjjjj"
-[DEBUG] ✅ selectAll() returned 3 records
-[DEBUG] ========================================
-[DEBUG] ✅ All resources cleared for employer 26
-[DEBUG] ✅ Resource 5 added to employer 26
-[DEBUG] ✅ Found 1 resources for employer 26
-[DEBUG] Loaded 1 resources for employer 26
-[DEBUG] [MainWindow::onModifyEmployerClicked] Form accepted, getting updates...
-[DEBUG] [MainWindow::onModifyEmployerClicked] Calling Employer::update with ID: 26
-[DEBUG] [MainWindow::onModifyEmployerClicked] Updated data: "llll" "llll" "llll@juj.ll"
-[DEBUG] [MainWindow::onModifyEmployerClicked] Update SUCCESS! Now updating resources...
-[DEBUG] [MainWindow::onModifyEmployerClicked] Current resources: 0
-[DEBUG] [MainWindow::onModifyEmployerClicked] New resources selected: 0
-[DEBUG] ✅ All resources cleared for employer 26
-[DEBUG] [MainWindow::onModifyEmployerClicked] Cleared old resources
-[DEBUG] [MainWindow::onModifyEmployerClicked] All resources updated: 0 resources assigned
-[DEBUG] [MainWindow::onModifyEmployerClicked] Reloading employers...
-[DEBUG] 
-[MainWindow::loadEmployers] ========== LOADING EMPLOYERS ==========
-[DEBUG] [MainWindow::loadEmployers] Calling Employer::selectAll()...
-[DEBUG] [MainWindow::loadEmployers] Retrieved 22 employers from database
-[DEBUG] [MainWindow::loadEmployers] Employers loaded successfully:
-[DEBUG]   [ 0 ] ID: 1 Name: "Aminelllll" "Helali" Email: "amine.helali@inspira.tn"
-[DEBUG]   [ 1 ] ID: 2 Name: "bbbbbbNour" "Trabelsi" Email: "nour.trabelsi@inspirastudio.com"
-[DEBUG]   [ 2 ] ID: 3 Name: "Sami" "Ben Amor" Email: "sami.benamor@inspirastudio.com"
-[DEBUG]   [ 3 ] ID: 4 Name: "Raniajjjjjjjjjjjj" "Kacem" Email: "rania.kacem@inspirastudio.com"
-[DEBUG]   [ 4 ] ID: 6 Name: "Sara" "Bennani" Email: "sara.bennani@inspirastudio.com"
-[DEBUG]   [ 5 ] ID: 7 Name: "Omar" "Zouari" Email: "omar.zouari@inspirastudio.com"
-[DEBUG]   [ 6 ] ID: 8 Name: "Meriem" "Saidi" Email: "meriemfgdhdfhdfhd.saidi@inspirastudio.com"
-[DEBUG]   [ 7 ] ID: 9 Name: "Khaliljjjjjj" "Ayari" Email: "khalil.ayari@inspirastudio.com"
-[DEBUG]   [ 8 ] ID: 10 Name: "Amine" "Helali" Email: "amine.helali@inspira.tn"
-[DEBUG]   [ 9 ] ID: 11 Name: "yhjbghgvjhg" "jhghjghj" Email: "ghjgjhg@jhfg.hj"
-[DEBUG]   [ 10 ] ID: 12 Name: "Leila" "Jlassi" Email: "leila.jlassi@inspirastudio.com"
-[DEBUG]   [ 11 ] ID: 13 Name: "Ahmed" "Bouazizi" Email: "ahmed.bouazizi@inspirastudio.com"
-[DEBUG]   [ 12 ] ID: 14 Name: "Sahar" "Masmoudi" Email: "sahar.masmoudi@inspirastudio.com"
-[DEBUG]   [ 13 ] ID: 15 Name: "Firas" "Belhaj" Email: "firas.belhaj@inspirastudio.com"
-[DEBUG]   [ 14 ] ID: 16 Name: "Dorsaf" "Heni" Email: "dorsaf.heni@inspirastudio.com"
-[DEBUG]   [ 15 ] ID: 17 Name: "Karim" "Dridi" Email: "karim.dridi@inspirastudio.com"
-[DEBUG]   [ 16 ] ID: 18 Name: "Nada" "Jebali" Email: "nada.jebali@inspirastudio.com"
-[DEBUG]   [ 17 ] ID: 19 Name: "Hatemhhhhhhhhhhhhhhhhhhh" "Louati" Email: "hatem.louati@inspirastudio.com"
-[DEBUG]   [ 18 ] ID: 20 Name: "bjhbgh" "ghghgh" Email: "ghghg@ce.vev"
-[DEBUG]   [ 19 ] ID: 24 Name: "mm" "mm" Email: "mm@es.ggg"
-[DEBUG]   [ 20 ] ID: 25 Name: "jjjj" "jjjjjj" Email: "jjjjjj@ff.ff"
-[DEBUG]   [ 21 ] ID: 26 Name: "llll" "llll" Email: "llll@juj.ll"
-[DEBUG] [MainWindow::loadEmployers] Populating table...
-[DEBUG] [EmployerUIHelper::populateTable] CALLED with 22 records
-[DEBUG] [EmployerUIHelper::populateTable] Row 0 - ID: 1 Name: "Aminelllll" "Helali"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 1
-[DEBUG] ✅ Found 0 resources for employer 1
-[DEBUG] [EmployerUIHelper::populateTable] Row 1 - ID: 2 Name: "bbbbbbNour" "Trabelsi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 2
-[DEBUG] ✅ Found 0 resources for employer 2
-[DEBUG] [EmployerUIHelper::populateTable] Row 2 - ID: 3 Name: "Sami" "Ben Amor"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 3
-[DEBUG] ✅ Found 0 resources for employer 3
-[DEBUG] [EmployerUIHelper::populateTable] Row 3 - ID: 4 Name: "Raniajjjjjjjjjjjj" "Kacem"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 4
-[DEBUG] ✅ Found 0 resources for employer 4
-[DEBUG] [EmployerUIHelper::populateTable] Row 4 - ID: 6 Name: "Sara" "Bennani"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 6
-[DEBUG] ✅ Found 0 resources for employer 6
-[DEBUG] [EmployerUIHelper::populateTable] Row 5 - ID: 7 Name: "Omar" "Zouari"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 7
-[DEBUG] ✅ Found 0 resources for employer 7
-[DEBUG] [EmployerUIHelper::populateTable] Row 6 - ID: 8 Name: "Meriem" "Saidi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 8
-[DEBUG] ✅ Found 0 resources for employer 8
-[DEBUG] [EmployerUIHelper::populateTable] Row 7 - ID: 9 Name: "Khaliljjjjjj" "Ayari"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 9
-[DEBUG] ✅ Found 0 resources for employer 9
-[DEBUG] [EmployerUIHelper::populateTable] Row 8 - ID: 10 Name: "Amine" "Helali"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 10
-[DEBUG] ✅ Found 0 resources for employer 10
-[DEBUG] [EmployerUIHelper::populateTable] Row 9 - ID: 11 Name: "yhjbghgvjhg" "jhghjghj"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 11
-[DEBUG] ✅ Found 0 resources for employer 11
-[DEBUG] [EmployerUIHelper::populateTable] Row 10 - ID: 12 Name: "Leila" "Jlassi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 12
-[DEBUG] ✅ Found 0 resources for employer 12
-[DEBUG] [EmployerUIHelper::populateTable] Row 11 - ID: 13 Name: "Ahmed" "Bouazizi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 13
-[DEBUG] ✅ Found 0 resources for employer 13
-[DEBUG] [EmployerUIHelper::populateTable] Row 12 - ID: 14 Name: "Sahar" "Masmoudi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 14
-[DEBUG] ✅ Found 0 resources for employer 14
-[DEBUG] [EmployerUIHelper::populateTable] Row 13 - ID: 15 Name: "Firas" "Belhaj"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 15
-[DEBUG] ✅ Found 0 resources for employer 15
-[DEBUG] [EmployerUIHelper::populateTable] Row 14 - ID: 16 Name: "Dorsaf" "Heni"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 16
-[DEBUG] ✅ Found 0 resources for employer 16
-[DEBUG] [EmployerUIHelper::populateTable] Row 15 - ID: 17 Name: "Karim" "Dridi"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 17
-[DEBUG] ✅ Found 0 resources for employer 17
-[DEBUG] [EmployerUIHelper::populateTable] Row 16 - ID: 18 Name: "Nada" "Jebali"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 18
-[DEBUG] ✅ Found 0 resources for employer 18
-[DEBUG] [EmployerUIHelper::populateTable] Row 17 - ID: 19 Name: "Hatemhhhhhhhhhhhhhhhhhhh" "Louati"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 19
-[DEBUG] ✅ Found 0 resources for employer 19
-[DEBUG] [EmployerUIHelper::populateTable] Row 18 - ID: 20 Name: "bjhbgh" "ghghgh"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 20
-[DEBUG] ✅ Found 0 resources for employer 20
-[DEBUG] [EmployerUIHelper::populateTable] Row 19 - ID: 24 Name: "mm" "mm"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 24
-[DEBUG] ✅ Found 0 resources for employer 24
-[DEBUG] [EmployerUIHelper::populateTable] Row 20 - ID: 25 Name: "jjjj" "jjjjjj"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 25
-[DEBUG] ✅ Found 0 resources for employer 25
-[DEBUG] [EmployerUIHelper::populateTable] Row 21 - ID: 26 Name: "llll" "llll"
-[DEBUG] [EmployerUIHelper::populateTable] Storing ID in UserRole: 26
-[DEBUG] ✅ Found 0 resources for employer 26
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] CALLED
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Table has 22 rows
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] currentRow(): 21
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Selected row: 21
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data type: qlonglong
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data value: QVariant(qlonglong, 26)
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Extracted ID: 26
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Returning ID: 26 valid: true
-[DEBUG] [EmployerUIHelper::populateTable] Table populated successfully
-[DEBUG] [MainWindow::loadEmployers] Updating button states...
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] CALLED
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Table has 22 rows
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] currentRow(): 21
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Selected row: 21
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data type: qlonglong
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] UserRole data value: QVariant(qlonglong, 26)
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Extracted ID: 26
-[DEBUG] [EmployerUIHelper::getSelectedEmployerId] Returning ID: 26 valid: true
-[DEBUG] [MainWindow::loadEmployers] ========== LOAD COMPLETE ==========
-
-[DEBUG] ========== MODIFY EMPLOYER COMPLETED ==========
-
+[DEBUG] [RessourceWidget::loadRessources] Retrieved 1 resources from DB
+[DEBUG] [RessourceWidget::loadRessources] Clearing table...
+[DEBUG] [RessourceWidget::loadRessources] Table headers set
+[DEBUG] [RessourceWidget::loadRessources] Populating table with 1 rows...
+[DEBUG] [RessourceWidget::loadRessources] Row 0 - ID: 2 Title: "aaa"
+[DEBUG] [RessourceWidget::loadRessources] ✅ Table population COMPLETE
+[DEBUG] [RessourceWidget::loadRessources] Table now has 1 rows
+[DEBUG] ================================================

@@ -1,0 +1,10 @@
+../release/obj/main.o
+../release/obj/mainwindow.o
+../release/obj/ressourcewidget.o
+../release/obj/connection.o
+../release/obj/employer.o
+../release/obj/client.o
+../release/obj/ressource.o
+../release/obj/qrc_resources.o
+../release/obj/moc_mainwindow.o
+../release/obj/moc_ressourcewidget.o

@@ -32,7 +32,6 @@ class Ui_EmployerForm
 public:
     QVBoxLayout *verticalLayout;
     QLabel *titleLabel;
-    QLabel *introLabel;
     QLabel *errorLabel;
     QHBoxLayout *mainLayout;
     QVBoxLayout *formLayout_main;
@@ -56,41 +55,42 @@ public:
     QHBoxLayout *avatarLayout;
     QLineEdit *avatarLineEdit;
     QPushButton *browseAvatarButton;
-    QSpacerItem *verticalSpacer;
-    QVBoxLayout *avatarLayout_2;
     QLabel *avatarPreviewLabel;
+    QVBoxLayout *avatarLayout_2;
     QLabel *resourceLabel;
     QListWidget *resourceListWidget;
     QHBoxLayout *resourceButtonLayout;
     QPushButton *addResourceButton;
     QPushButton *removeResourceButton;
+    QLabel *projectLabel;
+    QListWidget *projectListWidget;
+    QHBoxLayout *projectButtonLayout;
+    QPushButton *addProjectButton;
+    QPushButton *removeProjectButton;
     QDialogButtonBox *buttonBox;
+    QSpacerItem *verticalSpacer_3;
+    QSpacerItem *verticalSpacer_2;
 
     void setupUi(QDialog *EmployerForm)
     {
         if (EmployerForm->objectName().isEmpty())
             EmployerForm->setObjectName("EmployerForm");
-        EmployerForm->setMinimumSize(QSize(700, 800));
+        EmployerForm->resize(980, 700);
+        EmployerForm->setMinimumSize(QSize(900, 680));
         verticalLayout = new QVBoxLayout(EmployerForm);
-        verticalLayout->setSpacing(12);
+        verticalLayout->setSpacing(2);
         verticalLayout->setObjectName("verticalLayout");
-        verticalLayout->setContentsMargins(16, 16, 16, 16);
+        verticalLayout->setContentsMargins(2, 2, 2, 2);
         titleLabel = new QLabel(EmployerForm);
         titleLabel->setObjectName("titleLabel");
-        titleLabel->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter);
+        titleLabel->setAlignment(Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter);
 
         verticalLayout->addWidget(titleLabel);
-
-        introLabel = new QLabel(EmployerForm);
-        introLabel->setObjectName("introLabel");
-        introLabel->setWordWrap(true);
-
-        verticalLayout->addWidget(introLabel);
 
         errorLabel = new QLabel(EmployerForm);
         errorLabel->setObjectName("errorLabel");
         errorLabel->setStyleSheet(QString::fromUtf8("QLabel { color: #c82333; }"));
-        errorLabel->setAlignment(Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop);
+        errorLabel->setAlignment(Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop);
         errorLabel->setWordWrap(true);
 
         verticalLayout->addWidget(errorLabel);
@@ -106,7 +106,7 @@ public:
 
         formLayout = new QFormLayout();
         formLayout->setObjectName("formLayout");
-        formLayout->setLabelAlignment(Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter);
+        formLayout->setLabelAlignment(Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter);
         firstNameLabel = new QLabel(EmployerForm);
         firstNameLabel->setObjectName("firstNameLabel");
 
@@ -181,7 +181,7 @@ public:
 
         passwordLineEdit = new QLineEdit(EmployerForm);
         passwordLineEdit->setObjectName("passwordLineEdit");
-        passwordLineEdit->setEchoMode(QLineEdit::Password);
+        passwordLineEdit->setEchoMode(QLineEdit::EchoMode::Password);
 
         formLayout->setWidget(6, QFormLayout::FieldRole, passwordLineEdit);
 
@@ -206,28 +206,24 @@ public:
 
         formLayout->setLayout(7, QFormLayout::FieldRole, avatarLayout);
 
+        avatarPreviewLabel = new QLabel(EmployerForm);
+        avatarPreviewLabel->setObjectName("avatarPreviewLabel");
+        avatarPreviewLabel->setMinimumSize(QSize(180, 180));
+        avatarPreviewLabel->setMaximumSize(QSize(180, 180));
+        avatarPreviewLabel->setStyleSheet(QString::fromUtf8("QLabel { border: 2px solid #ccc; border-radius: 0px; background-color: #f5f5f5; }"));
+        avatarPreviewLabel->setFrameShape(QFrame::Shape::StyledPanel);
+        avatarPreviewLabel->setAlignment(Qt::AlignmentFlag::AlignCenter);
+
+        formLayout->setWidget(8, QFormLayout::FieldRole, avatarPreviewLabel);
+
 
         formLayout_main->addLayout(formLayout);
-
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
-
-        formLayout_main->addItem(verticalSpacer);
 
 
         mainLayout->addLayout(formLayout_main);
 
         avatarLayout_2 = new QVBoxLayout();
         avatarLayout_2->setObjectName("avatarLayout_2");
-        avatarPreviewLabel = new QLabel(EmployerForm);
-        avatarPreviewLabel->setObjectName("avatarPreviewLabel");
-        avatarPreviewLabel->setMinimumSize(QSize(300, 300));
-        avatarPreviewLabel->setMaximumSize(QSize(300, 300));
-        avatarPreviewLabel->setStyleSheet(QString::fromUtf8("QLabel { border: 2px solid #ccc; border-radius: 0px; background-color: #f5f5f5; }"));
-        avatarPreviewLabel->setFrameShape(QFrame::StyledPanel);
-        avatarPreviewLabel->setAlignment(Qt::AlignCenter);
-
-        avatarLayout_2->addWidget(avatarPreviewLabel);
-
         resourceLabel = new QLabel(EmployerForm);
         resourceLabel->setObjectName("resourceLabel");
 
@@ -235,7 +231,7 @@ public:
 
         resourceListWidget = new QListWidget(EmployerForm);
         resourceListWidget->setObjectName("resourceListWidget");
-        resourceListWidget->setMinimumSize(QSize(280, 120));
+        resourceListWidget->setMinimumSize(QSize(220, 90));
 
         avatarLayout_2->addWidget(resourceListWidget);
 
@@ -254,6 +250,32 @@ public:
 
         avatarLayout_2->addLayout(resourceButtonLayout);
 
+        projectLabel = new QLabel(EmployerForm);
+        projectLabel->setObjectName("projectLabel");
+
+        avatarLayout_2->addWidget(projectLabel);
+
+        projectListWidget = new QListWidget(EmployerForm);
+        projectListWidget->setObjectName("projectListWidget");
+        projectListWidget->setMinimumSize(QSize(220, 90));
+
+        avatarLayout_2->addWidget(projectListWidget);
+
+        projectButtonLayout = new QHBoxLayout();
+        projectButtonLayout->setObjectName("projectButtonLayout");
+        addProjectButton = new QPushButton(EmployerForm);
+        addProjectButton->setObjectName("addProjectButton");
+
+        projectButtonLayout->addWidget(addProjectButton);
+
+        removeProjectButton = new QPushButton(EmployerForm);
+        removeProjectButton->setObjectName("removeProjectButton");
+
+        projectButtonLayout->addWidget(removeProjectButton);
+
+
+        avatarLayout_2->addLayout(projectButtonLayout);
+
 
         mainLayout->addLayout(avatarLayout_2);
 
@@ -262,10 +284,18 @@ public:
 
         buttonBox = new QDialogButtonBox(EmployerForm);
         buttonBox->setObjectName("buttonBox");
-        buttonBox->setOrientation(Qt::Horizontal);
-        buttonBox->setStandardButtons(QDialogButtonBox::Cancel|QDialogButtonBox::Ok);
+        buttonBox->setOrientation(Qt::Orientation::Horizontal);
+        buttonBox->setStandardButtons(QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok);
 
         verticalLayout->addWidget(buttonBox);
+
+        verticalSpacer_3 = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
+
+        verticalLayout->addItem(verticalSpacer_3);
+
+        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Policy::Minimum, QSizePolicy::Policy::Expanding);
+
+        verticalLayout->addItem(verticalSpacer_2);
 
 
         retranslateUi(EmployerForm);
@@ -279,7 +309,6 @@ public:
     {
         EmployerForm->setWindowTitle(QCoreApplication::translate("EmployerForm", "Employer", nullptr));
         titleLabel->setText(QCoreApplication::translate("EmployerForm", "Employer Details", nullptr));
-        introLabel->setText(QCoreApplication::translate("EmployerForm", "Fill in the employer information. Fields marked with * are required.", nullptr));
         errorLabel->setText(QString());
         label_info->setText(QCoreApplication::translate("EmployerForm", "Personal Information", nullptr));
         firstNameLabel->setText(QCoreApplication::translate("EmployerForm", "First Name *", nullptr));
@@ -308,6 +337,9 @@ public:
         resourceLabel->setText(QCoreApplication::translate("EmployerForm", "Assigned Resources", nullptr));
         addResourceButton->setText(QCoreApplication::translate("EmployerForm", "Add Resource", nullptr));
         removeResourceButton->setText(QCoreApplication::translate("EmployerForm", "Remove", nullptr));
+        projectLabel->setText(QCoreApplication::translate("EmployerForm", "Assigned Projects", nullptr));
+        addProjectButton->setText(QCoreApplication::translate("EmployerForm", "Add Project", nullptr));
+        removeProjectButton->setText(QCoreApplication::translate("EmployerForm", "Remove", nullptr));
     } // retranslateUi
 
 };

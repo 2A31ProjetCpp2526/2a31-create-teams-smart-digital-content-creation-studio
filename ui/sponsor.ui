@@ -6,623 +6,824 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1200</width>
-    <height>800</height>
+    <width>1439</width>
+    <height>703</height>
    </rect>
   </property>
+  <property name="windowTitle">
+   <string>Sponsor Management</string>
+  </property>
   <property name="styleSheet">
-   <string>QMainWindow {
-    background-color: #f8f9fa;
-    font-family: 'Segoe UI', Arial, sans-serif;
-}
-
-QTabWidget::pane {
-    border: 1px solid #e1e8ed;
-    border-radius: 8px;
-    background-color: #ffffff;
-    margin-top: 4px;
-}
-
-QTabWidget::tab-bar {
-    alignment: left;
-}
-
-QTabBar::tab {
-    background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
-    border-bottom: none;
-    border-radius: 6px 6px 0 0;
-    padding: 12px 20px;
-    margin-right: 2px;
-    font-weight: 700; /* make tab text bold */
-    color: #495057;
-    font-size: 14px;
-    min-width: 100px;
+   <string notr="true"/>
+  </property>
+  <widget class="QWidget" name="centralwidget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>20</y>
+     <width>1431</width>
+     <height>741</height>
+    </rect>
+   </property>
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>10</y>
+      <width>1431</width>
+      <height>671</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QTabBar::tab {
+    background: white;             /* white background */
+    color: black;                  /* black text */
+    padding: 8px 20px;
+    border: 1px solid #ccc;        /* light gray border */
+    border-radius: 5px;           /* rounded rectangle */
+    margin: 3px;
 }
 
 QTabBar::tab:selected {
-    background-color: #ffffff;
-    color: #007bff;
-    border-color: #007bff;
-    border-bottom: 1px solid #ffffff;
+    background: #f0f0f0;           /* light gray when active */
+    font-weight: bold;
+    border: 1px solid #999; 
+border-bottom: 3px solid #2c3e50;       /* darker border for selected */
 }
 
-QTableWidget {
-    gridline-color: #e9ecef;
-    background-color: #ffffff;
-    alternate-background-color: #f8f9fa;
-    border: 1px solid #dee2e6;
+QTabBar::tab:hover {
+    background: #e6e6e6;           /* hover effect */
+}
+
+QTabWidget::pane {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-top: 5px;
+    background: white;
+}
+</string>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>🌐Display</string>
+     </attribute>
+     <widget class="QTableWidget" name="affiche">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>130</y>
+        <width>1161</width>
+        <height>391</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QTableWidget {
+    background-color: #f2f2f2;   /* gris très clair, proche du blanc */
+    gridline-color: #bdc3c7;     /* couleur des lignes */
+    font: 11pt &quot;Segoe UI&quot;;
+    color: #000000;              /* texte en noir */
+    selection-background-color: #3498db; /* fond bleu quand sélectionné */
+    selection-color: #ffffff;    /* texte blanc quand sélectionné */
+    border: 2px solid #3498db;
     border-radius: 6px;
 }
 
 QTableWidget::item {
-    padding: 8px;
-    border-bottom: 1px solid #e9ecef;
-}
-
-QTableWidget::item:selected {
-    background-color: #e3f2fd;
-    color: #1976d2;
+    background-color: #f2f2f2; /* gris clair pour chaque cellule */
+    color: #000000;            /* texte noir dans les cellules */
 }
 
 QHeaderView::section {
-    background-color: #f1f3f4;
-    padding: 10px;
+    background-color: #2c3e50;   /* fond des en-têtes */
+    color: #ffffff;              /* texte blanc dans les titres */
+    font-weight: bold;
+    padding: 6px;
     border: none;
-    border-bottom: 2px solid #007bff;
-    font-weight: 600;
-    color: #495057;
 }
 
-QPushButton {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-weight: 600;
-    font-size: 14px;
-}
-
-/* Service Management Button Colors */
-QPushButton#exportCsvBtn {
-    background-color: #28a745;
-    color: white;
-}
-
-QPushButton#exportCsvBtn:hover {
-    background-color: #218838;
-}
-
-QPushButton#btnSortByName {
-    background-color: #17a2b8;
-    color: white;
-}
-
-QPushButton#btnSortByName:hover {
-    background-color: #138496;
-}
-
-QPushButton#btnEditService {
-    /* Modified to match reference: yellow/golden modify button */
-    background-color: #f5b400;
-    color: white;
-    font-weight: 600;
-    border-radius: 10px;
-    padding: 10px 20px;
-}
-
-QPushButton#btnEditService:hover {
-    background-color: #e0a800;
-}
-
-QPushButton#btnEditService:disabled {
-    background-color: #6c757d;
-    color: #ffffff;
-}
-
-QPushButton#btnDeleteService {
-    background-color: #e53935;
-    color: white;
-    border-radius: 10px;
-    padding: 10px 20px;
-}
-
-QPushButton#btnDeleteService:hover {
-    background-color: #c62828;
-}
-
-QPushButton#btnDeleteService:disabled {
-    background-color: #6c757d;
-    color: #ffffff;
-}
-
-/* updateClientBtn removed from UI (Modify button removed from Clients tab) */
-
-QLineEdit, QTextEdit, QComboBox {
-    padding: 8px 12px;
-    border: 2px solid #d0d7dd;
-    border-radius: 12px;
-    background-color: #ffffff;
-    color: #000000;
-    font-size: 14px;
-}
-
-QLineEdit:hover {
-    border: 2px solid #4da3ff;
+</string>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOn</enum>
+      </property>
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::SizeAdjustPolicy::AdjustToContents</enum>
+      </property>
+      <property name="autoScroll">
+       <bool>true</bool>
+      </property>
+      <column>
+       <property name="text">
+        <string>ID</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Nom </string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Date-D</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Date-F</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>E-Mail</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>Status</string>
+       </property>
+      </column>
+     </widget>
+     <widget class="QLineEdit" name="search1">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>60</y>
+        <width>361</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLineEdit {
+    border: 2px solid #3498db;   /* bleu dès le départ */
+    border-radius: 8px;
+    padding: 6px;
+    background-color: #ecf0f1;
+    font: 11pt &quot;Segoe UI&quot;;
+    color: #2c3e50;
 }
 
 QLineEdit:focus {
-    border: 2px solid #007bff;
-    outline: none;
-}
-
-QLabel {
-    color: #000000;
-    font-size: 14px;
-    font-weight: 500;
-}
-
-QLabel#headerTitle {
-    font-size: 24px;
-    font-weight: 700;
-    color: #000000;
-    padding: 20px 0;
-}
-QLabel#headerTitle:hover {
-    color: #1e88ff; /* light blue text on hover */
+    border: 2px solid #1d6fa5;   /* bleu plus foncé quand focus */
+    background-color: #ffffff;
 }
 </string>
-  </property>
-  <widget class="QWidget" name="centralwidget">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>20</y>
-     <width>1241</width>
-     <height>665</height>
-    </rect>
-   </property>
-   <layout class="QVBoxLayout" name="mainLayout">
-    <property name="spacing">
-     <number>20</number>
-    </property>
-    <property name="leftMargin">
-     <number>30</number>
-    </property>
-    <property name="topMargin">
-     <number>20</number>
-    </property>
-    <property name="rightMargin">
-     <number>30</number>
-    </property>
-    <property name="bottomMargin">
-     <number>20</number>
-    </property>
-    <item>
-     <widget class="QTabWidget" name="clientTabWidget">
-      <property name="currentIndex">
-       <number>1</number>
       </property>
-      <widget class="QWidget" name="serviceManagementTab">
-       <attribute name="icon">
-        <iconset resource="resources.qrc">
-         <normaloff>:/resources/icons/clients.svg</normaloff>:/resources/icons/clients.svg</iconset>
-       </attribute>
-       <attribute name="title">
-        <string>Sponsor Management</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="serviceManagementLayout">
-        <property name="spacing">
-         <number>15</number>
-        </property>
-        <property name="leftMargin">
-         <number>20</number>
-        </property>
-        <property name="topMargin">
-         <number>20</number>
-        </property>
-        <property name="rightMargin">
-         <number>20</number>
-        </property>
-        <property name="bottomMargin">
-         <number>20</number>
-        </property>
-        <item>
-         <widget class="QLabel" name="headerTitle">
-          <property name="text">
-           <string>Sponsor Management</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="topControlsLayout">
-          <item>
-           <widget class="QLineEdit" name="searchServices">
-            <property name="minimumSize">
-             <size>
-              <width>250</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="placeholderText">
-             <string>Search sponsor...</string>
-            </property>
-            <property name="clearButtonEnabled">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <spacer name="topControlsSpacer">
-            <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QPushButton" name="exportCsvBtn">
-            <property name="text">
-             <string>Export CSV</string>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/resources/icons/export.svg</normaloff>:/resources/icons/export.svg</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>16</width>
-              <height>16</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="btnSortByName">
-            <property name="text">
-             <string>Sort by Name</string>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/resources/icons/sort.svg</normaloff>:/resources/icons/sort.svg</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>16</width>
-              <height>16</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QTableWidget" name="clientsTable">
-          <property name="columnCount">
-           <number>4</number>
-          </property>
-          <column>
-           <property name="text">
-            <string>ID</string>
-           </property>
-           <property name="font">
-            <font>
-             <bold>true</bold>
-            </font>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Name</string>
-           </property>
-           <property name="font">
-            <font>
-             <bold>true</bold>
-            </font>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Email</string>
-           </property>
-           <property name="font">
-            <font>
-             <bold>true</bold>
-            </font>
-           </property>
-          </column>
-          <column>
-           <property name="text">
-            <string>Status</string>
-           </property>
-          </column>
-         </widget>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="serviceButtonsLayout">
-          <item>
-           <spacer name="serviceButtonsSpacer">
-            <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QPushButton" name="btnEditService">
-            <property name="text">
-             <string>Edit</string>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/resources/icons/modify.svg</normaloff>:/resources/icons/modify.svg</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>16</width>
-              <height>16</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="btnDeleteService">
-            <property name="text">
-             <string>Delete</string>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/resources/icons/delete.svg</normaloff>:/resources/icons/delete.svg</iconset>
-            </property>
-            <property name="iconSize">
-             <size>
-              <width>16</width>
-              <height>16</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="addTab">
-       <attribute name="icon">
-        <iconset resource="resources.qrc">
-         <normaloff>:/resources/icons/add.svg</normaloff>:/resources/icons/add.svg</iconset>
-       </attribute>
-       <attribute name="title">
-        <string>Add</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="addLayout">
-        <property name="spacing">
-         <number>15</number>
-        </property>
-        <property name="leftMargin">
-         <number>20</number>
-        </property>
-        <property name="topMargin">
-         <number>20</number>
-        </property>
-        <property name="rightMargin">
-         <number>20</number>
-        </property>
-        <property name="bottomMargin">
-         <number>20</number>
-        </property>
-        <item>
-         <widget class="QLabel" name="addLabel">
-          <property name="text">
-           <string>Add New Sponsor</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignmentFlag::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <layout class="QFormLayout" name="addFormLayout">
-          <item row="0" column="0">
-           <widget class="QLabel" name="addServiceIdLabel">
-            <property name="text">
-             <string>ID</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QLineEdit" name="addServiceIdEdit">
-            <property name="readOnly">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="addServiceNameLabel">
-            <property name="text">
-             <string>Name:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QLineEdit" name="addNameEdit"/>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="addServiceCategoryLabel">
-            <property name="text">
-             <string>Status</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="1">
-           <widget class="QComboBox" name="addCategoryCombo">
-            <item>
-             <property name="text">
-              <string>Active</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Maintenance</string>
-             </property>
-            </item>
-            <item>
-             <property name="text">
-              <string>Consulting</string>
-             </property>
-            </item>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="addServicePriceLabel">
-            <property name="text">
-             <string>Price:</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="1">
-           <widget class="QLineEdit" name="addPriceEdit"/>
-          </item>
-          <item row="4" column="1">
-           <widget class="QDateTimeEdit" name="addDateEdit">
-            <property name="displayFormat">
-             <string>yyyy-MM-dd HH:mm</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="addServiceDateLabel">
-            <property name="text">
-             <string>Date Created:</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="addButtonLayout">
-          <item>
-           <spacer name="addButtonSpacer">
-            <property name="orientation">
-             <enum>Qt::Orientation::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
-          <item>
-           <widget class="QPushButton" name="addServiceBtn">
-            <property name="text">
-             <string>Add</string>
-            </property>
-            <property name="icon">
-             <iconset resource="resources.qrc">
-              <normaloff>:/resources/icons/add.svg</normaloff>:/resources/icons/add.svg</iconset>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <spacer name="addVerticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Orientation::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="voiceChatTab">
-       <attribute name="icon">
-        <iconset resource="resources.qrc">
-         <normaloff>:/resources/icons/mail.svg</normaloff>:/resources/icons/mail.svg</iconset>
-       </attribute>
-       <attribute name="title">
-        <string>Automatic Email</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="voiceChatLayout">
-        <property name="spacing">
-         <number>15</number>
-        </property>
-        <property name="leftMargin">
-         <number>20</number>
-        </property>
-        <property name="topMargin">
-         <number>20</number>
-        </property>
-        <property name="rightMargin">
-         <number>20</number>
-        </property>
-        <property name="bottomMargin">
-         <number>20</number>
-        </property>
-        <item>
-         <layout class="QHBoxLayout" name="voiceControlLayout"/>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="modifyTab">
-       <attribute name="icon">
-        <iconset resource="resources.qrc">
-         <normaloff>:/resources/icons/chatbot.svg</normaloff>:/resources/icons/chatbot.svg</iconset>
-       </attribute>
-       <attribute name="title">
-        <string>Scheduling with Calendar</string>
-       </attribute>
-       <layout class="QVBoxLayout" name="modifyLayout">
-        <property name="spacing">
-         <number>15</number>
-        </property>
-        <property name="leftMargin">
-         <number>20</number>
-        </property>
-        <property name="topMargin">
-         <number>20</number>
-        </property>
-        <property name="rightMargin">
-         <number>20</number>
-        </property>
-        <property name="bottomMargin">
-         <number>20</number>
-        </property>
-       </layout>
-      </widget>
+      <property name="inputMask">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="placeholderText">
+       <string>Entrer ID a recherché</string>
+      </property>
      </widget>
-    </item>
-   </layout>
+     <widget class="QPushButton" name="search1_2">
+      <property name="geometry">
+       <rect>
+        <x>440</x>
+        <y>60</y>
+        <width>141</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #2a75b3; /* bleu foncé de base */
+    color: white;
+    border-radius: 10px;
+    padding: 8px 20px;
+    font-weight: bold;
+    border: none;
+}
+
+QPushButton:hover {
+    background-color: #28a745; /* vert au survol */
+}
+
+QPushButton:pressed {
+    background-color: #1e3f66; /* bleu encore plus foncé au clic */
+}
+</string>
+      </property>
+      <property name="text">
+       <string>🔍Search</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pdfexport">
+      <property name="geometry">
+       <rect>
+        <x>990</x>
+        <y>60</y>
+        <width>211</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #28a745; /* vert normal */
+    color: white;
+    border-radius: 10px;
+    padding: 8px 20px;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background-color: #218838; /* vert foncé quand souris dessus */
+}
+
+QPushButton:pressed {
+    background-color: #004080; /* bleu foncé quand on clique */
+}
+</string>
+      </property>
+      <property name="text">
+       <string>📥Exporter PDF</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="deleteButton">
+      <property name="geometry">
+       <rect>
+        <x>220</x>
+        <y>530</y>
+        <width>151</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #e74c3c; /* rouge normal */
+    color: white;
+    border-radius: 10px;
+    padding: 8px 20px;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background-color: #c0392b; /* rouge foncé quand souris dessus */
+}
+
+QPushButton:pressed {
+    background-color: #27ae60; /* vert quand on clique */
+}
+</string>
+      </property>
+      <property name="text">
+       <string>🗑Delete </string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>10</y>
+        <width>381</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 700 16pt &quot;Simplified Arabic&quot;;
+color: #000000</string>
+      </property>
+      <property name="text">
+       <string>Gestion Sposoring Management</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="sort">
+      <property name="geometry">
+       <rect>
+        <x>820</x>
+        <y>60</y>
+        <width>161</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #2a75b3; /* bleu foncé de base */
+    color: white;
+    border-radius: 10px;
+    padding: 8px 20px;
+    font-weight: bold;
+    border: none;
+}
+
+QPushButton:hover {
+    background-color: #28a745; /* vert au survol */
+}
+
+QPushButton:pressed {
+    background-color: #1e3f66; /* bleu encore plus foncé au clic */
+}
+</string>
+      </property>
+      <property name="text">
+       <string>🔄Sort by ID</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="afficherButton">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>530</y>
+        <width>151</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #e67e22; /* orange normal */
+    color: white;
+    border-radius: 10px;
+    padding: 8px 20px;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background-color: #d35400; /* orange foncé quand souris dessus */
+}
+
+QPushButton:pressed {
+    background-color: #ff0000; /* rouge pur quand on clique */
+}
+</string>
+      </property>
+      <property name="text">
+       <string>Afficher</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab">
+     <attribute name="title">
+      <string>➕Add</string>
+     </attribute>
+     <widget class="QLabel" name="label_7">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>270</y>
+        <width>131</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: #000000  /* texte noir */;
+
+font: 12pt &quot;MS Serif&quot;;
+</string>
+      </property>
+      <property name="text">
+       <string>Email</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_4">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>280</y>
+        <width>121</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: #000000  /* texte noir */;
+
+font: 12pt &quot;MS Serif&quot;;
+</string>
+      </property>
+      <property name="text">
+       <string>Date-Début</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>190</y>
+        <width>151</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: #000000  /* texte noir */;
+
+font: 12pt &quot;MS Serif&quot;;
+</string>
+      </property>
+      <property name="text">
+       <string>Nom-Sponsor</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>200</y>
+        <width>141</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: #000000  /* texte noir */;
+
+font: 12pt &quot;MS Serif&quot;;
+</string>
+      </property>
+      <property name="text">
+       <string>ID-SPONSOR</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="ID">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>190</y>
+        <width>171</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLineEdit {
+    border: 2px solid #3498db;   /* bleu dès le départ */
+    border-radius: 8px;
+    padding: 6px;
+    background-color: #ecf0f1;
+    font: 11pt &quot;Segoe UI&quot;;
+    color: #2c3e50;
+}
+
+QLineEdit:focus {
+    border: 2px solid #1d6fa5;   /* bleu plus foncé quand focus */
+    background-color: #ffffff;
+}
+</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="placeholderText">
+       <string>Entrez L'ID</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_5">
+      <property name="geometry">
+       <rect>
+        <x>470</x>
+        <y>350</y>
+        <width>111</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: #000000  /* texte noir */;
+
+font: 12pt &quot;MS Serif&quot;;
+</string>
+      </property>
+      <property name="text">
+       <string> Status :</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_9">
+      <property name="geometry">
+       <rect>
+        <x>40</x>
+        <y>350</y>
+        <width>201</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: #000000  /* texte noir */;
+
+font: 12pt &quot;MS Serif&quot;;
+</string>
+      </property>
+      <property name="text">
+       <string>Date-Fin</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="addButton">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>410</y>
+        <width>101</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #7DDE92; /* vert pastel cool */
+    color: white;
+    border-radius: 10px;
+    padding: 8px 20px;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background-color: #6CCB82; /* hover vert */
+}
+
+QPushButton:pressed {
+    background-color: #5BB56F; /* vert pressé */
+}
+</string>
+      </property>
+      <property name="text">
+       <string>➕ Add</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="Nom">
+      <property name="geometry">
+       <rect>
+        <x>660</x>
+        <y>190</y>
+        <width>271</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLineEdit {
+    border: 2px solid #3498db;   /* bleu dès le départ */
+    border-radius: 8px;
+    padding: 6px;
+    background-color: #ecf0f1;
+    font: 11pt &quot;Segoe UI&quot;;
+    color: #2c3e50;
+}
+
+QLineEdit:focus {
+    border: 2px solid #1d6fa5;   /* bleu plus foncé quand focus */
+    background-color: #ffffff;
+}
+</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="placeholderText">
+       <string>Entrez le Nom de Sponsor...</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="EM">
+      <property name="geometry">
+       <rect>
+        <x>660</x>
+        <y>260</y>
+        <width>271</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QLineEdit {
+    border: 2px solid #3498db;   /* bleu dès le départ */
+    border-radius: 8px;
+    padding: 6px;
+    background-color: #ecf0f1;
+    font: 11pt &quot;Segoe UI&quot;;
+    color: #2c3e50;
+}
+
+QLineEdit:focus {
+    border: 2px solid #1d6fa5;   /* bleu plus foncé quand focus */
+    background-color: #ffffff;
+}
+</string>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="placeholderText">
+       <string>Entrez l'Email</string>
+      </property>
+     </widget>
+     <widget class="QDateEdit" name="dd">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>280</y>
+        <width>194</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: #FFFF;  /* texte noir */</string>
+      </property>
+     </widget>
+     <widget class="QDateEdit" name="df">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>350</y>
+        <width>194</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: #FFFF;  /* texte noir */</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="STS">
+      <property name="geometry">
+       <rect>
+        <x>660</x>
+        <y>350</y>
+        <width>271</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: #FFFF  /* texte noir */;
+
+font: 12pt &quot;MS Serif&quot;;
+</string>
+      </property>
+      <property name="placeholderText">
+       <string/>
+      </property>
+      <item>
+       <property name="text">
+        <string>Selectionner...</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Active</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>Non Active</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QPushButton" name="updateButton">
+      <property name="geometry">
+       <rect>
+        <x>310</x>
+        <y>410</y>
+        <width>121</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #aee1f9;   /* bleu clair pastel */
+    color: #1b4f72;              /* bleu foncé lisible */
+    border-radius: 12px;
+    padding: 10px 22px;
+    font-weight: bold;
+    border: 2px solid #87cdee;   /* contour léger */
+}
+
+/* Hover – plus vif */
+QPushButton:hover {
+    background-color: #87cdee;   /* bleu un peu plus foncé */
+    border-color: #5ab3d6;
+}
+
+/* Pressed – effet enfoncé */
+QPushButton:pressed {
+    background-color: #74c0e3;   /* bleu plus soutenu */
+    border-color: #4c9fcf;
+}
+
+/* Optionnel : effet de transition */
+QPushButton {
+    transition: 0.25s;
+}
+</string>
+      </property>
+      <property name="text">
+       <string>✨Modify </string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="clear">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>410</y>
+        <width>111</width>
+        <height>51</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: #55efc4; /* vert menthe clair */
+    color: #2d3436;  /* texte foncé pour contraste */
+    border-radius: 10px;
+    padding: 8px 20px;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background-color: #2ecc71; /* vert plus appuyé */
+}
+
+QPushButton:pressed {
+    background-color: #27ae60; /* vert profond */
+}
+</string>
+      </property>
+      <property name="text">
+       <string>✨Clear</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>📊Gestion</string>
+     </attribute>
+     <widget class="QWidget" name="horizontalLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>10</y>
+        <width>541</width>
+        <height>581</height>
+       </rect>
+      </property>
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="calendrier">
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    background-color: #e67e22; /* orange normal */
+    color: white;
+    border-radius: 10px;
+    padding: 8px 20px;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background-color: #d35400; /* orange foncé quand souris dessus */
+}
+
+QPushButton:pressed {
+    background-color: #ff0000; /* rouge pur quand on clique */
+}
+</string>
+         </property>
+         <property name="text">
+          <string>📅Calendrier</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="Stat">
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    background-color: #0fff67; /* orange normal */
+    color: white;
+    border-radius: 10px;
+    padding: 8px 20px;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background-color: #d35400; /* orange foncé quand souris dessus */
+}
+
+QPushButton:pressed {
+    background-color: #ff0000; /* rouge pur quand on clique */
+}
+</string>
+         </property>
+         <property name="text">
+          <string>📊Stat</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1200</width>
+     <width>1718</width>
      <height>25</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuG_SPONSORING">
+    <property name="title">
+     <string>G SPONSORING</string>
+    </property>
+   </widget>
+   <addaction name="menuG_SPONSORING"/>
   </widget>
   <widget class="QStatusBar" name="statusbar">
    <property name="geometry">
@@ -635,8 +836,6 @@ QLabel#headerTitle:hover {
    </property>
   </widget>
  </widget>
- <resources>
-  <include location="resources.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

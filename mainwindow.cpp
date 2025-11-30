@@ -3740,26 +3740,39 @@ void MainWindow::onStatisticsClicked()
     QHBoxLayout *metricsRow = new QHBoxLayout();
     metricsRow->setSpacing(12);
 
-    auto createMetricCard = [&createCard](const QString &icon, const QString &title, const QString &accentColor) -> QPair<QFrame*, QLabel*> {
-        QFrame *card = createCard();
-        card->setMinimumSize(160, 100);
-        card->setMaximumHeight(110);
+    auto createMetricCard = [&createCard](const QString &icon, const QString &title, const QString &accentColor, const QString &gradientStart, const QString &gradientEnd) -> QPair<QFrame*, QLabel*> {
+        QFrame *card = new QFrame();
+        card->setMinimumSize(180, 110);
+        card->setMaximumHeight(120);
+        card->setStyleSheet(QString(R"(
+            QFrame {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:1, stop:0 %1, stop:1 %2);
+                border-radius: 14px;
+                border: none;
+            }
+        )").arg(gradientStart, gradientEnd));
+        
+        QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect();
+        shadow->setBlurRadius(15);
+        shadow->setColor(QColor(0, 0, 0, 40));
+        shadow->setOffset(0, 5);
+        card->setGraphicsEffect(shadow);
         
         QVBoxLayout *lay = new QVBoxLayout(card);
-        lay->setSpacing(6);
-        lay->setContentsMargins(15, 12, 15, 12);
+        lay->setSpacing(4);
+        lay->setContentsMargins(16, 14, 16, 14);
         
         QHBoxLayout *topRow = new QHBoxLayout();
         QLabel *iconLbl = new QLabel(icon);
-        iconLbl->setStyleSheet(QString("font-size: 24px; background: %1; padding: 6px; border-radius: 8px;").arg(accentColor));
+        iconLbl->setStyleSheet("font-size: 26px; background: rgba(255,255,255,0.2); padding: 6px; border-radius: 10px;");
         topRow->addWidget(iconLbl);
         topRow->addStretch();
         
         QLabel *titleLbl = new QLabel(title);
-        titleLbl->setStyleSheet("color: #7f8c8d; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; background: transparent;");
+        titleLbl->setStyleSheet("color: rgba(255,255,255,0.85); font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; background: transparent;");
         
         QLabel *valLbl = new QLabel("0");
-        valLbl->setStyleSheet("color: #1a1a2e; font-size: 32px; font-weight: 700; background: transparent;");
+        valLbl->setStyleSheet("color: white; font-size: 36px; font-weight: 800; background: transparent;");
         
         lay->addLayout(topRow);
         lay->addWidget(titleLbl);
@@ -3768,10 +3781,10 @@ void MainWindow::onStatisticsClicked()
         return qMakePair(card, valLbl);
     };
 
-    auto [card1, val1] = createMetricCard("👥", "TOTAL EMPLOYEES", "#e8f4fc");
-    auto [card2, val2] = createMetricCard("📅", "NEW THIS MONTH", "#e8fcf4");
-    auto [card3, val3] = createMetricCard("📊", "HIRES THIS YEAR", "#fce8e8");
-    auto [card4, val4] = createMetricCard("🏢", "DEPARTMENTS", "#f4e8fc");
+    auto [card1, val1] = createMetricCard("👥", "TOTAL EMPLOYEES", "#e8f4fc", "#667eea", "#764ba2");
+    auto [card2, val2] = createMetricCard("📅", "NEW THIS MONTH", "#e8fcf4", "#11998e", "#38ef7d");
+    auto [card3, val3] = createMetricCard("📊", "HIRES THIS YEAR", "#fce8e8", "#eb3349", "#f45c43");
+    auto [card4, val4] = createMetricCard("🏢", "DEPARTMENTS", "#f4e8fc", "#4facfe", "#00f2fe");
 
     metricsRow->addWidget(card1);
     metricsRow->addWidget(card2);
@@ -3947,7 +3960,7 @@ void MainWindow::onStatisticsClicked()
     monthlyLayout->setSpacing(15);
     monthlyLayout->setContentsMargins(15, 15, 15, 15);
 
-    // Area Chart Card
+    // Area Chart Card - Using Bar Chart for accurate month alignment
     QFrame *areaCard = createCard();
     QVBoxLayout *areaLay = new QVBoxLayout(areaCard);
     areaLay->setContentsMargins(15, 12, 15, 12);
@@ -3956,86 +3969,101 @@ void MainWindow::onStatisticsClicked()
     areaTitle->setStyleSheet("color: #1a1a2e; font-size: 14px; font-weight: 700; background: transparent;");
     areaLay->addWidget(areaTitle);
 
-    QLineSeries *lineSeries = new QLineSeries();
-    QLineSeries *lowerSeries = new QLineSeries();
+    QStringList months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     
+    // Use Bar Chart for accurate month-to-value alignment
+    QBarSet *monthlyBarSet = new QBarSet("Hires");
+    monthlyBarSet->setColor(QColor("#3498db"));
+    monthlyBarSet->setBorderColor(QColor("#2980b9"));
+    
+    int maxMonth = 1;
     for (int i = 1; i <= 12; ++i) {
-        lineSeries->append(i, stats.hiresPerMonth.value(i, 0));
-        lowerSeries->append(i, 0);
+        int val = stats.hiresPerMonth.value(i, 0);
+        *monthlyBarSet << val;
+        if (val > maxMonth) maxMonth = val;
     }
 
-    QAreaSeries *areaSeries = new QAreaSeries(lineSeries, lowerSeries);
-    areaSeries->setName("Monthly Hires");
-    
-    QLinearGradient gradient(QPointF(0, 0), QPointF(0, 1));
-    gradient.setColorAt(0.0, QColor(52, 152, 219, 180));
-    gradient.setColorAt(1.0, QColor(52, 152, 219, 40));
-    gradient.setCoordinateMode(QGradient::ObjectBoundingMode);
-    areaSeries->setBrush(gradient);
-    areaSeries->setPen(QPen(QColor("#3498db"), 2));
+    QBarSeries *monthlyBarSeries = new QBarSeries();
+    monthlyBarSeries->append(monthlyBarSet);
+    monthlyBarSeries->setBarWidth(0.6);
+    monthlyBarSeries->setLabelsVisible(true);
+    monthlyBarSeries->setLabelsPosition(QAbstractBarSeries::LabelsOutsideEnd);
+    monthlyBarSeries->setLabelsFormat("@value");
 
-    QChart *areaChart = new QChart();
-    areaChart->addSeries(areaSeries);
-    areaChart->setBackgroundVisible(false);
-    areaChart->legend()->setVisible(false);
-    areaChart->setAnimationOptions(QChart::SeriesAnimations);
-    areaChart->setAnimationDuration(1200);
+    QChart *monthlyChart = new QChart();
+    monthlyChart->addSeries(monthlyBarSeries);
+    monthlyChart->setBackgroundVisible(false);
+    monthlyChart->setMargins(QMargins(5, 5, 5, 5));
+    monthlyChart->legend()->setVisible(false);
+    monthlyChart->setAnimationOptions(QChart::SeriesAnimations);
+    monthlyChart->setAnimationDuration(1000);
 
-    QStringList months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
     QBarCategoryAxis *monthAxis = new QBarCategoryAxis();
     monthAxis->append(months);
     monthAxis->setLabelsColor(QColor("#2c3e50"));
     monthAxis->setGridLineVisible(false);
-    monthAxis->setLabelsFont(QFont("Segoe UI", 9));
-    areaChart->addAxis(monthAxis, Qt::AlignBottom);
-    areaSeries->attachAxis(monthAxis);
+    monthAxis->setLabelsFont(QFont("Segoe UI", 9, QFont::Bold));
+    monthlyChart->addAxis(monthAxis, Qt::AlignBottom);
+    monthlyBarSeries->attachAxis(monthAxis);
 
     QValueAxis *monthValueAxis = new QValueAxis();
     monthValueAxis->setLabelsColor(QColor("#2c3e50"));
-    monthValueAxis->setGridLineColor(QColor("#ecf0f1"));
+    monthValueAxis->setGridLineColor(QColor("#e8ecf1"));
     monthValueAxis->setLabelFormat("%d");
     monthValueAxis->setLabelsFont(QFont("Segoe UI", 9));
-    int maxMonth = 1;
-    for (int i = 1; i <= 12; ++i) {
-        if (stats.hiresPerMonth.value(i, 0) > maxMonth)
-            maxMonth = stats.hiresPerMonth.value(i, 0);
-    }
     monthValueAxis->setRange(0, maxMonth + 2);
-    areaChart->addAxis(monthValueAxis, Qt::AlignLeft);
-    areaSeries->attachAxis(monthValueAxis);
+    monthValueAxis->setTickCount(qMin(maxMonth + 3, 8));
+    monthlyChart->addAxis(monthValueAxis, Qt::AlignLeft);
+    monthlyBarSeries->attachAxis(monthValueAxis);
 
-    QChartView *areaView = new QChartView(areaChart);
-    areaView->setRenderHint(QPainter::Antialiasing);
-    areaView->setStyleSheet("background: transparent; border: none;");
-    areaView->setMinimumHeight(280);
-    areaLay->addWidget(areaView, 1);
+    QChartView *monthlyChartView = new QChartView(monthlyChart);
+    monthlyChartView->setRenderHint(QPainter::Antialiasing);
+    monthlyChartView->setStyleSheet("background: transparent; border: none;");
+    monthlyChartView->setMinimumHeight(320);
+    areaLay->addWidget(monthlyChartView, 1);
     monthlyLayout->addWidget(areaCard, 1);
 
-    // Monthly mini-cards
+    // Monthly summary cards - Enhanced style
     QFrame *monthCardsFrame = createCard();
     QHBoxLayout *monthCardsLay = new QHBoxLayout(monthCardsFrame);
-    monthCardsLay->setSpacing(6);
-    monthCardsLay->setContentsMargins(12, 10, 12, 10);
+    monthCardsLay->setSpacing(8);
+    monthCardsLay->setContentsMargins(15, 12, 15, 12);
+
+    // Calculate total for percentage
+    int totalMonthlyHires = 0;
+    for (int i = 1; i <= 12; ++i) {
+        totalMonthlyHires += stats.hiresPerMonth.value(i, 0);
+    }
 
     for (int i = 1; i <= 12; ++i) {
-        QWidget *mCard = new QWidget();
+        QFrame *mCard = new QFrame();
         int val = stats.hiresPerMonth.value(i, 0);
-        QString bgColor = val > 0 ? "#3498db" : "#ecf0f1";
-        QString txtColor = val > 0 ? "white" : "#2c3e50";
-        mCard->setStyleSheet(QString("background: %1; border-radius: 8px;").arg(bgColor));
-        mCard->setMinimumWidth(60);
-        mCard->setMaximumWidth(80);
+        
+        // Gradient blue for months with hires, light gray for zero
+        QString cardStyle;
+        QString txtColor;
+        if (val > 0) {
+            cardStyle = "background: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #3498db, stop:1 #2980b9); border-radius: 10px; border: 2px solid #2980b9;";
+            txtColor = "white";
+        } else {
+            cardStyle = "background: #f8f9fa; border-radius: 10px; border: 1px solid #e8ecf1;";
+            txtColor = "#7f8c8d";
+        }
+        mCard->setStyleSheet(cardStyle);
+        mCard->setMinimumWidth(70);
+        mCard->setMaximumWidth(85);
+        mCard->setMinimumHeight(65);
         
         QVBoxLayout *mLay = new QVBoxLayout(mCard);
-        mLay->setSpacing(2);
-        mLay->setContentsMargins(6, 8, 6, 8);
+        mLay->setSpacing(3);
+        mLay->setContentsMargins(8, 8, 8, 8);
         
         QLabel *mName = new QLabel(months[i-1]);
-        mName->setStyleSheet(QString("color: %1; font-size: 9px; font-weight: 600; background: transparent;").arg(txtColor));
+        mName->setStyleSheet(QString("color: %1; font-size: 10px; font-weight: 700; background: transparent; letter-spacing: 0.5px;").arg(txtColor));
         mName->setAlignment(Qt::AlignCenter);
         
         QLabel *mVal = new QLabel(QString::number(val));
-        mVal->setStyleSheet(QString("color: %1; font-size: 18px; font-weight: 700; background: transparent;").arg(txtColor));
+        mVal->setStyleSheet(QString("color: %1; font-size: 20px; font-weight: 800; background: transparent;").arg(txtColor));
         mVal->setAlignment(Qt::AlignCenter);
         
         mLay->addWidget(mName);

@@ -81,6 +81,20 @@
 #include <QVideoFrame>
 #include <algorithm>
 
+// Qt Charts for advanced statistics visualization
+#include <QtCharts/QChartView>
+#include <QtCharts/QPieSeries>
+#include <QtCharts/QPieSlice>
+#include <QtCharts/QBarSeries>
+#include <QtCharts/QBarSet>
+#include <QtCharts/QBarCategoryAxis>
+#include <QtCharts/QValueAxis>
+#include <QtCharts/QLineSeries>
+#include <QtCharts/QAreaSeries>
+#include <QtCharts/QSplineSeries>
+#include <QTabWidget>
+#include <QGraphicsDropShadowEffect>
+
 // =============================================================================
 // Helper Functions and Constants
 // =============================================================================
@@ -3565,598 +3579,817 @@ void MainWindow::onStatisticsClicked()
 {
     EmployerStatistics stats = Employer::computeStatistics();
 
+    // ========== DIALOG SETUP - Smaller, Centered, Light Theme ==========
     QDialog dlg(this);
-    dlg.setWindowTitle(tr("📊 Employee Statistics Dashboard"));
+    dlg.setWindowTitle(tr("Employee Statistics Dashboard"));
     dlg.setModal(true);
-    dlg.setMinimumSize(1400, 1200);
-    dlg.resize(1400, 1200);
-    dlg.setStyleSheet(
-        "QDialog { "
-        "    background-color: #ffffff; "
-        "    border: 1px solid #e0e0e0; "
-        "} "
-        "QScrollArea { "
-        "    background-color: #ffffff; "
-        "    border: none; "
-        "} "
-        "QScrollBar:vertical { "
-        "    width: 10px; "
-        "    background-color: #f5f5f5; "
-        "} "
-        "QScrollBar::handle:vertical { "
-        "    background-color: #bbb; "
-        "    border-radius: 5px; "
-        "} "
-        "QScrollBar::handle:vertical:hover { "
-        "    background-color: #999; "
-        "}"
-    );
+    dlg.setFixedSize(1200, 720);  // Reduced size (25-30% smaller)
+    
+    // Center the dialog on screen
+    dlg.move(this->geometry().center() - dlg.rect().center());
+    
+    // Light theme stylesheet - BLACK text, WHITE background, BLUE accents
+    dlg.setStyleSheet(R"(
+        QDialog {
+            background-color: #f5f7fa;
+            border-radius: 16px;
+        }
+        QTabWidget::pane {
+            border: none;
+            background: transparent;
+        }
+        QTabBar::tab {
+            background: #e8ecf1;
+            color: #2c3e50;
+            padding: 10px 20px;
+            margin-right: 4px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            font-weight: 600;
+            font-size: 12px;
+        }
+        QTabBar::tab:selected {
+            background: #3498db;
+            color: white;
+        }
+        QTabBar::tab:hover:!selected {
+            background: #d5dce4;
+        }
+        QScrollArea {
+            background: transparent;
+            border: none;
+        }
+        QScrollBar:vertical {
+            width: 8px;
+            background: #e8ecf1;
+            border-radius: 4px;
+        }
+        QScrollBar::handle:vertical {
+            background: #bdc3c7;
+            border-radius: 4px;
+            min-height: 30px;
+        }
+        QScrollBar::handle:vertical:hover {
+            background: #95a5a6;
+        }
+        QScrollBar::add-line:vertical, QScrollBar::sub-line:vertical {
+            height: 0px;
+        }
+        QLabel {
+            color: #2c3e50;
+        }
+    )");
 
     QVBoxLayout *mainLayout = new QVBoxLayout(&dlg);
-    mainLayout->setSpacing(6);
-    mainLayout->setContentsMargins(20, 10, 20, 15);
+    mainLayout->setSpacing(0);
+    mainLayout->setContentsMargins(20, 15, 20, 15);
 
-    // ===== HEADER =====
-    QLabel *headerTitle = new QLabel(tr("📊 Employee Statistics Dashboard"));
-    headerTitle->setStyleSheet(
-        "font-size: 20px; "
-        "font-weight: bold; "
-        "color: #1a1a1a; "
-        "font-family: 'Poppins'; "
-        "margin-bottom: 0px;"
-    );
-    mainLayout->addWidget(headerTitle);
+    // ========== HEADER - Clean Summary Style ==========
+    QWidget *headerWidget = new QWidget();
+    headerWidget->setStyleSheet("background: white; border-radius: 12px;");
+    headerWidget->setFixedHeight(70);
+    
+    QGraphicsDropShadowEffect *headerShadow = new QGraphicsDropShadowEffect();
+    headerShadow->setBlurRadius(15);
+    headerShadow->setColor(QColor(0, 0, 0, 30));
+    headerShadow->setOffset(0, 4);
+    headerWidget->setGraphicsEffect(headerShadow);
+    
+    QHBoxLayout *headerLayout = new QHBoxLayout(headerWidget);
+    headerLayout->setContentsMargins(20, 12, 20, 12);
 
+    QLabel *headerIcon = new QLabel("📊");
+    headerIcon->setStyleSheet("font-size: 28px; background: transparent;");
+    
+    QVBoxLayout *titleLayout = new QVBoxLayout();
+    titleLayout->setSpacing(2);
+    
+    QLabel *headerTitle = new QLabel(tr("Employee Statistics Dashboard"));
+    headerTitle->setStyleSheet("font-size: 18px; font-weight: 700; color: #1a1a2e; background: transparent;");
+    
     QLabel *subHeader = new QLabel(tr("Comprehensive employee analytics and insights"));
-    subHeader->setStyleSheet("font-size: 9px; color: #888888; margin-bottom: 2px;");
-    mainLayout->addWidget(subHeader);
+    subHeader->setStyleSheet("font-size: 11px; color: #7f8c8d; background: transparent;");
+    
+    titleLayout->addWidget(headerTitle);
+    titleLayout->addWidget(subHeader);
+    
+    headerLayout->addWidget(headerIcon);
+    headerLayout->addLayout(titleLayout);
+    headerLayout->addStretch();
 
-    // ===== SCROLL AREA FOR ALL CONTENT =====
-    QScrollArea *scrollArea = new QScrollArea();
-    scrollArea->setWidgetResizable(true);
-    scrollArea->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    scrollArea->setStyleSheet(
-        "QScrollArea { border: none; background-color: #ffffff; } "
-        "QScrollBar:vertical { width: 12px; background-color: #f5f5f5; } "
-        "QScrollBar::handle:vertical { background-color: #ccc; border-radius: 6px; min-height: 20px; } "
-        "QScrollBar::handle:vertical:hover { background-color: #999; } "
-        "QScrollBar::add-line:vertical { border: none; background: none; } "
-        "QScrollBar::sub-line:vertical { border: none; background: none; }"
-    );
-    QWidget *scrollWidget = new QWidget();
-    scrollWidget->setStyleSheet("background-color: #ffffff;");
-    QVBoxLayout *scrollLayout = new QVBoxLayout(scrollWidget);
-    scrollLayout->setSpacing(10);
-    scrollLayout->setContentsMargins(0, 0, 0, 0);
+    // Close button
+    QPushButton *closeBtn = new QPushButton("✕");
+    closeBtn->setFixedSize(32, 32);
+    closeBtn->setCursor(Qt::PointingHandCursor);
+    closeBtn->setStyleSheet(R"(
+        QPushButton {
+            background: #ecf0f1;
+            color: #7f8c8d;
+            border: none;
+            border-radius: 16px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        QPushButton:hover {
+            background: #e74c3c;
+            color: white;
+        }
+    )");
+    connect(closeBtn, &QPushButton::clicked, &dlg, &QDialog::accept);
+    headerLayout->addWidget(closeBtn);
 
-    // ===== ROW 1: KEY METRICS CARDS =====
-    QHBoxLayout *row1 = new QHBoxLayout();
-    row1->setSpacing(10);
+    mainLayout->addWidget(headerWidget);
+    mainLayout->addSpacing(12);
 
-    // Card creation lambda - WHITE gradients with BLACK text for visibility
-    auto createMetricCard = [](const QString &emoji, const QString &title, int minHeight, const QString &color1, const QString &color2) -> QPair<QWidget*, QLabel*> {
-        QWidget *card = new QWidget();
-        card->setStyleSheet(QString(
-            "QWidget { background: linear-gradient(135deg, %1 0%, %2 100%); border-radius: 10px; }"
-        ).arg(color1, color2));
-        card->setMinimumHeight(minHeight);
+    // ========== TAB WIDGET ==========
+    QTabWidget *tabWidget = new QTabWidget();
+    tabWidget->setDocumentMode(true);
+    mainLayout->addWidget(tabWidget, 1);
+
+    // Lambda to create styled card frames
+    auto createCard = [](const QString &title = QString()) -> QFrame* {
+        QFrame *card = new QFrame();
+        card->setStyleSheet(R"(
+            QFrame {
+                background: white;
+                border-radius: 12px;
+                border: 1px solid #e8ecf1;
+            }
+            QFrame:hover {
+                border: 1px solid #3498db;
+            }
+        )");
+        QGraphicsDropShadowEffect *shadow = new QGraphicsDropShadowEffect();
+        shadow->setBlurRadius(10);
+        shadow->setColor(QColor(0, 0, 0, 20));
+        shadow->setOffset(0, 3);
+        card->setGraphicsEffect(shadow);
+        return card;
+    };
+
+    // ==========================================
+    // TAB 1: SUMMARY (Overview)
+    // ==========================================
+    QWidget *summaryTab = new QWidget();
+    summaryTab->setStyleSheet("background: transparent;");
+    QVBoxLayout *summaryLayout = new QVBoxLayout(summaryTab);
+    summaryLayout->setSpacing(15);
+    summaryLayout->setContentsMargins(15, 15, 15, 15);
+
+    // --- KEY METRICS ROW ---
+    QHBoxLayout *metricsRow = new QHBoxLayout();
+    metricsRow->setSpacing(12);
+
+    auto createMetricCard = [&createCard](const QString &icon, const QString &title, const QString &accentColor) -> QPair<QFrame*, QLabel*> {
+        QFrame *card = createCard();
+        card->setMinimumSize(160, 100);
+        card->setMaximumHeight(110);
         
         QVBoxLayout *lay = new QVBoxLayout(card);
-        lay->setSpacing(4);
-        lay->setContentsMargins(14, 12, 14, 12);
+        lay->setSpacing(6);
+        lay->setContentsMargins(15, 12, 15, 12);
         
-        QLabel *titleLbl = new QLabel(emoji + "  " + title);
-        titleLbl->setStyleSheet(
-            "color: #000000; "
-            "font-size: 10px; "
-            "font-weight: 600; "
-            "text-transform: uppercase; "
-            "letter-spacing: 0.5px;"
-        );
+        QHBoxLayout *topRow = new QHBoxLayout();
+        QLabel *iconLbl = new QLabel(icon);
+        iconLbl->setStyleSheet(QString("font-size: 24px; background: %1; padding: 6px; border-radius: 8px;").arg(accentColor));
+        topRow->addWidget(iconLbl);
+        topRow->addStretch();
         
-        QLabel *valLbl = new QLabel("—");
-        valLbl->setStyleSheet(
-            "color: #000000; "
-            "font-size: 36px; "
-            "font-weight: 700; "
-            "margin-top: 2px;"
-        );
+        QLabel *titleLbl = new QLabel(title);
+        titleLbl->setStyleSheet("color: #7f8c8d; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; background: transparent;");
         
+        QLabel *valLbl = new QLabel("0");
+        valLbl->setStyleSheet("color: #1a1a2e; font-size: 32px; font-weight: 700; background: transparent;");
+        
+        lay->addLayout(topRow);
         lay->addWidget(titleLbl);
         lay->addWidget(valLbl);
-        lay->addStretch();
         
         return qMakePair(card, valLbl);
     };
 
-    auto [c1, c1Val] = createMetricCard("👥", "Total Employees", 130, "#e8f4f8", "#f0e8ff");
-    row1->addWidget(c1);
+    auto [card1, val1] = createMetricCard("👥", "TOTAL EMPLOYEES", "#e8f4fc");
+    auto [card2, val2] = createMetricCard("📅", "NEW THIS MONTH", "#e8fcf4");
+    auto [card3, val3] = createMetricCard("📊", "HIRES THIS YEAR", "#fce8e8");
+    auto [card4, val4] = createMetricCard("🏢", "DEPARTMENTS", "#f4e8fc");
 
-    auto [c3, c3Val] = createMetricCard("📅", "New This Month", 130, "#e8f8f0", "#f0f8e8");
-    row1->addWidget(c3);
+    metricsRow->addWidget(card1);
+    metricsRow->addWidget(card2);
+    metricsRow->addWidget(card3);
+    metricsRow->addWidget(card4);
+    summaryLayout->addLayout(metricsRow);
 
-    auto [c4, c4Val] = createMetricCard("📊", "Total Hires This Year", 130, "#f8e8e8", "#f8f0e8");
-    row1->addWidget(c4);
+    // --- CHARTS ROW ---
+    QHBoxLayout *chartsRow = new QHBoxLayout();
+    chartsRow->setSpacing(15);
 
-    scrollLayout->addLayout(row1);
+    // === PIE CHART: Role Distribution (Donut) ===
+    QFrame *pieCard = createCard();
+    QVBoxLayout *pieLay = new QVBoxLayout(pieCard);
+    pieLay->setContentsMargins(15, 12, 15, 12);
 
-    // ===== ROW 2: DEPARTMENTS ONLY =====
-    QHBoxLayout *row2 = new QHBoxLayout();
-    row2->setSpacing(10);
+    QLabel *pieTitle = new QLabel("🎯 Role Distribution");
+    pieTitle->setStyleSheet("color: #1a1a2e; font-size: 14px; font-weight: 700; background: transparent;");
+    pieLay->addWidget(pieTitle);
 
-    // Departments Card
-    auto [deptCard, deptVal] = [&]() {
-        QWidget *card = new QWidget();
-        card->setStyleSheet("background: linear-gradient(135deg, #f8e8e8 0%, #f8f0e8 100%); border-radius: 10px;");
-        card->setMinimumHeight(130);
-        QVBoxLayout *lay = new QVBoxLayout(card);
-        lay->setSpacing(4);
-        lay->setContentsMargins(14, 12, 14, 12);
-        
-        QLabel *title = new QLabel("🏢  Departments");
-        title->setStyleSheet("color: #000000; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;");
-        
-        QLabel *val = new QLabel("—");
-        val->setStyleSheet("color: #000000; font-size: 36px; font-weight: 700; margin-top: 2px;");
-        
-        lay->addWidget(title);
-        lay->addWidget(val);
-        lay->addStretch();
-        
-        return std::make_pair(card, val);
-    }();
-    row2->addWidget(deptCard);
-    row2->addStretch();
-
-    scrollLayout->addLayout(row2);
-
-    // ===== HIRING BY MONTH (CURRENT YEAR) =====
-    QLabel *monthTitle = new QLabel("📅  Hiring by Month (Current Year)");
-    monthTitle->setStyleSheet("font-size: 12px; font-weight: 700; color: #1a1a1a; margin-top: 4px;");
-    scrollLayout->addWidget(monthTitle);
-
-    QHBoxLayout *monthsLay = new QHBoxLayout();
-    monthsLay->setSpacing(6);
-    QStringList monthNames = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    QPieSeries *pieSeries = new QPieSeries();
+    pieSeries->setHoleSize(0.5);  // Donut style
     
-    QList<QLabel*> monthLabels;  // Store month value labels for animation
+    QList<QColor> pieColors = {
+        QColor("#3498db"), QColor("#9b59b6"), QColor("#e74c3c"), 
+        QColor("#2ecc71"), QColor("#f39c12"), QColor("#1abc9c"),
+        QColor("#34495e"), QColor("#e91e63")
+    };
     
-    int maxMon = 0;
-    for (auto it = stats.hiresPerMonth.constBegin(); it != stats.hiresPerMonth.constEnd(); ++it) {
-        if (it.value() > maxMon) maxMon = it.value();
+    int colorIdx = 0;
+    int totalRoles = 0;
+    for (auto it = stats.roleDistribution.constBegin(); it != stats.roleDistribution.constEnd(); ++it) {
+        totalRoles += it.value();
     }
-    if (maxMon == 0) maxMon = 1;
+    
+    for (auto it = stats.roleDistribution.constBegin(); it != stats.roleDistribution.constEnd(); ++it) {
+        QPieSlice *slice = pieSeries->append(it.key(), it.value());
+        slice->setColor(pieColors[colorIdx % pieColors.size()]);
+        slice->setBorderColor(Qt::white);
+        slice->setBorderWidth(2);
+        int pct = totalRoles > 0 ? (it.value() * 100) / totalRoles : 0;
+        slice->setLabel(QString("%1: %2%").arg(it.key()).arg(pct));
+        slice->setLabelVisible(true);
+        slice->setLabelColor(QColor("#2c3e50"));
+        slice->setLabelFont(QFont("Segoe UI", 9));
+        
+        // Hover effect
+        connect(slice, &QPieSlice::hovered, [slice](bool hovered) {
+            slice->setExploded(hovered);
+            slice->setExplodeDistanceFactor(hovered ? 0.05 : 0);
+        });
+        colorIdx++;
+    }
+
+    QChart *pieChart = new QChart();
+    pieChart->addSeries(pieSeries);
+    pieChart->setBackgroundVisible(false);
+    pieChart->setMargins(QMargins(0, 0, 0, 0));
+    pieChart->legend()->setVisible(false);
+    pieChart->setAnimationOptions(QChart::AllAnimations);
+    pieChart->setAnimationDuration(1200);
+
+    QChartView *pieView = new QChartView(pieChart);
+    pieView->setRenderHint(QPainter::Antialiasing);
+    pieView->setStyleSheet("background: transparent; border: none;");
+    pieView->setMinimumSize(280, 220);
+    pieLay->addWidget(pieView, 1);
+
+    // Role legend below
+    QWidget *legendWidget = new QWidget();
+    legendWidget->setStyleSheet("background: transparent;");
+    QGridLayout *legendGrid = new QGridLayout(legendWidget);
+    legendGrid->setSpacing(8);
+    legendGrid->setContentsMargins(0, 5, 0, 0);
+
+    colorIdx = 0;
+    int col = 0, row = 0;
+    for (auto it = stats.roleDistribution.constBegin(); it != stats.roleDistribution.constEnd(); ++it) {
+        QHBoxLayout *legendRow = new QHBoxLayout();
+        legendRow->setSpacing(6);
+        
+        QWidget *dot = new QWidget();
+        dot->setFixedSize(10, 10);
+        dot->setStyleSheet(QString("background: %1; border-radius: 5px;").arg(pieColors[colorIdx % pieColors.size()].name()));
+        
+        int pct = totalRoles > 0 ? (it.value() * 100) / totalRoles : 0;
+        QLabel *lbl = new QLabel(QString("%1 (%2)").arg(it.key()).arg(it.value()));
+        lbl->setStyleSheet("color: #2c3e50; font-size: 10px; background: transparent;");
+        
+        legendRow->addWidget(dot);
+        legendRow->addWidget(lbl);
+        legendRow->addStretch();
+        
+        QWidget *legendItem = new QWidget();
+        legendItem->setLayout(legendRow);
+        legendGrid->addWidget(legendItem, row, col);
+        
+        col++;
+        if (col >= 2) { col = 0; row++; }
+        colorIdx++;
+    }
+    pieLay->addWidget(legendWidget);
+    chartsRow->addWidget(pieCard, 1);
+
+    // === BAR CHART: Hiring by Year ===
+    QFrame *barCard = createCard();
+    QVBoxLayout *barLay = new QVBoxLayout(barCard);
+    barLay->setContentsMargins(15, 12, 15, 12);
+
+    QLabel *barTitle = new QLabel("📈 Hiring Trends by Year");
+    barTitle->setStyleSheet("color: #1a1a2e; font-size: 14px; font-weight: 700; background: transparent;");
+    barLay->addWidget(barTitle);
+
+    QBarSet *barSet = new QBarSet("Hires");
+    barSet->setColor(QColor("#3498db"));
+    barSet->setBorderColor(Qt::transparent);
+
+    QStringList yearCategories;
+    for (auto it = stats.hiresPerYear.constBegin(); it != stats.hiresPerYear.constEnd(); ++it) {
+        *barSet << it.value();
+        yearCategories << QString::number(it.key());
+    }
+
+    QBarSeries *barSeries = new QBarSeries();
+    barSeries->append(barSet);
+    barSeries->setBarWidth(0.7);
+
+    QChart *barChart = new QChart();
+    barChart->addSeries(barSeries);
+    barChart->setBackgroundVisible(false);
+    barChart->setMargins(QMargins(0, 0, 0, 0));
+    barChart->legend()->setVisible(false);
+    barChart->setAnimationOptions(QChart::SeriesAnimations);
+    barChart->setAnimationDuration(1000);
+
+    QBarCategoryAxis *axisX = new QBarCategoryAxis();
+    axisX->append(yearCategories);
+    axisX->setLabelsColor(QColor("#2c3e50"));
+    axisX->setGridLineVisible(false);
+    axisX->setLabelsFont(QFont("Segoe UI", 9));
+    barChart->addAxis(axisX, Qt::AlignBottom);
+    barSeries->attachAxis(axisX);
+
+    QValueAxis *axisY = new QValueAxis();
+    axisY->setLabelsColor(QColor("#2c3e50"));
+    axisY->setGridLineColor(QColor("#ecf0f1"));
+    axisY->setLabelFormat("%d");
+    axisY->setLabelsFont(QFont("Segoe UI", 9));
+    int maxHires = 1;
+    for (auto it = stats.hiresPerYear.constBegin(); it != stats.hiresPerYear.constEnd(); ++it) {
+        if (it.value() > maxHires) maxHires = it.value();
+    }
+    axisY->setRange(0, maxHires + 2);
+    barChart->addAxis(axisY, Qt::AlignLeft);
+    barSeries->attachAxis(axisY);
+
+    QChartView *barView = new QChartView(barChart);
+    barView->setRenderHint(QPainter::Antialiasing);
+    barView->setStyleSheet("background: transparent; border: none;");
+    barView->setMinimumSize(320, 250);
+    barLay->addWidget(barView, 1);
+    chartsRow->addWidget(barCard, 1);
+
+    summaryLayout->addLayout(chartsRow, 1);
+    tabWidget->addTab(summaryTab, "📊 Summary");
+
+    // ==========================================
+    // TAB 2: MONTHLY ANALYTICS
+    // ==========================================
+    QWidget *monthlyTab = new QWidget();
+    monthlyTab->setStyleSheet("background: transparent;");
+    QVBoxLayout *monthlyLayout = new QVBoxLayout(monthlyTab);
+    monthlyLayout->setSpacing(15);
+    monthlyLayout->setContentsMargins(15, 15, 15, 15);
+
+    // Area Chart Card
+    QFrame *areaCard = createCard();
+    QVBoxLayout *areaLay = new QVBoxLayout(areaCard);
+    areaLay->setContentsMargins(15, 12, 15, 12);
+
+    QLabel *areaTitle = new QLabel("📅 Hiring by Month (Current Year)");
+    areaTitle->setStyleSheet("color: #1a1a2e; font-size: 14px; font-weight: 700; background: transparent;");
+    areaLay->addWidget(areaTitle);
+
+    QLineSeries *lineSeries = new QLineSeries();
+    QLineSeries *lowerSeries = new QLineSeries();
+    
+    for (int i = 1; i <= 12; ++i) {
+        lineSeries->append(i, stats.hiresPerMonth.value(i, 0));
+        lowerSeries->append(i, 0);
+    }
+
+    QAreaSeries *areaSeries = new QAreaSeries(lineSeries, lowerSeries);
+    areaSeries->setName("Monthly Hires");
+    
+    QLinearGradient gradient(QPointF(0, 0), QPointF(0, 1));
+    gradient.setColorAt(0.0, QColor(52, 152, 219, 180));
+    gradient.setColorAt(1.0, QColor(52, 152, 219, 40));
+    gradient.setCoordinateMode(QGradient::ObjectBoundingMode);
+    areaSeries->setBrush(gradient);
+    areaSeries->setPen(QPen(QColor("#3498db"), 2));
+
+    QChart *areaChart = new QChart();
+    areaChart->addSeries(areaSeries);
+    areaChart->setBackgroundVisible(false);
+    areaChart->legend()->setVisible(false);
+    areaChart->setAnimationOptions(QChart::SeriesAnimations);
+    areaChart->setAnimationDuration(1200);
+
+    QStringList months = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+    QBarCategoryAxis *monthAxis = new QBarCategoryAxis();
+    monthAxis->append(months);
+    monthAxis->setLabelsColor(QColor("#2c3e50"));
+    monthAxis->setGridLineVisible(false);
+    monthAxis->setLabelsFont(QFont("Segoe UI", 9));
+    areaChart->addAxis(monthAxis, Qt::AlignBottom);
+    areaSeries->attachAxis(monthAxis);
+
+    QValueAxis *monthValueAxis = new QValueAxis();
+    monthValueAxis->setLabelsColor(QColor("#2c3e50"));
+    monthValueAxis->setGridLineColor(QColor("#ecf0f1"));
+    monthValueAxis->setLabelFormat("%d");
+    monthValueAxis->setLabelsFont(QFont("Segoe UI", 9));
+    int maxMonth = 1;
+    for (int i = 1; i <= 12; ++i) {
+        if (stats.hiresPerMonth.value(i, 0) > maxMonth)
+            maxMonth = stats.hiresPerMonth.value(i, 0);
+    }
+    monthValueAxis->setRange(0, maxMonth + 2);
+    areaChart->addAxis(monthValueAxis, Qt::AlignLeft);
+    areaSeries->attachAxis(monthValueAxis);
+
+    QChartView *areaView = new QChartView(areaChart);
+    areaView->setRenderHint(QPainter::Antialiasing);
+    areaView->setStyleSheet("background: transparent; border: none;");
+    areaView->setMinimumHeight(280);
+    areaLay->addWidget(areaView, 1);
+    monthlyLayout->addWidget(areaCard, 1);
+
+    // Monthly mini-cards
+    QFrame *monthCardsFrame = createCard();
+    QHBoxLayout *monthCardsLay = new QHBoxLayout(monthCardsFrame);
+    monthCardsLay->setSpacing(6);
+    monthCardsLay->setContentsMargins(12, 10, 12, 10);
 
     for (int i = 1; i <= 12; ++i) {
-        QWidget *monthBox = new QWidget();
-        monthBox->setStyleSheet(
-            "QWidget { "
-            "    background-color: #f8f9fa; "
-            "    border-radius: 8px; "
-            "    border: 1px solid #e8ecf1; "
-            "}"
-        );
-        monthBox->setMinimumWidth(55);
+        QWidget *mCard = new QWidget();
+        int val = stats.hiresPerMonth.value(i, 0);
+        QString bgColor = val > 0 ? "#3498db" : "#ecf0f1";
+        QString txtColor = val > 0 ? "white" : "#2c3e50";
+        mCard->setStyleSheet(QString("background: %1; border-radius: 8px;").arg(bgColor));
+        mCard->setMinimumWidth(60);
+        mCard->setMaximumWidth(80);
         
-        QVBoxLayout *mbLay = new QVBoxLayout(monthBox);
-        mbLay->setSpacing(2);
-        mbLay->setContentsMargins(5, 6, 5, 6);
+        QVBoxLayout *mLay = new QVBoxLayout(mCard);
+        mLay->setSpacing(2);
+        mLay->setContentsMargins(6, 8, 6, 8);
         
-        QLabel *monLabel = new QLabel(monthNames[i-1]);
-        monLabel->setStyleSheet("color: #2c3e50; font-size: 9px; font-weight: 700; text-align: center;");
-        monLabel->setAlignment(Qt::AlignCenter);
+        QLabel *mName = new QLabel(months[i-1]);
+        mName->setStyleSheet(QString("color: %1; font-size: 9px; font-weight: 600; background: transparent;").arg(txtColor));
+        mName->setAlignment(Qt::AlignCenter);
         
-        QProgressBar *monBar = new QProgressBar();
-        monBar->setMaximum(maxMon);
-        monBar->setValue(stats.hiresPerMonth.value(i, 0));
-        monBar->setStyleSheet(
-            "QProgressBar { "
-            "    border: none; "
-            "    border-radius: 4px; "
-            "    background-color: #ecf0f1; "
-            "    height: 16px; "
-            "} "
-            "QProgressBar::chunk { "
-            "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #667eea, stop:1 #764ba2); "
-            "    border-radius: 4px; "
-            "}"
-        );
+        QLabel *mVal = new QLabel(QString::number(val));
+        mVal->setStyleSheet(QString("color: %1; font-size: 18px; font-weight: 700; background: transparent;").arg(txtColor));
+        mVal->setAlignment(Qt::AlignCenter);
         
-        QLabel *monVal = new QLabel(QString::number(stats.hiresPerMonth.value(i, 0)));
-        monVal->setStyleSheet("color: #34495e; font-size: 9px; font-weight: 600; text-align: center;");
-        monVal->setAlignment(Qt::AlignCenter);
-        monthLabels.append(monVal);  // Store for animation
-        
-        mbLay->addWidget(monLabel);
-        mbLay->addWidget(monBar);
-        mbLay->addWidget(monVal);
-        
-        monthsLay->addWidget(monthBox);
+        mLay->addWidget(mName);
+        mLay->addWidget(mVal);
+        monthCardsLay->addWidget(mCard);
     }
-    monthsLay->addStretch();
-    scrollLayout->addLayout(monthsLay);
+    monthlyLayout->addWidget(monthCardsFrame);
 
-    // ===== HIRING BY YEAR =====
-    QLabel *yearTitle = new QLabel("📊  Hiring by Year");
-    yearTitle->setStyleSheet("font-size: 12px; font-weight: 700; color: #1a1a1a; margin-top: 4px;");
-    scrollLayout->addWidget(yearTitle);
+    tabWidget->addTab(monthlyTab, "📅 Monthly");
 
-    QHBoxLayout *yearsLay = new QHBoxLayout();
-    yearsLay->setSpacing(8);
+    // ==========================================
+    // TAB 3: ADVANCED ANALYTICS
+    // ==========================================
+    QWidget *advancedTab = new QWidget();
+    advancedTab->setStyleSheet("background: transparent;");
+    QVBoxLayout *advancedLayout = new QVBoxLayout(advancedTab);
+    advancedLayout->setSpacing(12);
+    advancedLayout->setContentsMargins(15, 15, 15, 15);
+
+    // Row 1: Gauge metrics
+    QHBoxLayout *gaugeRow = new QHBoxLayout();
+    gaugeRow->setSpacing(12);
+
+    auto createGaugeCard = [&createCard](const QString &title, double value, double maxVal, const QString &unit, const QColor &color) -> QFrame* {
+        QFrame *card = createCard();
+        card->setMinimumSize(180, 120);
+        card->setMaximumHeight(130);
+        
+        QVBoxLayout *lay = new QVBoxLayout(card);
+        lay->setAlignment(Qt::AlignCenter);
+        lay->setContentsMargins(15, 12, 15, 12);
+        
+        QLabel *titleLbl = new QLabel(title);
+        titleLbl->setStyleSheet("color: #7f8c8d; font-size: 11px; font-weight: 600; background: transparent;");
+        titleLbl->setAlignment(Qt::AlignCenter);
+        
+        QLabel *valueLbl = new QLabel(QString::number(value, 'f', unit == "%" ? 1 : 0) + unit);
+        valueLbl->setStyleSheet(QString("color: %1; font-size: 28px; font-weight: 700; background: transparent;").arg(color.name()));
+        valueLbl->setAlignment(Qt::AlignCenter);
+        
+        QProgressBar *gauge = new QProgressBar();
+        gauge->setRange(0, static_cast<int>(maxVal));
+        gauge->setValue(static_cast<int>(value));
+        gauge->setTextVisible(false);
+        gauge->setFixedHeight(6);
+        gauge->setStyleSheet(QString(R"(
+            QProgressBar { background: #ecf0f1; border-radius: 3px; }
+            QProgressBar::chunk { background: %1; border-radius: 3px; }
+        )").arg(color.name()));
+        
+        lay->addWidget(titleLbl);
+        lay->addWidget(valueLbl);
+        lay->addSpacing(5);
+        lay->addWidget(gauge);
+        
+        return card;
+    };
+
+    gaugeRow->addWidget(createGaugeCard("Average Tenure", 2.5, 10, " yrs", QColor("#3498db")));
+    gaugeRow->addWidget(createGaugeCard("Retention Rate", stats.retentionRate, 100, "%", QColor("#2ecc71")));
+    gaugeRow->addWidget(createGaugeCard("Avg Salary", stats.averageSalary / 1000, 150, "K", QColor("#e74c3c")));
+    gaugeRow->addWidget(createGaugeCard("Growth Rate", stats.totalEmployees > 0 ? (stats.newEmployeesThisYear * 100.0 / stats.totalEmployees) : 0, 100, "%", QColor("#9b59b6")));
+    advancedLayout->addLayout(gaugeRow);
+
+    // Row 2: Salary + Status Donut
+    QHBoxLayout *row2 = new QHBoxLayout();
+    row2->setSpacing(12);
+
+    // Salary card
+    QFrame *salaryCard = createCard();
+    QVBoxLayout *salaryLay = new QVBoxLayout(salaryCard);
+    salaryLay->setContentsMargins(15, 12, 15, 12);
     
-    QList<QPair<int, QLabel*>> yearLabels;  // Store year+label for animation
+    QLabel *salaryTitle = new QLabel("💰 Salary Distribution");
+    salaryTitle->setStyleSheet("color: #1a1a2e; font-size: 13px; font-weight: 700; background: transparent;");
+    salaryLay->addWidget(salaryTitle);
     
-    int maxYear = 0;
-    for (auto it = stats.hiresPerYear.constBegin(); it != stats.hiresPerYear.constEnd(); ++it) {
-        if (it.value() > maxYear) maxYear = it.value();
+    QHBoxLayout *salaryStats = new QHBoxLayout();
+    salaryStats->setSpacing(25);
+    
+    auto createSalaryStat = [](const QString &label, double value, const QColor &color) -> QWidget* {
+        QWidget *w = new QWidget();
+        w->setStyleSheet("background: transparent;");
+        QVBoxLayout *l = new QVBoxLayout(w);
+        l->setSpacing(2);
+        l->setContentsMargins(0, 0, 0, 0);
+        
+        QLabel *lbl = new QLabel(label);
+        lbl->setStyleSheet("color: #7f8c8d; font-size: 10px; background: transparent;");
+        
+        QLabel *val = new QLabel(QString("$%1").arg(value, 0, 'f', 0));
+        val->setStyleSheet(QString("color: %1; font-size: 22px; font-weight: 700; background: transparent;").arg(color.name()));
+        
+        l->addWidget(lbl);
+        l->addWidget(val);
+        return w;
+    };
+    
+    salaryStats->addWidget(createSalaryStat("Minimum", stats.minSalary, QColor("#e74c3c")));
+    salaryStats->addWidget(createSalaryStat("Average", stats.averageSalary, QColor("#3498db")));
+    salaryStats->addWidget(createSalaryStat("Maximum", stats.maxSalary, QColor("#2ecc71")));
+    salaryStats->addStretch();
+    salaryLay->addLayout(salaryStats);
+    salaryLay->addStretch();
+    row2->addWidget(salaryCard, 1);
+
+    // Account Status Donut Chart
+    QFrame *statusCard = createCard();
+    QVBoxLayout *statusLay = new QVBoxLayout(statusCard);
+    statusLay->setContentsMargins(12, 10, 12, 10);
+    
+    QLabel *statusTitle = new QLabel("🔐 Account Status");
+    statusTitle->setStyleSheet("color: #1a1a2e; font-size: 13px; font-weight: 700; background: transparent;");
+    statusLay->addWidget(statusTitle);
+
+    QPieSeries *statusSeries = new QPieSeries();
+    statusSeries->setHoleSize(0.55);
+    
+    // Simulated status data
+    int activeCount = stats.activeEmployees > 0 ? stats.activeEmployees : stats.totalEmployees;
+    int pendingCount = qMax(0, stats.totalEmployees - activeCount);
+    int bannedCount = 0;
+    
+    if (activeCount > 0) {
+        QPieSlice *activeSlice = statusSeries->append("Active", activeCount);
+        activeSlice->setColor(QColor("#2ecc71"));
+        activeSlice->setBorderColor(Qt::white);
+        activeSlice->setBorderWidth(2);
+        activeSlice->setLabel(QString("Active: %1").arg(activeCount));
+        activeSlice->setLabelVisible(true);
+        activeSlice->setLabelColor(QColor("#2c3e50"));
     }
-    if (maxYear == 0) maxYear = 1;
-
-    for (auto it = stats.hiresPerYear.constBegin(); it != stats.hiresPerYear.constEnd(); ++it) {
-        QWidget *yearBox = new QWidget();
-        yearBox->setStyleSheet(
-            "QWidget { "
-            "    background-color: #f8f9fa; "
-            "    border-radius: 8px; "
-            "    border: 1px solid #e8ecf1; "
-            "}"
-        );
-        yearBox->setMinimumWidth(80);
-        
-        QVBoxLayout *ybLay = new QVBoxLayout(yearBox);
-        ybLay->setSpacing(3);
-        ybLay->setContentsMargins(10, 8, 10, 8);
-        
-        QLabel *yrLabel = new QLabel(QString::number(it.key()));
-        yrLabel->setStyleSheet("color: #2c3e50; font-size: 11px; font-weight: 700;");
-        yrLabel->setAlignment(Qt::AlignCenter);
-        
-        QProgressBar *yrBar = new QProgressBar();
-        yrBar->setMaximum(maxYear);
-        yrBar->setValue(it.value());
-        yrBar->setStyleSheet(
-            "QProgressBar { "
-            "    border: none; "
-            "    border-radius: 4px; "
-            "    background-color: #ecf0f1; "
-            "    height: 18px; "
-            "} "
-            "QProgressBar::chunk { "
-            "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #f093fb, stop:1 #f5576c); "
-            "    border-radius: 4px; "
-            "}"
-        );
-        
-        QLabel *yrVal = new QLabel(QString::number(it.value()));
-        yrVal->setStyleSheet("color: #34495e; font-size: 10px; font-weight: 700;");
-        yrVal->setAlignment(Qt::AlignCenter);
-        yearLabels.append(qMakePair(it.key(), yrVal));  // Store for animation
-        
-        ybLay->addWidget(yrLabel);
-        ybLay->addWidget(yrBar);
-        ybLay->addWidget(yrVal);
-        
-        yearsLay->addWidget(yearBox);
+    if (pendingCount > 0) {
+        QPieSlice *pendingSlice = statusSeries->append("Pending", pendingCount);
+        pendingSlice->setColor(QColor("#f39c12"));
+        pendingSlice->setBorderColor(Qt::white);
+        pendingSlice->setBorderWidth(2);
     }
-    yearsLay->addStretch();
-    scrollLayout->addLayout(yearsLay);
 
-    // ===== ROLE DISTRIBUTION =====
-    QLabel *roleTitle = new QLabel("📋  Role Distribution");
-    roleTitle->setStyleSheet("font-size: 12px; font-weight: 700; color: #1a1a1a; margin-top: 4px;");
-    scrollLayout->addWidget(roleTitle);
+    QChart *statusChart = new QChart();
+    statusChart->addSeries(statusSeries);
+    statusChart->setBackgroundVisible(false);
+    statusChart->setMargins(QMargins(0, 0, 0, 0));
+    statusChart->legend()->setVisible(false);
+    statusChart->setAnimationOptions(QChart::AllAnimations);
+    statusChart->setAnimationDuration(1000);
 
-    QWidget *roleContainer = new QWidget();
-    roleContainer->setStyleSheet(
-        "QWidget { "
-        "    background-color: #f8f9fa; "
-        "    border-radius: 8px; "
-        "    border: 1px solid #e8ecf1; "
-        "}"
-    );
-    QVBoxLayout *roleLay = new QVBoxLayout(roleContainer);
-    roleLay->setSpacing(6);
-    roleLay->setContentsMargins(10, 8, 10, 8);
+    QChartView *statusView = new QChartView(statusChart);
+    statusView->setRenderHint(QPainter::Antialiasing);
+    statusView->setStyleSheet("background: transparent; border: none;");
+    statusView->setMinimumSize(200, 160);
+    statusLay->addWidget(statusView, 1);
+    row2->addWidget(statusCard, 1);
 
-    QList<QPair<int, QPair<QString, QList<QWidget*>>>> roleItems;  // Store for animation
+    advancedLayout->addLayout(row2, 1);
 
-    if (!stats.roleDistribution.isEmpty()) {
-        QList<QPair<int, QString>> sorted;
-        int totalRoles = 0;
-        for (auto it = stats.roleDistribution.constBegin(); it != stats.roleDistribution.constEnd(); ++it) {
-            sorted.append(qMakePair(it.value(), it.key()));
-            totalRoles += it.value();
+    // Row 3: Top Projects & Resources
+    QHBoxLayout *row3 = new QHBoxLayout();
+    row3->setSpacing(12);
+
+    auto createTopList = [&createCard](const QString &title, const QString &icon, const QMap<QString, int> &data, const QColor &barColor) -> QFrame* {
+        QFrame *card = createCard();
+        QVBoxLayout *lay = new QVBoxLayout(card);
+        lay->setContentsMargins(12, 10, 12, 10);
+        
+        QLabel *titleLbl = new QLabel(icon + " " + title);
+        titleLbl->setStyleSheet("color: #1a1a2e; font-size: 12px; font-weight: 700; background: transparent;");
+        lay->addWidget(titleLbl);
+        
+        int maxVal = 1;
+        for (auto it = data.constBegin(); it != data.constEnd(); ++it) {
+            if (it.value() > maxVal) maxVal = it.value();
         }
-        std::sort(sorted.begin(), sorted.end(), [](const QPair<int, QString> &a, const QPair<int, QString> &b) {
-            return a.first > b.first;
-        });
-
-        for (const auto &p : sorted) {
-            QHBoxLayout *roleLine = new QHBoxLayout();
-            roleLine->setSpacing(12);
+        
+        int count = 0;
+        for (auto it = data.constBegin(); it != data.constEnd() && count < 4; ++it, ++count) {
+            QHBoxLayout *row = new QHBoxLayout();
+            row->setSpacing(8);
             
-            QLabel *roleNameLbl = new QLabel(p.second);
-            roleNameLbl->setStyleSheet("color: #2c3e50; font-weight: 600; min-width: 130px;");
+            QLabel *name = new QLabel(it.key());
+            name->setStyleSheet("color: #2c3e50; font-size: 10px; min-width: 80px; background: transparent;");
             
-            QProgressBar *roleBar = new QProgressBar();
-            roleBar->setMaximum(100);
-            int percentage = totalRoles > 0 ? (p.first * 100) / totalRoles : 0;
-            roleBar->setValue(percentage);
-            roleBar->setStyleSheet(
-                "QProgressBar { "
-                "    border: none; "
-                "    border-radius: 4px; "
-                "    background-color: #ecf0f1; "
-                "    height: 8px; "
-                "} "
-                "QProgressBar::chunk { "
-                "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #667eea, stop:1 #764ba2); "
-                "    border-radius: 4px; "
-                "}"
-            );
+            QProgressBar *bar = new QProgressBar();
+            bar->setRange(0, maxVal);
+            bar->setValue(it.value());
+            bar->setTextVisible(false);
+            bar->setFixedHeight(6);
+            bar->setStyleSheet(QString(R"(
+                QProgressBar { background: #ecf0f1; border-radius: 3px; }
+                QProgressBar::chunk { background: %1; border-radius: 3px; }
+            )").arg(barColor.name()));
             
-            QLabel *countLbl = new QLabel(QString::number(p.first) + " (" + QString::number(percentage) + "%)");
-            countLbl->setStyleSheet("color: #34495e; font-weight: 700; min-width: 60px; text-align: right;");
+            QLabel *val = new QLabel(QString::number(it.value()));
+            val->setStyleSheet("color: #7f8c8d; font-size: 10px; font-weight: 600; background: transparent;");
             
-            roleLine->addWidget(roleNameLbl, 0);
-            roleLine->addWidget(roleBar, 1);
-            roleLine->addWidget(countLbl, 0);
-            roleLay->addLayout(roleLine);
-            
-            QList<QWidget*> items;
-            items << roleBar << countLbl;
-            roleItems.append(qMakePair(p.first, qMakePair(p.second, items)));
+            row->addWidget(name);
+            row->addWidget(bar, 1);
+            row->addWidget(val);
+            lay->addLayout(row);
         }
-    } else {
-        QLabel *noRoles = new QLabel(tr("No role data available"));
-        noRoles->setStyleSheet("color: #95a5a6;");
-        roleLay->addWidget(noRoles);
-    }
-    scrollLayout->addWidget(roleContainer);
-
-    // ===== TOP PROJECTS =====
-    QLabel *projTitle = new QLabel("🎯  Top Managed Projects");
-    projTitle->setStyleSheet("font-size: 15px; font-weight: 700; color: #1a1a1a; margin-top: 8px;");
-    scrollLayout->addWidget(projTitle);
-
-    QWidget *projContainer = new QWidget();
-    projContainer->setStyleSheet(
-        "QWidget { "
-        "    background-color: #f8f9fa; "
-        "    border-radius: 10px; "
-        "    border: 1px solid #e8ecf1; "
-        "}"
-    );
-    QVBoxLayout *projLay = new QVBoxLayout(projContainer);
-    projLay->setSpacing(10);
-    projLay->setContentsMargins(16, 14, 16, 14);
-
-    if (!stats.topProjects.isEmpty()) {
-        int projMax = 0;
-        for (auto it = stats.topProjects.constBegin(); it != stats.topProjects.constEnd(); ++it) {
-            if (it.value() > projMax) projMax = it.value();
+        
+        if (data.isEmpty()) {
+            QLabel *empty = new QLabel("No data available");
+            empty->setStyleSheet("color: #bdc3c7; font-size: 10px; background: transparent;");
+            lay->addWidget(empty);
         }
-        int shown = 0;
-        for (auto it = stats.topProjects.constBegin(); it != stats.topProjects.constEnd(); ++it) {
-            QHBoxLayout *projLine = new QHBoxLayout();
-            projLine->setSpacing(12);
-            
-            QLabel *projNameLbl = new QLabel(it.key());
-            projNameLbl->setStyleSheet("color: #2c3e50; font-weight: 600; min-width: 140px;");
-            
-            QProgressBar *projBar = new QProgressBar();
-            projBar->setMaximum(100);
-            projBar->setValue(projMax > 0 ? (it.value() * 100) / projMax : 0);
-            projBar->setStyleSheet(
-                "QProgressBar { "
-                "    border: none; "
-                "    border-radius: 4px; "
-                "    background-color: #ecf0f1; "
-                "    height: 8px; "
-                "} "
-                "QProgressBar::chunk { "
-                "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #4facfe, stop:1 #00f2fe); "
-                "    border-radius: 4px; "
-                "}"
-            );
-            
-            QLabel *projCountLbl = new QLabel(QString::number(it.value()));
-            projCountLbl->setStyleSheet("color: #34495e; font-weight: 700; min-width: 35px; text-align: right;");
-            
-            projLine->addWidget(projNameLbl, 0);
-            projLine->addWidget(projBar, 1);
-            projLine->addWidget(projCountLbl, 0);
-            projLay->addLayout(projLine);
-            
-            if (++shown >= 8) break;
-        }
-    } else {
-        QLabel *noProj = new QLabel(tr("No project data available"));
-        noProj->setStyleSheet("color: #95a5a6;");
-        projLay->addWidget(noProj);
-    }
-    scrollLayout->addWidget(projContainer);
+        
+        lay->addStretch();
+        return card;
+    };
 
-    // ===== TOP RESOURCES =====
-    QLabel *resTitle = new QLabel("🔧  Top Used Resources");
-    resTitle->setStyleSheet("font-size: 15px; font-weight: 700; color: #1a1a1a; margin-top: 8px;");
-    scrollLayout->addWidget(resTitle);
+    row3->addWidget(createTopList("Top Projects", "🎯", stats.topProjects, QColor("#3498db")));
+    row3->addWidget(createTopList("Top Resources", "🔧", stats.topResources, QColor("#e74c3c")));
+    advancedLayout->addLayout(row3, 1);
 
-    QWidget *resContainer = new QWidget();
-    resContainer->setStyleSheet(
-        "QWidget { "
-        "    background-color: #f8f9fa; "
-        "    border-radius: 10px; "
-        "    border: 1px solid #e8ecf1; "
-        "}"
-    );
-    QVBoxLayout *resLay = new QVBoxLayout(resContainer);
-    resLay->setSpacing(10);
-    resLay->setContentsMargins(16, 14, 16, 14);
+    tabWidget->addTab(advancedTab, "🔬 Advanced");
 
-    if (!stats.topResources.isEmpty()) {
-        int resMax = 0;
-        for (auto it = stats.topResources.constBegin(); it != stats.topResources.constEnd(); ++it) {
-            if (it.value() > resMax) resMax = it.value();
-        }
-        int shown = 0;
-        for (auto it = stats.topResources.constBegin(); it != stats.topResources.constEnd(); ++it) {
-            QHBoxLayout *resLine = new QHBoxLayout();
-            resLine->setSpacing(12);
-            
-            QLabel *resNameLbl = new QLabel(it.key());
-            resNameLbl->setStyleSheet("color: #2c3e50; font-weight: 600; min-width: 140px;");
-            
-            QProgressBar *resBar = new QProgressBar();
-            resBar->setMaximum(100);
-            resBar->setValue(resMax > 0 ? (it.value() * 100) / resMax : 0);
-            resBar->setStyleSheet(
-                "QProgressBar { "
-                "    border: none; "
-                "    border-radius: 4px; "
-                "    background-color: #ecf0f1; "
-                "    height: 8px; "
-                "} "
-                "QProgressBar::chunk { "
-                "    background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #fa709a, stop:1 #fee140); "
-                "    border-radius: 4px; "
-                "}"
-            );
-            
-            QLabel *resCountLbl = new QLabel(QString::number(it.value()));
-            resCountLbl->setStyleSheet("color: #34495e; font-weight: 700; min-width: 35px; text-align: right;");
-            
-            resLine->addWidget(resNameLbl, 0);
-            resLine->addWidget(resBar, 1);
-            resLine->addWidget(resCountLbl, 0);
-            resLay->addLayout(resLine);
-            
-            if (++shown >= 8) break;
-        }
-    } else {
-        QLabel *noRes = new QLabel(tr("No resource data available"));
-        noRes->setStyleSheet("color: #95a5a6;");
-        resLay->addWidget(noRes);
-    }
-    scrollLayout->addWidget(resContainer);
+    // ==========================================
+    // TAB 4: DETAILS
+    // ==========================================
+    QWidget *detailTab = new QWidget();
+    detailTab->setStyleSheet("background: transparent;");
+    QScrollArea *detailScroll = new QScrollArea();
+    detailScroll->setWidgetResizable(true);
+    detailScroll->setStyleSheet("background: transparent; border: none;");
+    
+    QWidget *detailContent = new QWidget();
+    detailContent->setStyleSheet("background: transparent;");
+    QVBoxLayout *detailLayout = new QVBoxLayout(detailContent);
+    detailLayout->setSpacing(12);
+    detailLayout->setContentsMargins(15, 15, 15, 15);
 
-    scrollLayout->addStretch();
-    scrollArea->setWidget(scrollWidget);
-    mainLayout->addWidget(scrollArea, 1);
+    // Summary Grid
+    QFrame *summaryGridCard = createCard();
+    QGridLayout *gridLay = new QGridLayout(summaryGridCard);
+    gridLay->setSpacing(10);
+    gridLay->setContentsMargins(15, 12, 15, 12);
 
-    // Animation 1: Total Employees
-    QVariantAnimation *anim1 = new QVariantAnimation(&dlg);
-    anim1->setStartValue(0);
-    anim1->setEndValue(stats.totalEmployees);
-    anim1->setDuration(1000);
-    anim1->setEasingCurve(QEasingCurve::OutQuad);
-    connect(anim1, &QVariantAnimation::valueChanged, this, [c1Val](const QVariant &val) {
-        c1Val->setText(QString::number(val.toInt()));
-    });
+    auto createInfoItem = [](const QString &label, const QString &value, const QString &icon) -> QWidget* {
+        QWidget *item = new QWidget();
+        item->setStyleSheet("background: #f8f9fa; border-radius: 8px; padding: 8px;");
+        
+        QHBoxLayout *lay = new QHBoxLayout(item);
+        lay->setContentsMargins(10, 8, 10, 8);
+        lay->setSpacing(10);
+        
+        QLabel *iconLbl = new QLabel(icon);
+        iconLbl->setStyleSheet("font-size: 20px; background: transparent;");
+        
+        QVBoxLayout *textLay = new QVBoxLayout();
+        textLay->setSpacing(1);
+        
+        QLabel *labelLbl = new QLabel(label);
+        labelLbl->setStyleSheet("color: #7f8c8d; font-size: 9px; background: transparent;");
+        
+        QLabel *valueLbl = new QLabel(value);
+        valueLbl->setStyleSheet("color: #1a1a2e; font-size: 14px; font-weight: 700; background: transparent;");
+        
+        textLay->addWidget(labelLbl);
+        textLay->addWidget(valueLbl);
+        
+        lay->addWidget(iconLbl);
+        lay->addLayout(textLay, 1);
+        
+        return item;
+    };
 
-    // Animation 2: New This Month
-    QVariantAnimation *anim2 = new QVariantAnimation(&dlg);
-    anim2->setStartValue(0);
-    anim2->setEndValue(stats.newEmployeesThisMonth);
-    anim2->setDuration(900);
-    anim2->setEasingCurve(QEasingCurve::OutQuad);
-    connect(anim2, &QVariantAnimation::valueChanged, this, [c3Val](const QVariant &val) {
-        c3Val->setText(QString::number(val.toInt()));
-    });
+    gridLay->addWidget(createInfoItem("Total Employees", QString::number(stats.totalEmployees), "👥"), 0, 0);
+    gridLay->addWidget(createInfoItem("Active", QString::number(stats.activeEmployees), "✅"), 0, 1);
+    gridLay->addWidget(createInfoItem("New This Month", QString::number(stats.newEmployeesThisMonth), "📅"), 0, 2);
+    gridLay->addWidget(createInfoItem("Hires This Year", QString::number(stats.newEmployeesThisYear), "📊"), 0, 3);
+    gridLay->addWidget(createInfoItem("Departments", QString::number(stats.departmentCount), "🏢"), 1, 0);
+    gridLay->addWidget(createInfoItem("Top Role", stats.mostCommonRole.isEmpty() ? "N/A" : stats.mostCommonRole, "⭐"), 1, 1);
+    gridLay->addWidget(createInfoItem("Retention", QString("%1%").arg(stats.retentionRate, 0, 'f', 1), "📈"), 1, 2);
+    gridLay->addWidget(createInfoItem("Avg Salary", QString("$%1").arg(stats.averageSalary, 0, 'f', 0), "💰"), 1, 3);
 
-    // Animation 3: Total Hires This Year
-    QVariantAnimation *anim3 = new QVariantAnimation(&dlg);
-    anim3->setStartValue(0);
-    anim3->setEndValue(stats.newEmployeesThisYear);
-    anim3->setDuration(1000);
-    anim3->setEasingCurve(QEasingCurve::OutQuad);
-    connect(anim3, &QVariantAnimation::valueChanged, this, [c4Val](const QVariant &val) {
-        c4Val->setText(QString::number(val.toInt()));
-    });
+    detailLayout->addWidget(summaryGridCard);
 
-    // Animation 4: Departments
-    QVariantAnimation *animDept = new QVariantAnimation(&dlg);
-    animDept->setStartValue(0);
-    animDept->setEndValue(stats.departmentCount);
-    animDept->setDuration(900);
-    animDept->setEasingCurve(QEasingCurve::OutQuad);
-    connect(animDept, &QVariantAnimation::valueChanged, this, [deptVal](const QVariant &val) {
-        deptVal->setText(QString::number(val.toInt()));
-    });
+    // Role breakdown
+    QFrame *roleCard = createCard();
+    QVBoxLayout *roleLay = new QVBoxLayout(roleCard);
+    roleLay->setContentsMargins(15, 12, 15, 12);
+    
+    QLabel *roleTitle = new QLabel("👔 Role Distribution Details");
+    roleTitle->setStyleSheet("color: #1a1a2e; font-size: 13px; font-weight: 700; background: transparent;");
+    roleLay->addWidget(roleTitle);
 
-    // Start all animations
-    anim1->start(QAbstractAnimation::DeleteWhenStopped);
-    anim2->start(QAbstractAnimation::DeleteWhenStopped);
-    anim3->start(QAbstractAnimation::DeleteWhenStopped);
-    animDept->start(QAbstractAnimation::DeleteWhenStopped);
-
-    // Animation 7-18: Hiring by Month labels (slow stagger effect)
-    for (int i = 0; i < monthLabels.size(); ++i) {
-        QVariantAnimation *monthAnim = new QVariantAnimation(&dlg);
-        int startVal = 0;
-        for (auto it = stats.hiresPerMonth.constBegin(); it != stats.hiresPerMonth.constEnd(); ++it) {
-            if (it.key() == i + 1) {
-                startVal = it.value();
-                break;
+    for (auto it = stats.roleDistribution.constBegin(); it != stats.roleDistribution.constEnd(); ++it) {
+        QHBoxLayout *row = new QHBoxLayout();
+        row->setSpacing(12);
+        
+        QLabel *role = new QLabel(it.key());
+        role->setStyleSheet("color: #2c3e50; font-size: 11px; min-width: 120px; background: transparent;");
+        
+        int pct = totalRoles > 0 ? (it.value() * 100) / totalRoles : 0;
+        
+        QProgressBar *bar = new QProgressBar();
+        bar->setRange(0, 100);
+        bar->setValue(pct);
+        bar->setFormat(QString("%1%").arg(pct));
+        bar->setTextVisible(true);
+        bar->setFixedHeight(20);
+        bar->setStyleSheet(R"(
+            QProgressBar {
+                background: #ecf0f1;
+                border-radius: 10px;
+                text-align: center;
+                color: #2c3e50;
+                font-weight: 600;
+                font-size: 10px;
             }
-        }
-        monthAnim->setStartValue(0);
-        monthAnim->setEndValue(startVal);
-        monthAnim->setDuration(800 + i * 50);  // Staggered animation
-        monthAnim->setEasingCurve(QEasingCurve::OutQuad);
-        QLabel *lbl = monthLabels[i];
-        connect(monthAnim, &QVariantAnimation::valueChanged, this, [lbl](const QVariant &val) {
-            lbl->setText(QString::number(val.toInt()));
-        });
-        monthAnim->start(QAbstractAnimation::DeleteWhenStopped);
+            QProgressBar::chunk {
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:0, stop:0 #3498db, stop:1 #2980b9);
+                border-radius: 10px;
+            }
+        )");
+        
+        QLabel *count = new QLabel(QString::number(it.value()));
+        count->setStyleSheet("color: #7f8c8d; font-size: 11px; font-weight: 700; min-width: 30px; background: transparent;");
+        count->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+        
+        row->addWidget(role);
+        row->addWidget(bar, 1);
+        row->addWidget(count);
+        roleLay->addLayout(row);
     }
+    
+    detailLayout->addWidget(roleCard);
+    detailLayout->addStretch();
+    
+    detailScroll->setWidget(detailContent);
+    QVBoxLayout *detailTabLay = new QVBoxLayout(detailTab);
+    detailTabLay->setContentsMargins(0, 0, 0, 0);
+    detailTabLay->addWidget(detailScroll);
+    
+    tabWidget->addTab(detailTab, "📋 Details");
 
-    // Animation 19+: Hiring by Year labels (staggered)
-    for (int i = 0; i < yearLabels.size(); ++i) {
-        QVariantAnimation *yearAnim = new QVariantAnimation(&dlg);
-        int startVal = yearLabels[i].second ? stats.hiresPerYear.value(yearLabels[i].first, 0) : 0;
-        yearAnim->setStartValue(0);
-        yearAnim->setEndValue(startVal);
-        yearAnim->setDuration(900 + i * 100);  // Staggered animation
-        yearAnim->setEasingCurve(QEasingCurve::OutQuad);
-        QLabel *lbl = yearLabels[i].second;
-        connect(yearAnim, &QVariantAnimation::valueChanged, this, [lbl](const QVariant &val) {
-            lbl->setText(QString::number(val.toInt()));
+    // ========== ANIMATIONS ==========
+    auto animateValue = [&dlg](QLabel *label, int endVal, int duration) {
+        QVariantAnimation *anim = new QVariantAnimation(&dlg);
+        anim->setStartValue(0);
+        anim->setEndValue(endVal);
+        anim->setDuration(duration);
+        anim->setEasingCurve(QEasingCurve::OutCubic);
+        QObject::connect(anim, &QVariantAnimation::valueChanged, [label](const QVariant &v) {
+            label->setText(QString::number(v.toInt()));
         });
-        yearAnim->start(QAbstractAnimation::DeleteWhenStopped);
-    }
+        anim->start(QAbstractAnimation::DeleteWhenStopped);
+    };
 
-    // ===== CLOSE BUTTON =====
-    QPushButton *closeBtn = new QPushButton(tr("Close"));
-    closeBtn->setFixedHeight(44);
-    closeBtn->setMinimumWidth(140);
-    closeBtn->setStyleSheet(
-        "QPushButton { "
-        "    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); "
-        "    color: white; "
-        "    border: none; "
-        "    border-radius: 10px; "
-        "    padding: 0px; "
-        "    font-weight: 700; "
-        "    font-size: 14px; "
-        "} "
-        "QPushButton:hover { "
-        "    box-shadow: 0 6px 24px rgba(102, 126, 234, 0.35); "
-        "} "
-        "QPushButton:pressed { "
-        "    background: linear-gradient(135deg, #5a67d8 0%, #6b3f9d 100%); "
-        "    padding: 2px 2px 0px 0px; "
-        "}"
-    );
-    connect(closeBtn, &QPushButton::clicked, &dlg, &QDialog::accept);
-    
-    QHBoxLayout *btnLay = new QHBoxLayout();
-    btnLay->addStretch();
-    btnLay->addWidget(closeBtn);
-    btnLay->setContentsMargins(0, 12, 0, 0);
-    
-    mainLayout->addLayout(btnLay);
+    animateValue(val1, stats.totalEmployees, 1200);
+    animateValue(val2, stats.newEmployeesThisMonth, 1000);
+    animateValue(val3, stats.newEmployeesThisYear, 1100);
+    animateValue(val4, stats.departmentCount, 900);
 
     dlg.exec();
 }
@@ -4852,7 +5085,6 @@ void MainWindow::onFaceLoginClicked()
         // Only API mode is supported now
             statusLabel->setText(tr("Sending frame to API…"));
             dialogFaceApiClient->recognizeAgainstEmployees(frameToUse);
-        }
     });
 
     // Local recognition removed - API path will handle results via faceApiClient below

@@ -6,10 +6,6 @@
 #include <QDebug>
 #include <QRegularExpression>
 
-// ========================================
-// CONSTRUCTORS
-// ========================================
-
 Ressource::Ressource() : idMedia(0), uploadDate(QDateTime::currentDateTime()) {}
 
 Ressource::Ressource(qint64 idMedia, const QString &title, const QString &path,
@@ -18,19 +14,13 @@ Ressource::Ressource(qint64 idMedia, const QString &title, const QString &path,
     : idMedia(idMedia), title(title), path(path), owner(owner), 
       format(format), accessLevel(accessLevel), uploadDate(uploadDate) {}
 
-// ========================================
-// VALIDATION METHODS
-// ========================================
-
 bool Ressource::isTitleValid(const QString &title, QString &errorMsg)
 {
-    // Check if title is empty
     if (title.trimmed().isEmpty()) {
         errorMsg = "Title cannot be empty";
         return false;
     }
 
-    // Special characters forbidden: @ ; ! / \ # $ % ^ & * ( ) ? < > , . " ' { } [ ] | ~
     QRegularExpression specialCharsRegex("[\\@\\;\\!\\/\\\\\\#\\$\\%\\^\\&\\*\\(\\)\\?\\<\\>\\,\\.\\\"\\'\\'\\{\\}\\[\\]\\|\\~]");
     
     if (specialCharsRegex.match(title).hasMatch()) {
@@ -50,18 +40,15 @@ bool Ressource::isTitleUnique(const QString &title, qint64 excludeId)
         return false;
     }
 
-    // Use direct SQL string instead of bind values (QODBC compatibility issue)
-    // Escape single quotes in text values
     QString escapedTitle = title;
     escapedTitle.replace("'", "''");
     
     QString sql;
     
-    // If we're updating, exclude the current record's ID_MEDIA
     if (excludeId >= 0) {
-        sql = "SELECT COUNT(*) FROM RESSOURCES WHERE UPPER(TITLE) = UPPER('" + escapedTitle + "') AND ID_MEDIA != " + QString::number(excludeId);
+        sql = "SELECT COUNT(*) FROM RESSOURCE WHERE UPPER(TITLE) = UPPER('" + escapedTitle + "') AND ID != " + QString::number(excludeId);
     } else {
-        sql = "SELECT COUNT(*) FROM RESSOURCES WHERE UPPER(TITLE) = UPPER('" + escapedTitle + "')";
+        sql = "SELECT COUNT(*) FROM RESSOURCE WHERE UPPER(TITLE) = UPPER('" + escapedTitle + "')";
     }
 
     QSqlQuery query(db);
@@ -76,17 +63,13 @@ bool Ressource::isTitleUnique(const QString &title, qint64 excludeId)
 
     if (query.next()) {
         int count = query.value(0).toInt();
-        bool isUnique = (count == 0); // Title is unique if count is 0
+bool isUnique = (count == 0);
         qDebug() << "Title uniqueness check result: count=" << count << ", isUnique=" << isUnique;
         return isUnique;
     }
 
     return false;
 }
-
-// ========================================
-// CRUD OPERATIONS
-// ========================================
 
 bool Ressource::insert(const Ressource &ressource)
 {
@@ -96,21 +79,17 @@ bool Ressource::insert(const Ressource &ressource)
         return false;
     }
 
-    //  VALIDATION 1: Check title validity (no special characters)
     QString errorMsg;
     if (!isTitleValid(ressource.title, errorMsg)) {
         qDebug() << "❌ Title validation failed:" << errorMsg;
         return false;
     }
 
-    //  VALIDATION 2: Check title uniqueness
     if (!isTitleUnique(ressource.title)) {
         qDebug() << "❌ Duplicate title detected:" << ressource.title;
         return false;
     }
 
-    // Use direct SQL string instead of bind values (QODBC compatibility issue)
-    // Escape single quotes in text values
     QString escapedTitle = ressource.title;
     escapedTitle.replace("'", "''");
     QString escapedPath = ressource.path;
@@ -122,14 +101,12 @@ bool Ressource::insert(const Ressource &ressource)
     QString escapedAccess = ressource.accessLevel.isEmpty() ? QString("Public") : ressource.accessLevel;
     escapedAccess.replace("'", "''");
 
-    // Oracle 11g XE - Use SEQ_RESSOURCES.NEXTVAL for ID_MEDIA
-    QString sql = QString("INSERT INTO RESSOURCES (ID_MEDIA, TITLE, PATH, OWNER, FORMAT, ACCESS_LEVEL, UPLOAD_DATE) "
-                          "VALUES (SEQ_RESSOURCES.NEXTVAL, '%1', '%2', '%3', '%4', '%5', SYSDATE)")
+    QString sql = QString("INSERT INTO RESSOURCE (ID, TITLE, PATH, OWNER, FORMAT, ACCESS_LEVEL, UPLOAD_DATE) "
+                          "VALUES (SEQ_RESSOURCE.NEXTVAL, '%1', '%2', '%3', '%4', '%5', SYSDATE)")
                       .arg(escapedTitle, escapedPath, escapedOwner, escapedFormat, escapedAccess);
 
     QSqlQuery query(db);
 
-    // DEBUG: Print what we're inserting
     qDebug() << "========================================";
     qDebug() << "[Ressource::insert] Attempting insertion...";
     qDebug() << "  Title:" << ressource.title;
@@ -139,7 +116,6 @@ bool Ressource::insert(const Ressource &ressource)
     qDebug() << "  Access:" << (ressource.accessLevel.isEmpty() ? QString("Public") : ressource.accessLevel);
     qDebug() << "  SQL:" << sql;
 
-    // Execute insert
     if (!query.exec(sql)) {
         qDebug() << "❌ INSERTION FAILED";
         qDebug() << "Error:" << query.lastError().text();
@@ -164,8 +140,8 @@ QVector<Ressource> Ressource::selectAll()
         return records;
     }
 
-    QString sql = "SELECT ID_MEDIA, TITLE, PATH, OWNER, FORMAT, ACCESS_LEVEL, UPLOAD_DATE "
-                  "FROM RESSOURCES ORDER BY ID_MEDIA";
+    QString sql = "SELECT ID, TITLE, PATH, OWNER, FORMAT, ACCESS_LEVEL, UPLOAD_DATE "
+                  "FROM RESSOURCE ORDER BY ID";
     
     QSqlQuery query(db);
     
@@ -210,21 +186,17 @@ bool Ressource::update(const Ressource &ressource)
         return false;
     }
 
-    //  VALIDATION 1: Check title validity
     QString errorMsg;
     if (!isTitleValid(ressource.title, errorMsg)) {
         qDebug() << "❌ Title validation failed:" << errorMsg;
         return false;
     }
 
-    //  VALIDATION 2: Check title uniqueness (exclude current record)
     if (!isTitleUnique(ressource.title, ressource.idMedia)) {
         qDebug() << "❌ Duplicate title detected:" << ressource.title;
         return false;
     }
 
-    // Use direct SQL string instead of bind values (QODBC compatibility issue)
-    // Escape single quotes in text values
     QString escapedTitle = ressource.title;
     escapedTitle.replace("'", "''");
     QString escapedPath = ressource.path;
@@ -236,8 +208,8 @@ bool Ressource::update(const Ressource &ressource)
     QString escapedAccess = ressource.accessLevel;
     escapedAccess.replace("'", "''");
 
-    QString sql = QString("UPDATE RESSOURCES SET TITLE = '%1', PATH = '%2', OWNER = '%3', "
-                          "FORMAT = '%4', ACCESS_LEVEL = '%5' WHERE ID_MEDIA = %6")
+    QString sql = QString("UPDATE RESSOURCE SET TITLE = '%1', PATH = '%2', OWNER = '%3', "
+                          "FORMAT = '%4', ACCESS_LEVEL = '%5' WHERE ID = %6")
                       .arg(escapedTitle, escapedPath, escapedOwner, escapedFormat, escapedAccess)
                       .arg(ressource.idMedia);
 
@@ -271,16 +243,14 @@ bool Ressource::remove(qint64 id)
     }
 
     qDebug() << "========================================";
-    qDebug() << "[Ressource::remove] Attempting to delete resource with ID_MEDIA:" << id;
+    qDebug() << "[Ressource::remove] Attempting to delete resource with ID:" << id;
 
-    // First, clear all references in UTILISER table
     qDebug() << "[Ressource::remove] Clearing all references in UTILISER table...";
     if (!clearAllReferencesForResource(id)) {
         qDebug() << "[Ressource::remove] WARNING: Failed to clear references, continuing...";
     }
 
-    // Use direct SQL string instead of bind values (QODBC compatibility issue)
-    QString sql = QString("DELETE FROM RESSOURCES WHERE ID_MEDIA = %1").arg(id);
+    QString sql = QString("DELETE FROM RESSOURCE WHERE ID = %1").arg(id);
     QSqlQuery query(db);
 
     qDebug() << "Executing DELETE SQL:" << sql;
@@ -295,7 +265,7 @@ bool Ressource::remove(qint64 id)
     }
 
     int rowsAffected = query.numRowsAffected();
-    qDebug() << "✅ Ressource supprimée avec succès, ID_MEDIA:" << id;
+    qDebug() << "✅ Ressource supprimée avec succès, ID:" << id;
     qDebug() << "Rows affected:" << rowsAffected;
     qDebug() << "========================================";
     return true;
@@ -311,7 +281,6 @@ bool Ressource::clearAllReferencesForResource(qint64 resourceId)
 
     qDebug() << "[Ressource::clearAllReferencesForResource] Clearing all references for resource ID:" << resourceId;
 
-    // Delete all associations in UTILISER table
     QString sql = QString("DELETE FROM UTILISER WHERE ID_MEDIA = %1").arg(resourceId);
     QSqlQuery query(db);
 
@@ -334,9 +303,8 @@ bool Ressource::fetchById(qint64 id, Ressource &ressource)
         return false;
     }
 
-    // Use direct SQL string instead of bind values (QODBC compatibility issue)
-    QString sql = QString("SELECT ID_MEDIA, TITLE, PATH, OWNER, FORMAT, ACCESS_LEVEL, UPLOAD_DATE "
-                          "FROM RESSOURCES WHERE ID_MEDIA = %1").arg(id);
+    QString sql = QString("SELECT ID, TITLE, PATH, OWNER, FORMAT, ACCESS_LEVEL, UPLOAD_DATE "
+                          "FROM RESSOURCE WHERE ID = %1").arg(id);
     
     QSqlQuery query(db);
 
@@ -358,22 +326,18 @@ bool Ressource::fetchById(qint64 id, Ressource &ressource)
         ressource.accessLevel = query.value(5).toString();
         ressource.uploadDate = query.value(6).toDateTime();
         
-        qDebug() << "✅ fetchById() found resource with ID_MEDIA:" << id;
+        qDebug() << "✅ fetchById() found resource with ID:" << id;
         return true;
     }
 
-    qDebug() << "❌ fetchById() resource not found with ID_MEDIA:" << id;
+    qDebug() << "❌ fetchById() resource not found with ID:" << id;
     return false;
 }
-
-// ========================================
-// DISPLAY & QUERY METHODS
-// ========================================
 
 QSqlQueryModel* Ressource::displayAll()
 {
     QSqlQueryModel *model = new QSqlQueryModel();
-    model->setQuery("SELECT ID_MEDIA, TITLE, PATH, OWNER, FORMAT, ACCESS_LEVEL, UPLOAD_DATE FROM RESSOURCES ORDER BY ID_MEDIA", QSqlDatabase::database());
+    model->setQuery("SELECT ID, TITLE, PATH, OWNER, FORMAT, ACCESS_LEVEL, UPLOAD_DATE FROM RESSOURCE ORDER BY ID", QSqlDatabase::database());
 
     if (model->lastError().isValid()) {
         qDebug() << "❌ displayAll() model error:" << model->lastError().text();
@@ -381,7 +345,6 @@ QSqlQueryModel* Ressource::displayAll()
         return nullptr;
     }
 
-    // Set proper header labels
     model->setHeaderData(0, Qt::Horizontal, QObject::tr("ID"));
     model->setHeaderData(1, Qt::Horizontal, QObject::tr("Title"));
     model->setHeaderData(2, Qt::Horizontal, QObject::tr("Path"));
@@ -398,7 +361,7 @@ QSqlQueryModel* Ressource::search(const QString &keyword)
 {
     QSqlQueryModel *model = new QSqlQueryModel();
     QString searchQuery = QString(
-        "SELECT ID_MEDIA, TITLE, PATH, OWNER, FORMAT, ACCESS_LEVEL, UPLOAD_DATE FROM RESSOURCES "
+        "SELECT ID, TITLE, PATH, OWNER, FORMAT, ACCESS_LEVEL, UPLOAD_DATE FROM RESSOURCE "
         "WHERE UPPER(TITLE) LIKE UPPER('%%1%') "
         "OR UPPER(OWNER) LIKE UPPER('%%1%') "
         "OR UPPER(FORMAT) LIKE UPPER('%%1%')").arg(keyword);
@@ -428,7 +391,7 @@ QSqlQueryModel* Ressource::sortBy(const QString &columnName, Qt::SortOrder order
     QSqlQueryModel *model = new QSqlQueryModel();
     QString orderStr = (order == Qt::AscendingOrder) ? "ASC" : "DESC";
     QString sortQuery = QString(
-        "SELECT ID_MEDIA, TITLE, PATH, OWNER, FORMAT, ACCESS_LEVEL, UPLOAD_DATE FROM RESSOURCES ORDER BY %1 %2")
+        "SELECT ID, TITLE, PATH, OWNER, FORMAT, ACCESS_LEVEL, UPLOAD_DATE FROM RESSOURCE ORDER BY %1 %2")
         .arg(columnName, orderStr);
 
     model->setQuery(sortQuery, QSqlDatabase::database());
@@ -458,10 +421,6 @@ bool Ressource::exportToCsv(const QString &filePath)
     return false;
 }
 
-// ========================================
-// EMPLOYER-RESOURCE RELATIONS (N-N)
-// ========================================
-
 QVector<Ressource> Ressource::getResourcesByEmployer(qint64 employerId)
 {
     QVector<Ressource> resources;
@@ -471,9 +430,9 @@ QVector<Ressource> Ressource::getResourcesByEmployer(qint64 employerId)
         return resources;
     }
 
-    QString sql = QString("SELECT r.ID_MEDIA, r.TITLE, r.PATH, r.OWNER, r.FORMAT, r.ACCESS_LEVEL, r.UPLOAD_DATE "
-                         "FROM RESSOURCES r "
-                         "INNER JOIN UTILISER u ON r.ID_MEDIA = u.ID_MEDIA "
+    QString sql = QString("SELECT r.ID, r.TITLE, r.PATH, r.OWNER, r.FORMAT, r.ACCESS_LEVEL, r.UPLOAD_DATE "
+                         "FROM RESSOURCE r "
+                         "INNER JOIN UTILISER u ON r.ID = u.ID_MEDIA "
                          "WHERE u.ID_EMP = %1 "
                          "ORDER BY r.TITLE").arg(employerId);
 
@@ -508,22 +467,18 @@ bool Ressource::addResourceToEmployer(qint64 employerId, qint64 resourceId)
         return false;
     }
 
-    // Check if relation already exists
     QString checkSql = QString("SELECT COUNT(*) FROM UTILISER WHERE ID_EMP = %1 AND ID_MEDIA = %2")
                       .arg(employerId).arg(resourceId);
     QSqlQuery checkQuery(db);
     if (checkQuery.exec(checkSql) && checkQuery.next()) {
         if (checkQuery.value(0).toInt() > 0) {
             qDebug() << "ℹ️  Resource" << resourceId << "already assigned to employer" << employerId;
-            return true; // Already exists, not an error
+return true;
         }
     }
 
-    // Insert new relation
     QString sql = QString("INSERT INTO UTILISER (ID_EMP, ID_MEDIA) VALUES (%1, %2)")
-                 .arg(employerId).arg(resourceId);
-
-    QSqlQuery query(db);
+                      .arg(employerId).arg(resourceId);    QSqlQuery query(db);
     if (!query.exec(sql)) {
         qDebug() << "❌ Failed to add resource" << resourceId << "to employer" << employerId;
         qDebug() << "Error:" << query.lastError().text();
@@ -543,9 +498,7 @@ bool Ressource::removeResourceFromEmployer(qint64 employerId, qint64 resourceId)
     }
 
     QString sql = QString("DELETE FROM UTILISER WHERE ID_EMP = %1 AND ID_MEDIA = %2")
-                 .arg(employerId).arg(resourceId);
-
-    QSqlQuery query(db);
+                      .arg(employerId).arg(resourceId);    QSqlQuery query(db);
     if (!query.exec(sql)) {
         qDebug() << "❌ Failed to remove resource" << resourceId << "from employer" << employerId;
         qDebug() << "Error:" << query.lastError().text();
@@ -575,4 +528,166 @@ bool Ressource::clearEmployerResources(qint64 employerId)
 
     qDebug() << "✅ All resources cleared for employer" << employerId;
     return true;
+}
+
+RessourceStatistics Ressource::computeStatistics()
+{
+    RessourceStatistics stats;
+    QSqlDatabase db = QSqlDatabase::database();
+    QSqlQuery query(db);
+
+    // Total resources
+    if (query.exec("SELECT COUNT(*) FROM RESSOURCE") && query.next()) {
+        stats.totalResources = query.value(0).toInt();
+    }
+
+    // Public vs Private resources
+    if (query.exec("SELECT COUNT(*) FROM RESSOURCE WHERE UPPER(ACCESS) = 'PUBLIC'") && query.next()) {
+        stats.publicResources = query.value(0).toInt();
+    }
+    
+    if (query.exec("SELECT COUNT(*) FROM RESSOURCE WHERE UPPER(ACCESS) = 'PRIVATE'") && query.next()) {
+        stats.privateResources = query.value(0).toInt();
+    }
+
+    // Format distribution
+    if (query.exec("SELECT FORMAT, COUNT(*) FROM RESSOURCE GROUP BY FORMAT")) {
+        while (query.next()) {
+            QString format = query.value(0).toString();
+            int count = query.value(1).toInt();
+            if (!format.isEmpty()) {
+                stats.formatDistribution[format.toUpper()] = count;
+            }
+        }
+        stats.totalFormats = stats.formatDistribution.size();
+    }
+
+    // Owner distribution
+    if (query.exec("SELECT OWNER, COUNT(*) FROM RESSOURCE GROUP BY OWNER")) {
+        while (query.next()) {
+            QString owner = query.value(0).toString();
+            int count = query.value(1).toInt();
+            if (!owner.isEmpty()) {
+                stats.ownerDistribution[owner] = count;
+            }
+        }
+        stats.totalOwners = stats.ownerDistribution.size();
+    }
+
+    // Access level distribution
+    if (query.exec("SELECT ACCESS, COUNT(*) FROM RESSOURCE GROUP BY ACCESS")) {
+        while (query.next()) {
+            QString access = query.value(0).toString();
+            int count = query.value(1).toInt();
+            stats.accessLevelDistribution[access] = count;
+        }
+    }
+
+    // Uploads per year
+    QString driver = db.driverName().toLower();
+    if (driver.contains("sqlite")) {
+        if (query.exec("SELECT strftime('%Y', UPLOAD_DATE) AS yr, COUNT(*) FROM RESSOURCE GROUP BY yr ORDER BY yr DESC")) {
+            while (query.next()) {
+                QString yearStr = query.value(0).toString();
+                int count = query.value(1).toInt();
+                if (!yearStr.isEmpty()) stats.uploadsPerYear[yearStr.toInt()] = count;
+            }
+        }
+    } else {
+        // Oracle-style queries
+        if (query.exec("SELECT EXTRACT(YEAR FROM UPLOAD_DATE) AS yr, COUNT(*) FROM RESSOURCE GROUP BY EXTRACT(YEAR FROM UPLOAD_DATE) ORDER BY yr DESC")) {
+            while (query.next()) {
+                int year = query.value(0).toInt();
+                int count = query.value(1).toInt();
+                if (year > 0) stats.uploadsPerYear[year] = count;
+            }
+        } else if (query.exec("SELECT TO_CHAR(UPLOAD_DATE,'YYYY') AS yr, COUNT(*) FROM RESSOURCE GROUP BY TO_CHAR(UPLOAD_DATE,'YYYY') ORDER BY yr DESC")) {
+            while (query.next()) {
+                QString yearStr = query.value(0).toString();
+                int count = query.value(1).toInt();
+                if (!yearStr.isEmpty()) stats.uploadsPerYear[yearStr.toInt()] = count;
+            }
+        }
+    }
+
+    // Uploads per month (current year)
+    QDate now = QDate::currentDate();
+    QString yearStr = QString::number(now.year());
+    
+    if (driver.contains("sqlite")) {
+        QString monthQuery = QString("SELECT strftime('%%m', UPLOAD_DATE) AS mn, COUNT(*) FROM RESSOURCE WHERE strftime('%%Y', UPLOAD_DATE) = '%1' GROUP BY mn ORDER BY mn").arg(yearStr);
+        if (query.exec(monthQuery)) {
+            while (query.next()) {
+                QString monthStr = query.value(0).toString();
+                int count = query.value(1).toInt();
+                if (!monthStr.isEmpty()) stats.uploadsPerMonth[monthStr.toInt()] = count;
+            }
+        }
+    } else {
+        QString monthQuery = QString("SELECT EXTRACT(MONTH FROM UPLOAD_DATE) AS mn, COUNT(*) FROM RESSOURCE WHERE EXTRACT(YEAR FROM UPLOAD_DATE) = %1 GROUP BY EXTRACT(MONTH FROM UPLOAD_DATE) ORDER BY mn").arg(yearStr);
+        if (query.exec(monthQuery)) {
+            while (query.next()) {
+                int month = query.value(0).toInt();
+                int count = query.value(1).toInt();
+                if (month > 0) stats.uploadsPerMonth[month] = count;
+            }
+        } else {
+            monthQuery = QString("SELECT TO_CHAR(UPLOAD_DATE,'MM') AS mn, COUNT(*) FROM RESSOURCE WHERE TO_CHAR(UPLOAD_DATE,'YYYY') = '%1' GROUP BY TO_CHAR(UPLOAD_DATE,'MM') ORDER BY mn").arg(yearStr);
+            if (query.exec(monthQuery)) {
+                while (query.next()) {
+                    QString monthStr = query.value(0).toString();
+                    int count = query.value(1).toInt();
+                    if (!monthStr.isEmpty()) stats.uploadsPerMonth[monthStr.toInt()] = count;
+                }
+            }
+        }
+    }
+
+    // New resources this year & month
+    QString monthStr = QString("%1").arg(now.month(), 2, 10, QChar('0'));
+    if (driver.contains("sqlite")) {
+        QString q1 = QString("SELECT COUNT(*) FROM RESSOURCE WHERE strftime('%%Y', UPLOAD_DATE) = '%1'").arg(yearStr);
+        if (query.exec(q1) && query.next()) stats.newResourcesThisYear = query.value(0).toInt();
+
+        QString q2 = QString("SELECT COUNT(*) FROM RESSOURCE WHERE strftime('%%Y', UPLOAD_DATE) = '%1' AND strftime('%%m', UPLOAD_DATE) = '%2'")
+                         .arg(yearStr).arg(monthStr);
+        if (query.exec(q2) && query.next()) stats.newResourcesThisMonth = query.value(0).toInt();
+    } else {
+        QString q1 = QString("SELECT COUNT(*) FROM RESSOURCE WHERE TO_CHAR(UPLOAD_DATE,'YYYY') = '%1'").arg(yearStr);
+        if (!query.exec(q1)) {
+            q1 = QString("SELECT COUNT(*) FROM RESSOURCE WHERE EXTRACT(YEAR FROM UPLOAD_DATE) = %1").arg(yearStr);
+        }
+        if (query.exec(q1) && query.next()) stats.newResourcesThisYear = query.value(0).toInt();
+
+        QString q2 = QString("SELECT COUNT(*) FROM RESSOURCE WHERE TO_CHAR(UPLOAD_DATE,'YYYY') = '%1' AND TO_CHAR(UPLOAD_DATE,'MM') = '%2'")
+                         .arg(yearStr).arg(monthStr);
+        if (!query.exec(q2)) {
+            q2 = QString("SELECT COUNT(*) FROM RESSOURCE WHERE EXTRACT(YEAR FROM UPLOAD_DATE) = %1 AND EXTRACT(MONTH FROM UPLOAD_DATE) = %2").arg(yearStr).arg(now.month());
+        }
+        if (query.exec(q2) && query.next()) stats.newResourcesThisMonth = query.value(0).toInt();
+    }
+
+    // Most common format
+    if (!stats.formatDistribution.isEmpty()) {
+        int best = -1;
+        for (auto it = stats.formatDistribution.constBegin(); it != stats.formatDistribution.constEnd(); ++it) {
+            if (it.value() > best) {
+                best = it.value();
+                stats.mostCommonFormat = it.key();
+            }
+        }
+    }
+
+    // Most active owner
+    if (!stats.ownerDistribution.isEmpty()) {
+        int best = -1;
+        for (auto it = stats.ownerDistribution.constBegin(); it != stats.ownerDistribution.constEnd(); ++it) {
+            if (it.value() > best) {
+                best = it.value();
+                stats.mostActiveOwner = it.key();
+            }
+        }
+    }
+
+    return stats;
 }
